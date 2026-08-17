@@ -84,6 +84,24 @@
   .kpi .delta.pos{ color:var(--accent-ink); }
   .kpi .delta.neg{ color:var(--danger); }
 
+  .ratios-panel{
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:18px 20px; box-shadow:var(--shadow); margin-bottom:18px;
+  }
+  .ratios-panel h2{
+    font-size:12.5px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em;
+    color:var(--muted); margin:0 0 14px;
+  }
+  .ratio-grid{ display:grid; grid-template-columns: repeat(5, 1fr); gap:16px; }
+  .ratio-item{ display:flex; flex-direction:column; gap:6px; }
+  .ratio-item .rlabel{ font-size:11px; color:var(--faint); line-height:1.3; min-height:28px; }
+  .ratio-item .rvalue{ font-size:20px; font-weight:600; display:flex; align-items:center; gap:6px; }
+  .ratio-item .rdot{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .ratio-item .rdot.ok{ background:var(--accent); }
+  .ratio-item .rdot.warn{ background:oklch(75% 0.14 75); }
+  .ratio-item .rdot.bad{ background:var(--danger); }
+  .ratio-item .rnote{ font-size:10.5px; color:var(--faint); }
+
   .main-grid{ display:grid; grid-template-columns: 1.35fr 1fr; gap:14px; margin-bottom:14px; }
   .col{ display:flex; flex-direction:column; gap:14px; }
 
@@ -182,6 +200,7 @@
     .kpi.primary{ grid-column: 1 / -1; }
     .kpi.primary .value{ font-size:28px; }
     .kpi .value{ font-size:22px; }
+    .ratio-grid{ grid-template-columns: repeat(3, 1fr); gap:14px 16px; }
     .main-grid{ grid-template-columns: 1fr; gap:12px; }
     .composicion{ flex-direction:column; align-items:stretch; }
     .donut-wrap{ align-self:center; }
@@ -219,6 +238,9 @@
     .flag .badge{ grid-column:1; grid-row:1; justify-self:start; }
     .flag .amt{ grid-column:2; grid-row:1; align-self:start; }
     .flag .desc{ grid-column:1 / -1; grid-row:2; }
+
+    .ratio-grid{ grid-template-columns: repeat(2, 1fr); gap:14px; }
+    .ratio-item .rvalue{ font-size:17px; }
 
     table.re, table.deb{ font-size:12.5px; }
     table.re thead, table.deb thead{ display:none; }
@@ -264,6 +286,11 @@
   </header>
 
   <div class="kpi-row" id="kpiRow"></div>
+
+  <div class="ratios-panel">
+    <h2>Salud Financiera</h2>
+    <div class="ratio-grid" id="ratiosGrid"></div>
+  </div>
 
   <div class="main-grid">
     <div class="col">
@@ -534,6 +561,38 @@
       "patrimonio_neto": 303778.98,
       "es_primero": true
     }
+  ],
+  "ratios": [
+    {
+      "label": "Deuda / Activos",
+      "display": "30,8%",
+      "status": "ok",
+      "nota": "Sano: menos de 40%"
+    },
+    {
+      "label": "Esfuerzo de deuda (cuota/ingresos)",
+      "display": "22,1%",
+      "status": "ok",
+      "nota": "Alerta: más de 35-40%"
+    },
+    {
+      "label": "Tasa de ahorro mensual",
+      "display": "13,1%",
+      "status": "warn",
+      "nota": "Objetivo: 10-15% o más"
+    },
+    {
+      "label": "Colchón de liquidez",
+      "display": "7,7 meses",
+      "status": "ok",
+      "nota": "Estándar: 3-6 meses"
+    },
+    {
+      "label": "Apalancamiento (activos/patrimonio)",
+      "display": "1,45x",
+      "status": "ok",
+      "nota": "Normal invirtiendo con deuda"
+    }
   ]
 }
 </script>
@@ -570,6 +629,17 @@
       <div class="value num ${cashflowClass}" style="color:${DATA.kpi.cashflow_mes >= 0 ? 'var(--accent-ink)' : 'var(--danger)'}">${cashflowSign}${fmt(DATA.kpi.cashflow_mes)}</div>
       <div class="delta">Ingresos ${fmt(DATA.kpi.ingresos_mes)} · Gastos ${fmt(DATA.kpi.gastos_mes)}</div>
     </div>`;
+
+  // ---------- ratios de salud financiera ----------
+  const ratiosGrid = document.getElementById('ratiosGrid');
+  DATA.ratios.forEach(r => {
+    const item = document.createElement('div');
+    item.className = 'ratio-item';
+    item.innerHTML = `<div class="rlabel">${r.label}</div>
+      <div class="rvalue num"><span class="rdot ${r.status}"></span>${r.display}</div>
+      <div class="rnote">${r.nota}</div>`;
+    ratiosGrid.appendChild(item);
+  });
 
   // ---------- donut + legend ----------
   const totalActivos = DATA.activos.reduce((s,a)=>s+a.value, 0);

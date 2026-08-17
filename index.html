@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patrimonio Personal — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: oklch(96.5% 0.004 90);
+    --surface: oklch(99% 0.002 90);
+    --surface-2: oklch(97.3% 0.003 90);
+    --ink: oklch(22% 0.012 260);
+    --muted: oklch(48% 0.02 260);
+    --faint: oklch(62% 0.015 260);
+    --border: oklch(89% 0.01 260);
+    --border-2: oklch(93% 0.006 260);
+    --accent: oklch(45% 0.09 165);
+    --accent-ink: oklch(28% 0.07 165);
+    --accent-soft: oklch(94% 0.035 165);
+    --risk: oklch(52% 0.15 55);
+    --risk-soft: oklch(95% 0.045 70);
+    --risk-ink: oklch(35% 0.11 55);
+    --danger: oklch(50% 0.17 25);
+    --shadow: 0 1px 2px oklch(20% 0.01 260 / 0.04), 0 1px 1px oklch(20% 0.01 260 / 0.03);
+    color-scheme: light;
+  }
+  html[data-theme="dark"]{
+    --bg: oklch(19% 0.012 260);
+    --surface: oklch(23% 0.014 260);
+    --surface-2: oklch(26% 0.015 260);
+    --ink: oklch(94% 0.006 260);
+    --muted: oklch(72% 0.015 260);
+    --faint: oklch(58% 0.015 260);
+    --border: oklch(32% 0.015 260);
+    --border-2: oklch(29% 0.014 260);
+    --accent: oklch(72% 0.11 165);
+    --accent-ink: oklch(85% 0.08 165);
+    --accent-soft: oklch(30% 0.05 165);
+    --risk: oklch(72% 0.13 60);
+    --risk-soft: oklch(32% 0.06 65);
+    --risk-ink: oklch(85% 0.1 60);
+    --danger: oklch(68% 0.16 25);
+    --shadow: 0 1px 2px oklch(0% 0 0 / 0.2);
+  }
+
+  *{ box-sizing: border-box; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding: 28px 28px 60px;
+  }
+  .num{ font-family:'IBM Plex Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+
+  .wrap{ max-width:1240px; margin:0 auto; }
+
+  /* ---------- header ---------- */
+  header{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    margin-bottom:22px; padding-bottom:16px; border-bottom:1px solid var(--border);
+    flex-wrap:wrap; gap:12px;
+  }
+  header h1{ font-size:16px; font-weight:600; margin:0 0 4px; letter-spacing:0.01em; }
+  header .sub{ font-size:12.5px; color:var(--muted); }
+  .theme-toggle{
+    font-size:12px; color:var(--muted); background:var(--surface); border:1px solid var(--border);
+    border-radius:6px; padding:6px 10px; cursor:pointer; font-family:inherit;
+  }
+  .theme-toggle:hover{ color:var(--ink); border-color:var(--faint); }
+
+  /* ---------- KPI row ---------- */
+  .kpi-row{ display:grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap:14px; margin-bottom:18px; }
+  .kpi{
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:18px 20px; box-shadow:var(--shadow);
+  }
+  .kpi .label{ font-size:11px; text-transform:uppercase; letter-spacing:0.06em; color:var(--faint); margin-bottom:8px; }
+  .kpi .value{ font-size:28px; font-weight:600; line-height:1.1; }
+  .kpi.primary .value{ font-size:34px; color:var(--accent-ink); }
+  .kpi .delta{ font-size:12px; color:var(--muted); margin-top:6px; }
+  .kpi .delta.pos{ color:var(--accent-ink); }
+  .kpi .delta.neg{ color:var(--danger); }
+
+  /* ---------- main grid ---------- */
+  .main-grid{ display:grid; grid-template-columns: 1.35fr 1fr; gap:14px; margin-bottom:14px; }
+  .col{ display:flex; flex-direction:column; gap:14px; }
+
+  .panel{
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:18px 20px; box-shadow:var(--shadow);
+  }
+  .panel h2{
+    font-size:12.5px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em;
+    color:var(--muted); margin:0 0 14px;
+  }
+  .panel h2 .count{ font-weight:400; text-transform:none; letter-spacing:0; color:var(--faint); }
+
+  /* composición de activos: donut + legend */
+  .composicion{ display:flex; gap:24px; align-items:center; }
+  .donut-wrap{ position:relative; width:150px; height:150px; flex-shrink:0; }
+  .donut-wrap svg{ transform:rotate(-90deg); }
+  .donut-center{
+    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  }
+  .donut-center .n{ font-size:20px; font-weight:600; }
+  .donut-center .l{ font-size:10px; color:var(--faint); text-transform:uppercase; letter-spacing:0.04em; }
+  .legend{ flex:1; display:flex; flex-direction:column; gap:7px; }
+  .legend-row{ display:flex; align-items:center; gap:9px; font-size:12.5px; }
+  .legend-row .dot{ width:9px; height:9px; border-radius:2px; flex-shrink:0; }
+  .legend-row .lbl{ flex:1; color:var(--ink); }
+  .legend-row .pct{ color:var(--faint); width:38px; text-align:right; flex-shrink:0; }
+  .legend-row .val{ color:var(--muted); width:88px; text-align:right; flex-shrink:0; }
+
+  /* cartera inmobiliaria table */
+  table.re{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  table.re th{
+    text-align:left; font-weight:500; font-size:10.5px; text-transform:uppercase; letter-spacing:0.04em;
+    color:var(--faint); padding:0 8px 8px 0; border-bottom:1px solid var(--border);
+  }
+  table.re th.num, table.re td.num{ text-align:right; }
+  table.re td{ padding:8px 8px 8px 0; border-bottom:1px solid var(--border-2); color:var(--ink); }
+  table.re tr:last-child td{ border-bottom:none; }
+  table.re td.muted{ color:var(--muted); font-size:11.5px; }
+  .tag{
+    display:inline-block; font-size:10px; padding:2px 6px; border-radius:4px; font-weight:500;
+    background:var(--accent-soft); color:var(--accent-ink);
+  }
+  .tag.mora{ background:var(--risk-soft); color:var(--risk-ink); }
+
+  /* gasto por categoria - bar chart */
+  .bar-row{ display:grid; grid-template-columns: 130px 1fr 78px; align-items:center; gap:10px; margin-bottom:9px; font-size:12.5px; }
+  .bar-row .cat{ color:var(--ink); }
+  .bar-track{ height:16px; background:var(--surface-2); border-radius:4px; overflow:hidden; }
+  .bar-fill{ height:100%; background:var(--accent); border-radius:4px 0 0 4px; }
+  .bar-row .amt{ text-align:right; color:var(--muted); }
+  .bar-foot{ display:flex; justify-content:space-between; margin-top:10px; padding-top:10px; border-top:1px solid var(--border); font-size:12.5px; }
+  .bar-foot .lbl{ color:var(--muted); }
+  .bar-foot .val{ font-weight:600; color:var(--ink); }
+
+  /* pasivos table */
+  table.deb{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  table.deb th{
+    text-align:left; font-weight:500; font-size:10.5px; text-transform:uppercase; letter-spacing:0.04em;
+    color:var(--faint); padding:0 6px 8px 0; border-bottom:1px solid var(--border);
+  }
+  table.deb th.num, table.deb td.num{ text-align:right; }
+  table.deb td{ padding:9px 6px 9px 0; border-bottom:1px solid var(--border-2); }
+  table.deb tr:last-child td{ border-bottom:none; }
+  table.deb td.muted{ color:var(--muted); font-size:11.5px; }
+  table.deb tfoot td{ border-top:1px solid var(--border); border-bottom:none; font-weight:600; padding-top:10px; }
+
+  /* riesgos / pendientes */
+  .flags{ display:flex; flex-direction:column; gap:0; }
+  .flag{
+    display:grid; grid-template-columns: 90px 1fr 100px; gap:14px; align-items:start;
+    padding:12px 0; border-bottom:1px solid var(--border-2); font-size:12.5px;
+  }
+  .flag:last-child{ border-bottom:none; }
+  .flag .badge{
+    font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.03em;
+    padding:3px 7px; border-radius:4px; text-align:center; height:fit-content;
+  }
+  .flag .badge.mora{ background:var(--risk-soft); color:var(--risk-ink); }
+  .flag .badge.pend{ background:var(--surface-2); color:var(--muted); border:1px solid var(--border); }
+  .flag .desc .t{ color:var(--ink); margin-bottom:2px; }
+  .flag .desc .d{ color:var(--muted); font-size:11.5px; line-height:1.4; }
+  .flag .amt{ text-align:right; font-weight:600; color:var(--ink); }
+
+  /* evolucion footer note */
+  .evol{ display:flex; align-items:center; gap:16px; }
+  .evol-point{ display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .evol-point .dot-big{ width:11px; height:11px; border-radius:50%; background:var(--accent); }
+  .evol-point .lbl{ font-size:11px; color:var(--faint); }
+  .evol-line{ flex:1; height:1px; background:repeating-linear-gradient(90deg, var(--border) 0 6px, transparent 6px 12px); }
+  .evol-note{ font-size:12px; color:var(--muted); margin-top:10px; }
+
+  footer{ text-align:center; font-size:11px; color:var(--faint); margin-top:24px; padding-top:16px; border-top:1px solid var(--border); }
+
+  @media (max-width: 880px){
+    body{ padding: 20px 16px 48px; }
+    .kpi-row{ grid-template-columns: 1fr 1fr; gap:10px; }
+    .kpi{ padding:14px 16px; }
+    .kpi.primary{ grid-column: 1 / -1; }
+    .kpi.primary .value{ font-size:28px; }
+    .kpi .value{ font-size:22px; }
+    .main-grid{ grid-template-columns: 1fr; gap:12px; }
+    .composicion{ flex-direction:column; align-items:stretch; }
+    .donut-wrap{ align-self:center; }
+    .bar-row{ grid-template-columns: 100px 1fr 66px; }
+  }
+
+  @media (max-width: 640px){
+    body{ padding: 16px 12px 40px; font-size:14px; }
+    header{ align-items:flex-start; }
+    header h1{ font-size:14.5px; }
+    header .sub{ font-size:11.5px; }
+    .kpi-row{ grid-template-columns: 1fr 1fr; gap:8px; }
+    .kpi{ padding:12px 14px; border-radius:8px; }
+    .kpi .label{ font-size:10px; }
+    .kpi.primary .value{ font-size:24px; }
+    .kpi .value{ font-size:19px; }
+    .kpi .delta{ font-size:11px; }
+    .panel{ padding:14px 15px; border-radius:8px; }
+    .panel h2{ font-size:11.5px; margin-bottom:11px; }
+
+    /* donut still visible but a touch smaller, legend stacks values below label */
+    .donut-wrap{ width:130px; height:130px; }
+    .legend-row{ font-size:12px; flex-wrap:wrap; }
+    .legend-row .lbl{ flex-basis:100%; order:1; margin-top:1px; }
+    .legend-row .pct{ width:auto; }
+    .legend-row .val{ width:auto; margin-left:auto; }
+
+    /* bar chart: shrink label column, keep bar as the dominant visual */
+    .bar-row{ grid-template-columns: 82px 1fr 62px; gap:7px; font-size:11.5px; }
+    .bar-track{ height:14px; }
+    .bar-foot{ font-size:12px; }
+
+    /* risk flags: stack badge/desc/amount instead of forcing 3 fixed columns */
+    .flag{
+      grid-template-columns: 1fr auto; grid-template-rows: auto auto;
+      row-gap:6px; column-gap:10px; padding:11px 0;
+    }
+    .flag .badge{ grid-column:1; grid-row:1; justify-self:start; }
+    .flag .amt{ grid-column:2; grid-row:1; align-self:start; }
+    .flag .desc{ grid-column:1 / -1; grid-row:2; }
+
+    /* responsive tables -> stacked cards, no data loss, no horizontal scroll */
+    table.re, table.deb{ font-size:12.5px; }
+    table.re thead, table.deb thead{ display:none; }
+    table.re tbody, table.deb tbody,
+    table.re tfoot, table.deb tfoot{ display:block; width:100%; }
+    table.re tr, table.deb tr{
+      display:block; width:100%; padding:10px 0; border-bottom:1px solid var(--border-2);
+    }
+    table.re tr:last-child, table.deb tr:last-child{ border-bottom:none; }
+    table.re td, table.deb td{
+      display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+      padding:3px 0; border-bottom:none; text-align:right;
+    }
+    table.re td > *:not(.tag), table.deb td > div.muted{ text-align:right; }
+    table.re td::before, table.deb td::before{
+      content: attr(data-label); color:var(--faint); font-size:10.5px; text-transform:uppercase;
+      letter-spacing:0.04em; text-align:left; flex-shrink:0;
+    }
+    table.deb td[data-label="Entidad"]{ flex-direction:column; align-items:flex-start; gap:2px; }
+    table.deb td[data-label="Entidad"]::before{ margin-bottom:1px; }
+    table.deb td[data-label="Entidad"] .muted{ font-size:11px; }
+    table.re td.muted, table.deb td.muted{ font-size:11.5px; }
+    table.deb tfoot td{ padding-top:10px; }
+
+    .evol-note{ font-size:11.5px; }
+  }
+
+  @media (max-width: 380px){
+    .kpi-row{ grid-template-columns: 1fr; }
+    .kpi.primary{ grid-column: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <h1>Patrimonio Personal — Alejandro</h1>
+      <div class="sub">Datos: Google Sheet "Patrimonio Personal - Alejandro" · Actualizado 17.08.2026</div>
+    </div>
+    <button class="theme-toggle" id="themeToggle">Modo oscuro</button>
+  </header>
+
+  <!-- KPI ROW -->
+  <div class="kpi-row">
+    <div class="kpi primary">
+      <div class="label">Patrimonio Neto</div>
+      <div class="value num">303.778,98 €</div>
+      <div class="delta">Activos − Pasivos · primer registro, sin histórico previo</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Total Activos</div>
+      <div class="value num">439.092,89 €</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Total Pasivos</div>
+      <div class="value num">135.313,91 €</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Cashflow del mes</div>
+      <div class="value num pos" style="color:var(--accent-ink)">+764,10 €</div>
+      <div class="delta">Ingresos 5.827,50 € · Gastos 5.063,40 €</div>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="main-grid">
+
+    <!-- LEFT COLUMN -->
+    <div class="col">
+
+      <div class="panel">
+        <h2>Composición de Activos</h2>
+        <div class="composicion">
+          <div class="donut-wrap">
+            <svg width="150" height="150" viewBox="0 0 150 150" id="donutSvg"></svg>
+            <div class="donut-center">
+              <div class="n num">439,1k€</div>
+              <div class="l">Total</div>
+            </div>
+          </div>
+          <div class="legend" id="legend"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Cartera Real Estate (APH) — posiciones activas <span class="count">6 · 96.400 €</span></h2>
+        <table class="re">
+          <thead>
+            <tr><th>Posición</th><th>Gestor</th><th class="num">Valor</th><th>Estado</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="Posición">Torredembarra</td><td data-label="Gestor" class="muted">Mayela · 25%</td><td data-label="Valor" class="num num">35.900 €</td><td data-label="Estado"><span class="tag">Activa</span></td></tr>
+            <tr><td data-label="Posición">Escala 2</td><td data-label="Gestor" class="muted">Mayela · 33,3%</td><td data-label="Valor" class="num num">16.700 €</td><td data-label="Estado"><span class="tag">Activa</span></td></tr>
+            <tr><td data-label="Posición">Reus</td><td data-label="Gestor" class="muted">Mayela · 100%</td><td data-label="Valor" class="num num">20.000 €</td><td data-label="Estado"><span class="tag">Activa</span></td></tr>
+            <tr><td data-label="Posición">Salt</td><td data-label="Gestor" class="muted">Mayela · 25%</td><td data-label="Valor" class="num num">3.800 €</td><td data-label="Estado"><span class="tag">Tramo final</span></td></tr>
+            <tr><td data-label="Posición">Castelló 98</td><td data-label="Gestor" class="muted">Mayela/Jarque</td><td data-label="Valor" class="num num">10.000 €</td><td data-label="Estado"><span class="tag mora">En mora</span></td></tr>
+            <tr><td data-label="Posición">Maldonado 33</td><td data-label="Gestor" class="muted">Mayela/Jarque</td><td data-label="Valor" class="num num">10.000 €</td><td data-label="Estado"><span class="tag mora">En mora</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h2>Riesgos y pendientes</h2>
+        <div class="flags">
+          <div class="flag">
+            <span class="badge mora">En mora</span>
+            <div class="desc">
+              <div class="t">UrbanFlip — Castelló 98 + Maldonado 33</div>
+              <div class="d">Sin cobro desde otoño 2025. Negociación amistosa directa con el promotor en curso — Legálitas contratado pero aún no activado (17.08.2026).</div>
+            </div>
+            <div class="amt num">20.000 €</div>
+          </div>
+          <div class="flag">
+            <span class="badge pend">Pendiente</span>
+            <div class="desc">
+              <div class="t">Origen de la inversión en Reus</div>
+              <div class="d">Desembolsada 13.05.2026 desde alguna cuenta ya registrada — fuera del periodo cubierto por los extractos actuales.</div>
+            </div>
+            <div class="amt num">20.000 €</div>
+          </div>
+          <div class="flag">
+            <span class="badge pend">Estimado</span>
+            <div class="desc">
+              <div class="t">Préstamo privado a Gabriel/Lucia (Menorca)</div>
+              <div class="d">Capital pendiente calculado matemáticamente a partir del contrato (12%, sistema francés) — no es dato exacto de amortización oficial.</div>
+            </div>
+            <div class="amt num">8.024 €</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="col">
+
+      <div class="panel">
+        <h2>Gasto por categoría <span class="count">agosto 2026 · excl. movimientos internos</span></h2>
+        <div id="bars"></div>
+        <div class="bar-foot">
+          <span class="lbl">Total gasto real</span>
+          <span class="val num">5.063,40 €</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Pasivos — detalle</h2>
+        <table class="deb">
+          <thead>
+            <tr><th>Entidad</th><th class="num">Saldo</th><th class="num">Interés</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Entidad">CaixaBank — préstamo personal<div class="muted">Vence 04/2033</div></td>
+              <td data-label="Saldo" class="num num">25.978,77 €</td>
+              <td data-label="Interés" class="num num">6,25%</td>
+            </tr>
+            <tr>
+              <td data-label="Entidad">Bankinter — préstamo<div class="muted">Detalle de plazo pendiente</div></td>
+              <td data-label="Saldo" class="num num">43.900,00 €</td>
+              <td data-label="Interés" class="num muted">—</td>
+            </tr>
+            <tr>
+              <td data-label="Entidad">MyInvestor — pignorado #1<div class="muted">Vence 03/2045</div></td>
+              <td data-label="Saldo" class="num num">50.024,63 €</td>
+              <td data-label="Interés" class="num num">3,5%</td>
+            </tr>
+            <tr>
+              <td data-label="Entidad">MyInvestor — pignorado #2<div class="muted">Vence 05/2046</div></td>
+              <td data-label="Saldo" class="num num">15.410,51 €</td>
+              <td data-label="Interés" class="num num">3,5%</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr><td data-label="Total">Total Pasivos</td><td data-label="Saldo" class="num num">135.313,91 €</td><td data-label=""></td></tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h2>Evolución mensual</h2>
+        <div class="evol">
+          <div class="evol-point">
+            <div class="dot-big"></div>
+            <div class="lbl num">Ago 2026</div>
+          </div>
+          <div class="evol-line"></div>
+          <div class="evol-point" style="opacity:0.35">
+            <div class="dot-big" style="background:var(--border)"></div>
+            <div class="lbl">— próximo mes —</div>
+          </div>
+        </div>
+        <div class="evol-note">Primer registro del histórico. A partir del próximo mes se mostrará la línea de tendencia del patrimonio neto.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>Fuente: Google Sheet "Patrimonio Personal - Alejandro" · Este dashboard es una foto estática — para verlo con datos siempre en vivo, usar la vista conectada en Looker Studio.</footer>
+</div>
+
+<script>
+  // ---------- data (real, from BALANCE / RESUMEN_GASTOS as of 17.08.2026) ----------
+  const activos = [
+    { label: 'Inversiones / bolsa',        value: 173503.73, color: 'var(--accent)' },
+    { label: 'Real Estate (APH activas)',  value: 76400.00,  color: 'oklch(58% 0.10 165)' },
+    { label: 'Participación M&H',          value: 67000.00,  color: 'oklch(66% 0.09 165)' },
+    { label: 'Cuentas bancarias',          value: 38843.58,  color: 'oklch(74% 0.06 165)' },
+    { label: 'Criptomonedas',              value: 34695.12,  color: 'oklch(60% 0.13 250)' },
+    { label: 'UrbanFlip (en mora)',        value: 20000.00,  color: 'var(--risk)' },
+    { label: 'Aportaciones M&H pendientes',value: 16000.00,  color: 'oklch(80% 0.03 165)' },
+    { label: 'Préstamo privado otorgado',  value: 8024.10,   color: 'oklch(70% 0.05 250)' },
+    { label: 'Plan de pensiones',          value: 4626.36,   color: 'oklch(86% 0.02 165)' },
+  ];
+  const totalActivos = activos.reduce((s,a)=>s+a.value, 0);
+
+  const gastos = [
+    { label: 'Financiación',            value: 1216.64 },
+    { label: 'Familia / Terceros',      value: 867.30 },
+    { label: 'Ocio y suscripciones',    value: 809.65 },
+    { label: 'Vivienda',                value: 612.37 },
+    { label: 'Transporte',              value: 400.52 },
+    { label: 'Salud',                   value: 386.76 },
+    { label: 'Otros',                   value: 249.38 },
+    { label: 'Impuestos y seguros',     value: 226.15 },
+    { label: 'Alimentación',            value: 171.13 },
+    { label: 'Restauración',            value: 106.31 },
+    { label: 'Educación',               value: 17.19 },
+  ];
+  const maxGasto = Math.max(...gastos.map(g=>g.value));
+
+  const fmt = n => n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+
+  // ---------- donut ----------
+  const svg = document.getElementById('donutSvg');
+  const R = 60, CX = 75, CY = 75, STROKE = 20;
+  const circumference = 2 * Math.PI * R;
+  let cumulative = 0;
+  activos.forEach(a => {
+    const frac = a.value / totalActivos;
+    const dash = frac * circumference;
+    const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('cx', CX); circle.setAttribute('cy', CY); circle.setAttribute('r', R);
+    circle.setAttribute('fill', 'none');
+    circle.setAttribute('stroke', a.color);
+    circle.setAttribute('stroke-width', STROKE);
+    circle.setAttribute('stroke-dasharray', `${dash} ${circumference - dash}`);
+    circle.setAttribute('stroke-dashoffset', -cumulative);
+    svg.appendChild(circle);
+    cumulative += dash;
+  });
+
+  // ---------- legend ----------
+  const legend = document.getElementById('legend');
+  activos.forEach(a => {
+    const pct = (a.value / totalActivos * 100).toFixed(1);
+    const row = document.createElement('div');
+    row.className = 'legend-row';
+    row.innerHTML = `<span class="dot" style="background:${a.color}"></span>
+      <span class="lbl">${a.label}</span>
+      <span class="pct num">${pct}%</span>
+      <span class="val num">${fmt(a.value)}</span>`;
+    legend.appendChild(row);
+  });
+
+  // ---------- bars ----------
+  const bars = document.getElementById('bars');
+  gastos.forEach(g => {
+    const pct = (g.value / maxGasto * 100).toFixed(0);
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    row.innerHTML = `<span class="cat">${g.label}</span>
+      <span class="bar-track"><span class="bar-fill" style="width:${pct}%"></span></span>
+      <span class="amt num">${fmt(g.value)}</span>`;
+    bars.appendChild(row);
+  });
+
+  // ---------- theme toggle ----------
+  const toggle = document.getElementById('themeToggle');
+  const root = document.documentElement;
+  const saved = localStorage.getItem('patrimonio-theme');
+  if (saved === 'dark') { root.setAttribute('data-theme','dark'); toggle.textContent = 'Modo claro'; }
+  toggle.addEventListener('click', () => {
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    if (isDark) { root.removeAttribute('data-theme'); toggle.textContent = 'Modo oscuro'; localStorage.setItem('patrimonio-theme','light'); }
+    else { root.setAttribute('data-theme','dark'); toggle.textContent = 'Modo claro'; localStorage.setItem('patrimonio-theme','dark'); }
+  });
+</script>
+</body>
+</html>

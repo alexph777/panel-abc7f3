@@ -59,7 +59,6 @@
 
   .wrap{ max-width:1240px; margin:0 auto; }
 
-  /* ---------- header ---------- */
   header{
     display:flex; align-items:flex-end; justify-content:space-between;
     margin-bottom:22px; padding-bottom:16px; border-bottom:1px solid var(--border);
@@ -73,7 +72,6 @@
   }
   .theme-toggle:hover{ color:var(--ink); border-color:var(--faint); }
 
-  /* ---------- KPI row ---------- */
   .kpi-row{ display:grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap:14px; margin-bottom:18px; }
   .kpi{
     background:var(--surface); border:1px solid var(--border); border-radius:10px;
@@ -86,7 +84,6 @@
   .kpi .delta.pos{ color:var(--accent-ink); }
   .kpi .delta.neg{ color:var(--danger); }
 
-  /* ---------- main grid ---------- */
   .main-grid{ display:grid; grid-template-columns: 1.35fr 1fr; gap:14px; margin-bottom:14px; }
   .col{ display:flex; flex-direction:column; gap:14px; }
 
@@ -100,14 +97,13 @@
   }
   .panel h2 .count{ font-weight:400; text-transform:none; letter-spacing:0; color:var(--faint); }
 
-  /* composición de activos: donut + legend */
   .composicion{ display:flex; gap:24px; align-items:center; }
   .donut-wrap{ position:relative; width:150px; height:150px; flex-shrink:0; }
   .donut-wrap svg{ transform:rotate(-90deg); }
   .donut-center{
     position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
   }
-  .donut-center .n{ font-size:20px; font-weight:600; }
+  .donut-center .n{ font-size:18px; font-weight:600; }
   .donut-center .l{ font-size:10px; color:var(--faint); text-transform:uppercase; letter-spacing:0.04em; }
   .legend{ flex:1; display:flex; flex-direction:column; gap:7px; }
   .legend-row{ display:flex; align-items:center; gap:9px; font-size:12.5px; }
@@ -116,7 +112,6 @@
   .legend-row .pct{ color:var(--faint); width:38px; text-align:right; flex-shrink:0; }
   .legend-row .val{ color:var(--muted); width:88px; text-align:right; flex-shrink:0; }
 
-  /* cartera inmobiliaria table */
   table.re{ width:100%; border-collapse:collapse; font-size:12.5px; }
   table.re th{
     text-align:left; font-weight:500; font-size:10.5px; text-transform:uppercase; letter-spacing:0.04em;
@@ -131,8 +126,8 @@
     background:var(--accent-soft); color:var(--accent-ink);
   }
   .tag.mora{ background:var(--risk-soft); color:var(--risk-ink); }
+  .empty-note{ font-size:12px; color:var(--faint); padding:6px 0; }
 
-  /* gasto por categoria - bar chart */
   .bar-row{ display:grid; grid-template-columns: 130px 1fr 78px; align-items:center; gap:10px; margin-bottom:9px; font-size:12.5px; }
   .bar-row .cat{ color:var(--ink); }
   .bar-track{ height:16px; background:var(--surface-2); border-radius:4px; overflow:hidden; }
@@ -142,7 +137,6 @@
   .bar-foot .lbl{ color:var(--muted); }
   .bar-foot .val{ font-weight:600; color:var(--ink); }
 
-  /* pasivos table */
   table.deb{ width:100%; border-collapse:collapse; font-size:12.5px; }
   table.deb th{
     text-align:left; font-weight:500; font-size:10.5px; text-transform:uppercase; letter-spacing:0.04em;
@@ -154,7 +148,6 @@
   table.deb td.muted{ color:var(--muted); font-size:11.5px; }
   table.deb tfoot td{ border-top:1px solid var(--border); border-bottom:none; font-weight:600; padding-top:10px; }
 
-  /* riesgos / pendientes */
   .flags{ display:flex; flex-direction:column; gap:0; }
   .flag{
     display:grid; grid-template-columns: 90px 1fr 100px; gap:14px; align-items:start;
@@ -171,12 +164,13 @@
   .flag .desc .d{ color:var(--muted); font-size:11.5px; line-height:1.4; }
   .flag .amt{ text-align:right; font-weight:600; color:var(--ink); }
 
-  /* evolucion footer note */
-  .evol{ display:flex; align-items:center; gap:16px; }
-  .evol-point{ display:flex; flex-direction:column; align-items:center; gap:6px; }
-  .evol-point .dot-big{ width:11px; height:11px; border-radius:50%; background:var(--accent); }
-  .evol-point .lbl{ font-size:11px; color:var(--faint); }
-  .evol-line{ flex:1; height:1px; background:repeating-linear-gradient(90deg, var(--border) 0 6px, transparent 6px 12px); }
+  .evol-chart{ margin-bottom:10px; }
+  .evol-table{ width:100%; border-collapse:collapse; font-size:12px; }
+  .evol-table td{ padding:5px 0; border-bottom:1px solid var(--border-2); }
+  .evol-table tr:last-child td{ border-bottom:none; }
+  .evol-table td.num{ text-align:right; }
+  .evol-table td.delta-pos{ color:var(--accent-ink); }
+  .evol-table td.delta-neg{ color:var(--danger); }
   .evol-note{ font-size:12px; color:var(--muted); margin-top:10px; }
 
   footer{ text-align:center; font-size:11px; color:var(--faint); margin-top:24px; padding-top:16px; border-top:1px solid var(--border); }
@@ -208,19 +202,16 @@
     .panel{ padding:14px 15px; border-radius:8px; }
     .panel h2{ font-size:11.5px; margin-bottom:11px; }
 
-    /* donut still visible but a touch smaller, legend stacks values below label */
     .donut-wrap{ width:130px; height:130px; }
     .legend-row{ font-size:12px; flex-wrap:wrap; }
     .legend-row .lbl{ flex-basis:100%; order:1; margin-top:1px; }
     .legend-row .pct{ width:auto; }
     .legend-row .val{ width:auto; margin-left:auto; }
 
-    /* bar chart: shrink label column, keep bar as the dominant visual */
     .bar-row{ grid-template-columns: 82px 1fr 62px; gap:7px; font-size:11.5px; }
     .bar-track{ height:14px; }
     .bar-foot{ font-size:12px; }
 
-    /* risk flags: stack badge/desc/amount instead of forcing 3 fixed columns */
     .flag{
       grid-template-columns: 1fr auto; grid-template-rows: auto auto;
       row-gap:6px; column-gap:10px; padding:11px 0;
@@ -229,7 +220,6 @@
     .flag .amt{ grid-column:2; grid-row:1; align-self:start; }
     .flag .desc{ grid-column:1 / -1; grid-row:2; }
 
-    /* responsive tables -> stacked cards, no data loss, no horizontal scroll */
     table.re, table.deb{ font-size:12.5px; }
     table.re thead, table.deb thead{ display:none; }
     table.re tbody, table.deb tbody,
@@ -268,46 +258,22 @@
   <header>
     <div>
       <h1>Patrimonio Personal — Alejandro</h1>
-      <div class="sub">Datos: Google Sheet "Patrimonio Personal - Alejandro" · Actualizado 17.08.2026</div>
+      <div class="sub" id="headerSub">Datos: Google Sheet "Patrimonio Personal - Alejandro"</div>
     </div>
     <button class="theme-toggle" id="themeToggle">Modo oscuro</button>
   </header>
 
-  <!-- KPI ROW -->
-  <div class="kpi-row">
-    <div class="kpi primary">
-      <div class="label">Patrimonio Neto</div>
-      <div class="value num">303.778,98 €</div>
-      <div class="delta">Activos − Pasivos · primer registro, sin histórico previo</div>
-    </div>
-    <div class="kpi">
-      <div class="label">Total Activos</div>
-      <div class="value num">439.092,89 €</div>
-    </div>
-    <div class="kpi">
-      <div class="label">Total Pasivos</div>
-      <div class="value num">135.313,91 €</div>
-    </div>
-    <div class="kpi">
-      <div class="label">Cashflow del mes</div>
-      <div class="value num pos" style="color:var(--accent-ink)">+764,10 €</div>
-      <div class="delta">Ingresos 5.827,50 € · Gastos 5.063,40 €</div>
-    </div>
-  </div>
+  <div class="kpi-row" id="kpiRow"></div>
 
-  <!-- MAIN GRID -->
   <div class="main-grid">
-
-    <!-- LEFT COLUMN -->
     <div class="col">
-
       <div class="panel">
         <h2>Composición de Activos</h2>
         <div class="composicion">
           <div class="donut-wrap">
             <svg width="150" height="150" viewBox="0 0 150 150" id="donutSvg"></svg>
             <div class="donut-center">
-              <div class="n num">439,1k€</div>
+              <div class="n num" id="donutTotal">—</div>
               <div class="l">Total</div>
             </div>
           </div>
@@ -316,63 +282,28 @@
       </div>
 
       <div class="panel">
-        <h2>Cartera Real Estate (APH) — posiciones activas <span class="count">6 · 96.400 €</span></h2>
+        <h2 id="reHeading">Cartera Real Estate (APH) — posiciones activas</h2>
         <table class="re">
           <thead>
             <tr><th>Posición</th><th>Gestor</th><th class="num">Valor</th><th>Estado</th></tr>
           </thead>
-          <tbody>
-            <tr><td data-label="Posición">Torredembarra</td><td data-label="Gestor" class="muted">Mayela · 25%</td><td data-label="Valor" class="num num">35.900 €</td><td data-label="Estado"><span class="tag">Activa</span></td></tr>
-            <tr><td data-label="Posición">Escala 2</td><td data-label="Gestor" class="muted">Mayela · 33,3%</td><td data-label="Valor" class="num num">16.700 €</td><td data-label="Estado"><span class="tag">Activa</span></td></tr>
-            <tr><td data-label="Posición">Reus</td><td data-label="Gestor" class="muted">Mayela · 100%</td><td data-label="Valor" class="num num">20.000 €</td><td data-label="Estado"><span class="tag">Activa</span></td></tr>
-            <tr><td data-label="Posición">Salt</td><td data-label="Gestor" class="muted">Mayela · 25%</td><td data-label="Valor" class="num num">3.800 €</td><td data-label="Estado"><span class="tag">Tramo final</span></td></tr>
-            <tr><td data-label="Posición">Castelló 98</td><td data-label="Gestor" class="muted">Mayela/Jarque</td><td data-label="Valor" class="num num">10.000 €</td><td data-label="Estado"><span class="tag mora">En mora</span></td></tr>
-            <tr><td data-label="Posición">Maldonado 33</td><td data-label="Gestor" class="muted">Mayela/Jarque</td><td data-label="Valor" class="num num">10.000 €</td><td data-label="Estado"><span class="tag mora">En mora</span></td></tr>
-          </tbody>
+          <tbody id="reBody"></tbody>
         </table>
       </div>
 
       <div class="panel">
         <h2>Riesgos y pendientes</h2>
-        <div class="flags">
-          <div class="flag">
-            <span class="badge mora">En mora</span>
-            <div class="desc">
-              <div class="t">UrbanFlip — Castelló 98 + Maldonado 33</div>
-              <div class="d">Sin cobro desde otoño 2025. Negociación amistosa directa con el promotor en curso — Legálitas contratado pero aún no activado (17.08.2026).</div>
-            </div>
-            <div class="amt num">20.000 €</div>
-          </div>
-          <div class="flag">
-            <span class="badge pend">Pendiente</span>
-            <div class="desc">
-              <div class="t">Origen de la inversión en Reus</div>
-              <div class="d">Desembolsada 13.05.2026 desde alguna cuenta ya registrada — fuera del periodo cubierto por los extractos actuales.</div>
-            </div>
-            <div class="amt num">20.000 €</div>
-          </div>
-          <div class="flag">
-            <span class="badge pend">Estimado</span>
-            <div class="desc">
-              <div class="t">Préstamo privado a Gabriel/Lucia (Menorca)</div>
-              <div class="d">Capital pendiente calculado matemáticamente a partir del contrato (12%, sistema francés) — no es dato exacto de amortización oficial.</div>
-            </div>
-            <div class="amt num">8.024 €</div>
-          </div>
-        </div>
+        <div class="flags" id="flags"></div>
       </div>
-
     </div>
 
-    <!-- RIGHT COLUMN -->
     <div class="col">
-
       <div class="panel">
-        <h2>Gasto por categoría <span class="count">agosto 2026 · excl. movimientos internos</span></h2>
+        <h2 id="gastosHeading">Gasto por categoría</h2>
         <div id="bars"></div>
         <div class="bar-foot">
           <span class="lbl">Total gasto real</span>
-          <span class="val num">5.063,40 €</span>
+          <span class="val num" id="gastosTotal">—</span>
         </div>
       </div>
 
@@ -382,94 +313,266 @@
           <thead>
             <tr><th>Entidad</th><th class="num">Saldo</th><th class="num">Interés</th></tr>
           </thead>
-          <tbody>
-            <tr>
-              <td data-label="Entidad">CaixaBank — préstamo personal<div class="muted">Vence 04/2033</div></td>
-              <td data-label="Saldo" class="num num">25.978,77 €</td>
-              <td data-label="Interés" class="num num">6,25%</td>
-            </tr>
-            <tr>
-              <td data-label="Entidad">Bankinter — préstamo<div class="muted">Detalle de plazo pendiente</div></td>
-              <td data-label="Saldo" class="num num">43.900,00 €</td>
-              <td data-label="Interés" class="num muted">—</td>
-            </tr>
-            <tr>
-              <td data-label="Entidad">MyInvestor — pignorado #1<div class="muted">Vence 03/2045</div></td>
-              <td data-label="Saldo" class="num num">50.024,63 €</td>
-              <td data-label="Interés" class="num num">3,5%</td>
-            </tr>
-            <tr>
-              <td data-label="Entidad">MyInvestor — pignorado #2<div class="muted">Vence 05/2046</div></td>
-              <td data-label="Saldo" class="num num">15.410,51 €</td>
-              <td data-label="Interés" class="num num">3,5%</td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr><td data-label="Total">Total Pasivos</td><td data-label="Saldo" class="num num">135.313,91 €</td><td data-label=""></td></tr>
-          </tfoot>
+          <tbody id="debBody"></tbody>
+          <tfoot id="debFoot"></tfoot>
         </table>
       </div>
 
       <div class="panel">
         <h2>Evolución mensual</h2>
-        <div class="evol">
-          <div class="evol-point">
-            <div class="dot-big"></div>
-            <div class="lbl num">Ago 2026</div>
-          </div>
-          <div class="evol-line"></div>
-          <div class="evol-point" style="opacity:0.35">
-            <div class="dot-big" style="background:var(--border)"></div>
-            <div class="lbl">— próximo mes —</div>
-          </div>
-        </div>
-        <div class="evol-note">Primer registro del histórico. A partir del próximo mes se mostrará la línea de tendencia del patrimonio neto.</div>
+        <div class="evol-chart"><svg id="evolSvg" width="100%" height="70" preserveAspectRatio="none"></svg></div>
+        <table class="evol-table" id="evolTable"></table>
+        <div class="evol-note" id="evolNote"></div>
       </div>
-
     </div>
   </div>
 
-  <footer>Fuente: Google Sheet "Patrimonio Personal - Alejandro" · Este dashboard es una foto estática — para verlo con datos siempre en vivo, usar la vista conectada en Looker Studio.</footer>
+  <footer id="footerNote">Fuente: Google Sheet "Patrimonio Personal - Alejandro"</footer>
 </div>
 
+<script type="application/json" id="dashboard-data">
+{
+  "generated_at": "17.08.2026",
+  "kpi": {
+    "patrimonio_neto": 303778.98,
+    "total_activos": 439092.89,
+    "total_pasivos": 135313.91,
+    "cashflow_mes": 764.1,
+    "ingresos_mes": 5827.5,
+    "gastos_mes": 5063.4,
+    "delta_neto_texto": "Activos − Pasivos · primer registro, sin histórico previo"
+  },
+  "activos": [
+    {
+      "label": "Inversiones / bolsa",
+      "value": 173503.73,
+      "color": "var(--accent)"
+    },
+    {
+      "label": "Préstamos participativos / Real Estate",
+      "value": 76400.0,
+      "color": "oklch(58% 0.10 165)"
+    },
+    {
+      "label": "Participación M&H Capital Partners",
+      "value": 67000.0,
+      "color": "oklch(66% 0.09 165)"
+    },
+    {
+      "label": "Cuentas bancarias",
+      "value": 38843.58,
+      "color": "oklch(74% 0.06 165)"
+    },
+    {
+      "label": "Criptomonedas",
+      "value": 34695.12,
+      "color": "oklch(60% 0.13 250)"
+    },
+    {
+      "label": "Préstamos participativos",
+      "value": 20000.0,
+      "color": "var(--risk)"
+    },
+    {
+      "label": "Aportaciones de capital a M&H (pendientes devolución)",
+      "value": 16000.0,
+      "color": "oklch(80% 0.03 165)"
+    },
+    {
+      "label": "Préstamos privados otorgados",
+      "value": 8024.1,
+      "color": "oklch(70% 0.05 250)"
+    },
+    {
+      "label": "Plan de pensiones",
+      "value": 4626.36,
+      "color": "oklch(86% 0.02 165)"
+    }
+  ],
+  "gastos_periodo_label": "08/2026 · excl. movimientos internos",
+  "gastos": [
+    {
+      "label": "Financiación",
+      "value": 1216.64
+    },
+    {
+      "label": "Familia / Terceros",
+      "value": 867.3
+    },
+    {
+      "label": "Ocio y suscripciones",
+      "value": 809.65
+    },
+    {
+      "label": "Vivienda",
+      "value": 612.37
+    },
+    {
+      "label": "Transporte",
+      "value": 400.52
+    },
+    {
+      "label": "Salud",
+      "value": 386.76
+    },
+    {
+      "label": "Otros",
+      "value": 249.38
+    },
+    {
+      "label": "Impuestos y seguros personales",
+      "value": 226.15
+    },
+    {
+      "label": "Alimentación",
+      "value": 171.13
+    },
+    {
+      "label": "Restauración",
+      "value": 106.31
+    },
+    {
+      "label": "Educación",
+      "value": 17.19
+    }
+  ],
+  "real_estate": [
+    {
+      "posicion": "Torredembarra",
+      "gestor": "Mayela · 25%",
+      "valor": 35900,
+      "estado": "Activa"
+    },
+    {
+      "posicion": "Escala 2",
+      "gestor": "Mayela · 33,3%",
+      "valor": 16700,
+      "estado": "Activa"
+    },
+    {
+      "posicion": "Reus",
+      "gestor": "Mayela · 100%",
+      "valor": 20000,
+      "estado": "Activa"
+    },
+    {
+      "posicion": "Salt",
+      "gestor": "Mayela · 25%",
+      "valor": 3800,
+      "estado": "Tramo final"
+    },
+    {
+      "posicion": "Castelló 98",
+      "gestor": "Mayela/Jarque",
+      "valor": 10000,
+      "estado": "En mora"
+    },
+    {
+      "posicion": "Maldonado 33",
+      "gestor": "Mayela/Jarque",
+      "valor": 10000,
+      "estado": "En mora"
+    }
+  ],
+  "pasivos": [
+    {
+      "entidad": "CaixaBank — préstamo personal",
+      "nota": "Vence 04/2033",
+      "saldo": 25978.77,
+      "interes": "6,25%"
+    },
+    {
+      "entidad": "Bankinter — préstamo",
+      "nota": "Detalle de plazo pendiente",
+      "saldo": 43900.0,
+      "interes": "—"
+    },
+    {
+      "entidad": "MyInvestor — pignorado #1",
+      "nota": "Vence 03/2045",
+      "saldo": 50024.63,
+      "interes": "3,5%"
+    },
+    {
+      "entidad": "MyInvestor — pignorado #2",
+      "nota": "Vence 05/2046",
+      "saldo": 15410.51,
+      "interes": "3,5%"
+    }
+  ],
+  "riesgos": [
+    {
+      "badge": "mora",
+      "badge_text": "En mora",
+      "titulo": "UrbanFlip — Castelló 98 + Maldonado 33",
+      "desc": "Sin cobro desde otoño 2025. Negociación amistosa directa con el promotor en curso — Legálitas contratado pero aún no activado.",
+      "importe": 20000
+    },
+    {
+      "badge": "pend",
+      "badge_text": "Pendiente",
+      "titulo": "Origen de la inversión en Reus",
+      "desc": "Desembolsada 13.05.2026 desde alguna cuenta ya registrada — fuera del periodo cubierto por los extractos actuales.",
+      "importe": 20000
+    },
+    {
+      "badge": "pend",
+      "badge_text": "Estimado",
+      "titulo": "Préstamo privado a Gabriel/Lucia (Menorca)",
+      "desc": "Capital pendiente calculado matemáticamente a partir del contrato (12%, sistema francés) — no es dato exacto de amortización oficial.",
+      "importe": 8024
+    }
+  ],
+  "evolucion": [
+    {
+      "mes": "Agosto 2026",
+      "patrimonio_neto": 303778.98,
+      "es_primero": true
+    }
+  ]
+}
+</script>
+
 <script>
-  // ---------- data (real, from BALANCE / RESUMEN_GASTOS as of 17.08.2026) ----------
-  const activos = [
-    { label: 'Inversiones / bolsa',        value: 173503.73, color: 'var(--accent)' },
-    { label: 'Real Estate (APH activas)',  value: 76400.00,  color: 'oklch(58% 0.10 165)' },
-    { label: 'Participación M&H',          value: 67000.00,  color: 'oklch(66% 0.09 165)' },
-    { label: 'Cuentas bancarias',          value: 38843.58,  color: 'oklch(74% 0.06 165)' },
-    { label: 'Criptomonedas',              value: 34695.12,  color: 'oklch(60% 0.13 250)' },
-    { label: 'UrbanFlip (en mora)',        value: 20000.00,  color: 'var(--risk)' },
-    { label: 'Aportaciones M&H pendientes',value: 16000.00,  color: 'oklch(80% 0.03 165)' },
-    { label: 'Préstamo privado otorgado',  value: 8024.10,   color: 'oklch(70% 0.05 250)' },
-    { label: 'Plan de pensiones',          value: 4626.36,   color: 'oklch(86% 0.02 165)' },
-  ];
-  const totalActivos = activos.reduce((s,a)=>s+a.value, 0);
+  const DATA = JSON.parse(document.getElementById('dashboard-data').textContent);
+  const fmt = n => n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: true }) + ' €';
+  const fmtShort = n => (n/1000).toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + 'k€';
 
-  const gastos = [
-    { label: 'Financiación',            value: 1216.64 },
-    { label: 'Familia / Terceros',      value: 867.30 },
-    { label: 'Ocio y suscripciones',    value: 809.65 },
-    { label: 'Vivienda',                value: 612.37 },
-    { label: 'Transporte',              value: 400.52 },
-    { label: 'Salud',                   value: 386.76 },
-    { label: 'Otros',                   value: 249.38 },
-    { label: 'Impuestos y seguros',     value: 226.15 },
-    { label: 'Alimentación',            value: 171.13 },
-    { label: 'Restauración',            value: 106.31 },
-    { label: 'Educación',               value: 17.19 },
-  ];
-  const maxGasto = Math.max(...gastos.map(g=>g.value));
+  document.getElementById('headerSub').textContent = `Datos: Google Sheet "Patrimonio Personal - Alejandro" · Actualizado ${DATA.generated_at}`;
+  document.getElementById('footerNote').textContent = `Fuente: Google Sheet "Patrimonio Personal - Alejandro" · Generado automáticamente el ${DATA.generated_at}`;
 
-  const fmt = n => n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+  // ---------- KPI row ----------
+  const kpiRow = document.getElementById('kpiRow');
+  const cashflowClass = DATA.kpi.cashflow_mes >= 0 ? 'pos' : 'neg';
+  const cashflowSign = DATA.kpi.cashflow_mes >= 0 ? '+' : '';
+  kpiRow.innerHTML = `
+    <div class="kpi primary">
+      <div class="label">Patrimonio Neto</div>
+      <div class="value num">${fmt(DATA.kpi.patrimonio_neto)}</div>
+      <div class="delta">${DATA.kpi.delta_neto_texto}</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Total Activos</div>
+      <div class="value num">${fmt(DATA.kpi.total_activos)}</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Total Pasivos</div>
+      <div class="value num">${fmt(DATA.kpi.total_pasivos)}</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Cashflow del mes</div>
+      <div class="value num ${cashflowClass}" style="color:${DATA.kpi.cashflow_mes >= 0 ? 'var(--accent-ink)' : 'var(--danger)'}">${cashflowSign}${fmt(DATA.kpi.cashflow_mes)}</div>
+      <div class="delta">Ingresos ${fmt(DATA.kpi.ingresos_mes)} · Gastos ${fmt(DATA.kpi.gastos_mes)}</div>
+    </div>`;
 
-  // ---------- donut ----------
+  // ---------- donut + legend ----------
+  const totalActivos = DATA.activos.reduce((s,a)=>s+a.value, 0);
+  document.getElementById('donutTotal').textContent = fmtShort(totalActivos);
   const svg = document.getElementById('donutSvg');
   const R = 60, CX = 75, CY = 75, STROKE = 20;
   const circumference = 2 * Math.PI * R;
   let cumulative = 0;
-  activos.forEach(a => {
+  DATA.activos.forEach(a => {
     const frac = a.value / totalActivos;
     const dash = frac * circumference;
     const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
@@ -482,10 +585,8 @@
     svg.appendChild(circle);
     cumulative += dash;
   });
-
-  // ---------- legend ----------
   const legend = document.getElementById('legend');
-  activos.forEach(a => {
+  DATA.activos.forEach(a => {
     const pct = (a.value / totalActivos * 100).toFixed(1);
     const row = document.createElement('div');
     row.className = 'legend-row';
@@ -496,9 +597,12 @@
     legend.appendChild(row);
   });
 
-  // ---------- bars ----------
+  // ---------- gasto bars ----------
+  document.getElementById('gastosHeading').innerHTML = `Gasto por categoría <span class="count">${DATA.gastos_periodo_label}</span>`;
+  document.getElementById('gastosTotal').textContent = fmt(DATA.kpi.gastos_mes);
   const bars = document.getElementById('bars');
-  gastos.forEach(g => {
+  const maxGasto = Math.max(...DATA.gastos.map(g=>g.value), 1);
+  DATA.gastos.forEach(g => {
     const pct = (g.value / maxGasto * 100).toFixed(0);
     const row = document.createElement('div');
     row.className = 'bar-row';
@@ -507,6 +611,88 @@
       <span class="amt num">${fmt(g.value)}</span>`;
     bars.appendChild(row);
   });
+
+  // ---------- real estate table ----------
+  const reTotal = DATA.real_estate.reduce((s,r)=>s+r.valor, 0);
+  document.getElementById('reHeading').innerHTML = `Cartera Real Estate (APH) — posiciones activas <span class="count">${DATA.real_estate.length} · ${fmt(reTotal)}</span>`;
+  const reBody = document.getElementById('reBody');
+  if (DATA.real_estate.length === 0) {
+    reBody.innerHTML = `<tr><td colspan="4" class="empty-note">Sin posiciones activas registradas.</td></tr>`;
+  } else {
+    DATA.real_estate.forEach(r => {
+      const tagClass = r.estado.toLowerCase().includes('mora') ? 'tag mora' : 'tag';
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td data-label="Posición">${r.posicion}</td>
+        <td data-label="Gestor" class="muted">${r.gestor}</td>
+        <td data-label="Valor" class="num num">${fmt(r.valor)}</td>
+        <td data-label="Estado"><span class="${tagClass}">${r.estado}</span></td>`;
+      reBody.appendChild(tr);
+    });
+  }
+
+  // ---------- riesgos ----------
+  const flags = document.getElementById('flags');
+  if (DATA.riesgos.length === 0) {
+    flags.innerHTML = `<div class="empty-note">Sin riesgos ni pendientes registrados.</div>`;
+  } else {
+    DATA.riesgos.forEach(r => {
+      const div = document.createElement('div');
+      div.className = 'flag';
+      div.innerHTML = `<span class="badge ${r.badge}">${r.badge_text}</span>
+        <div class="desc"><div class="t">${r.titulo}</div><div class="d">${r.desc}</div></div>
+        <div class="amt num">${fmt(r.importe)}</div>`;
+      flags.appendChild(div);
+    });
+  }
+
+  // ---------- pasivos ----------
+  const debBody = document.getElementById('debBody');
+  DATA.pasivos.forEach(p => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td data-label="Entidad">${p.entidad}<div class="muted">${p.nota}</div></td>
+      <td data-label="Saldo" class="num num">${fmt(p.saldo)}</td>
+      <td data-label="Interés" class="num ${p.interes === '—' ? 'muted' : 'num'}">${p.interes}</td>`;
+    debBody.appendChild(tr);
+  });
+  document.getElementById('debFoot').innerHTML = `<tr><td data-label="Total">Total Pasivos</td><td data-label="Saldo" class="num num">${fmt(DATA.kpi.total_pasivos)}</td><td data-label=""></td></tr>`;
+
+  // ---------- evolucion (sparkline + table) ----------
+  const evol = DATA.evolucion;
+  const evolSvg = document.getElementById('evolSvg');
+  const evolTable = document.getElementById('evolTable');
+  const evolNote = document.getElementById('evolNote');
+
+  if (evol.length < 2) {
+    evolSvg.style.display = 'none';
+    evolNote.textContent = 'Primer registro del histórico. A partir del próximo mes se mostrará la línea de tendencia del patrimonio neto.';
+  } else {
+    const values = evol.map(e => e.patrimonio_neto);
+    const min = Math.min(...values), max = Math.max(...values);
+    const range = (max - min) || 1;
+    const W = 400, H = 60, PAD = 6;
+    const pts = values.map((v,i) => {
+      const x = PAD + (i/(values.length-1)) * (W - PAD*2);
+      const y = H - PAD - ((v - min)/range) * (H - PAD*2);
+      return `${x},${y}`;
+    });
+    evolSvg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#2f7d5a';
+    evolSvg.innerHTML = `<polyline points="${pts.join(' ')}" fill="none" stroke="${accentColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>` +
+      pts.map(p => `<circle cx="${p.split(',')[0]}" cy="${p.split(',')[1]}" r="3" fill="${accentColor}"/>`).join('');
+    evolNote.textContent = '';
+  }
+
+  let rows = '';
+  evol.forEach((e, i) => {
+    let deltaTxt = '—', deltaClass = '';
+    if (i > 0) {
+      const delta = e.patrimonio_neto - evol[i-1].patrimonio_neto;
+      deltaClass = delta >= 0 ? 'delta-pos' : 'delta-neg';
+      deltaTxt = (delta >= 0 ? '+' : '') + fmt(delta);
+    }
+    rows += `<tr><td>${e.mes}</td><td class="num">${fmt(e.patrimonio_neto)}</td><td class="num ${deltaClass}">${deltaTxt}</td></tr>`;
+  });
+  evolTable.innerHTML = rows;
 
   // ---------- theme toggle ----------
   const toggle = document.getElementById('themeToggle');

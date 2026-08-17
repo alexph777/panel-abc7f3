@@ -311,7 +311,7 @@
         <h2>Pasivos — detalle</h2>
         <table class="deb">
           <thead>
-            <tr><th>Entidad</th><th class="num">Saldo</th><th class="num">Interés</th></tr>
+            <tr><th>Entidad</th><th class="num">Saldo</th><th class="num">Cuota/mes</th><th class="num">Interés</th></tr>
           </thead>
           <tbody id="debBody"></tbody>
           <tfoot id="debFoot"></tfoot>
@@ -340,7 +340,8 @@
     "cashflow_mes": 764.1,
     "ingresos_mes": 5827.5,
     "gastos_mes": 5063.4,
-    "delta_neto_texto": "Activos − Pasivos · primer registro, sin histórico previo"
+    "delta_neto_texto": "Activos − Pasivos · primer registro, sin histórico previo",
+    "cuota_mensual_total": 1290.75
   },
   "activos": [
     {
@@ -479,24 +480,28 @@
       "entidad": "CaixaBank — préstamo personal",
       "nota": "Vence 04/2033",
       "saldo": 25978.77,
+      "cuota_mensual": 397.9,
       "interes": "6,25%"
     },
     {
       "entidad": "Bankinter — préstamo",
-      "nota": "Detalle de plazo pendiente",
+      "nota": "Vence aprox. 07/2036",
       "saldo": 43900.0,
-      "interes": "—"
+      "cuota_mensual": 498.48,
+      "interes": "6,50% TIN"
     },
     {
       "entidad": "MyInvestor — pignorado #1",
       "nota": "Vence 03/2045",
       "saldo": 50024.63,
+      "cuota_mensual": 304.48,
       "interes": "3,5%"
     },
     {
       "entidad": "MyInvestor — pignorado #2",
       "nota": "Vence 05/2046",
       "saldo": 15410.51,
+      "cuota_mensual": 89.89,
       "interes": "3,5%"
     }
   ],
@@ -558,6 +563,7 @@
     <div class="kpi">
       <div class="label">Total Pasivos</div>
       <div class="value num">${fmt(DATA.kpi.total_pasivos)}</div>
+      <div class="delta">Cuota mensual total: ${fmt(DATA.kpi.cuota_mensual_total)}</div>
     </div>
     <div class="kpi">
       <div class="label">Cashflow del mes</div>
@@ -649,12 +655,14 @@
   const debBody = document.getElementById('debBody');
   DATA.pasivos.forEach(p => {
     const tr = document.createElement('tr');
+    const cuotaTxt = p.cuota_mensual ? fmt(p.cuota_mensual) : '—';
     tr.innerHTML = `<td data-label="Entidad">${p.entidad}<div class="muted">${p.nota}</div></td>
       <td data-label="Saldo" class="num num">${fmt(p.saldo)}</td>
+      <td data-label="Cuota/mes" class="num ${p.cuota_mensual ? 'num' : 'muted'}">${cuotaTxt}</td>
       <td data-label="Interés" class="num ${p.interes === '—' ? 'muted' : 'num'}">${p.interes}</td>`;
     debBody.appendChild(tr);
   });
-  document.getElementById('debFoot').innerHTML = `<tr><td data-label="Total">Total Pasivos</td><td data-label="Saldo" class="num num">${fmt(DATA.kpi.total_pasivos)}</td><td data-label=""></td></tr>`;
+  document.getElementById('debFoot').innerHTML = `<tr><td data-label="Total">Total Pasivos</td><td data-label="Saldo" class="num num">${fmt(DATA.kpi.total_pasivos)}</td><td data-label="Cuota/mes" class="num num">${fmt(DATA.kpi.cuota_mensual_total)}</td><td data-label=""></td></tr>`;
 
   // ---------- evolucion (sparkline + table) ----------
   const evol = DATA.evolucion;

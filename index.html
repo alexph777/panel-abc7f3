@@ -113,6 +113,45 @@
   .main-grid{ display:grid; grid-template-columns: 1.35fr 1fr; gap:14px; margin-bottom:14px; }
   .col{ display:flex; flex-direction:column; gap:14px; }
 
+  /* ---------- tabs ---------- */
+  .tabs-nav{
+    display:flex; gap:4px; margin-bottom:18px; border-bottom:1px solid var(--border);
+  }
+  .tab-btn{
+    padding:9px 4px; margin-right:18px; font-size:12.5px; font-weight:500; color:var(--faint);
+    background:none; border:none; border-bottom:2px solid transparent; cursor:pointer;
+    font-family:inherit; letter-spacing:0.01em;
+  }
+  .tab-btn:hover{ color:var(--ink); }
+  .tab-btn.active{ color:var(--ink); font-weight:600; border-bottom-color:var(--accent); }
+  .tab-panel{ display:none; }
+  .tab-panel.active{ display:block; }
+
+  /* ---------- detalle de gastos ---------- */
+  .detalle-controls{ display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap; align-items:center; }
+  .detalle-controls select, .detalle-controls input{
+    font-family:inherit; font-size:12.5px; color:var(--ink); background:var(--surface);
+    border:1px solid var(--border); border-radius:6px; padding:7px 10px;
+  }
+  .detalle-controls input{ flex:1; min-width:160px; }
+  .detalle-count{ font-size:12px; color:var(--faint); margin-left:auto; }
+  .detalle-table-wrap{
+    max-height:640px; overflow-y:auto; border:1px solid var(--border); border-radius:8px;
+  }
+  table.detalle{ width:100%; border-collapse:collapse; font-size:12px; }
+  table.detalle thead th{
+    position:sticky; top:0; background:var(--surface-2); text-align:left; font-weight:500;
+    font-size:10.5px; text-transform:uppercase; letter-spacing:0.04em; color:var(--faint);
+    padding:8px 10px; border-bottom:1px solid var(--border); z-index:1;
+  }
+  table.detalle th.num, table.detalle td.num{ text-align:right; }
+  table.detalle td{ padding:8px 10px; border-bottom:1px solid var(--border-2); color:var(--ink); }
+  table.detalle tr:last-child td{ border-bottom:none; }
+  table.detalle td.muted{ color:var(--muted); font-size:11px; }
+  table.detalle td.neg{ color:var(--ink); }
+  table.detalle td.pos{ color:var(--accent-ink); }
+  table.detalle tr.interno{ opacity:0.5; font-style:italic; }
+
   .panel{
     background:var(--surface); border:1px solid var(--border); border-radius:10px;
     padding:18px 20px; box-shadow:var(--shadow);
@@ -213,6 +252,7 @@
     .composicion{ flex-direction:column; align-items:stretch; }
     .donut-wrap{ align-self:center; }
     .bar-row{ grid-template-columns: 100px 1fr 66px; }
+    .detalle-table-wrap{ max-height:520px; }
   }
 
   @media (max-width: 640px){
@@ -274,6 +314,28 @@
     table.deb tfoot td{ padding-top:10px; }
 
     .evol-note{ font-size:11.5px; }
+
+    .tabs-nav{ overflow-x:auto; white-space:nowrap; -webkit-overflow-scrolling:touch; }
+    .tab-btn{ margin-right:14px; padding:8px 2px; }
+    .detalle-controls{ gap:8px; }
+    .detalle-controls input{ min-width:120px; }
+    .detalle-count{ width:100%; margin-left:0; order:3; }
+    table.detalle thead{ display:none; }
+    table.detalle tbody{ display:block; }
+    table.detalle tr{
+      display:block; width:100%; padding:8px 10px; border-bottom:1px solid var(--border-2);
+    }
+    table.detalle tr:last-child{ border-bottom:none; }
+    table.detalle td{
+      display:flex; justify-content:space-between; align-items:baseline; gap:10px;
+      padding:2px 0; border-bottom:none; text-align:right; font-size:12px;
+    }
+    table.detalle td::before{
+      content: attr(data-label); color:var(--faint); font-size:10px; text-transform:uppercase;
+      letter-spacing:0.04em; text-align:left; flex-shrink:0;
+    }
+    table.detalle td[data-label="Concepto"]{ flex-direction:column; align-items:flex-start; gap:2px; text-align:left; }
+    table.detalle td[data-label="Concepto"]::before{ margin-bottom:1px; }
   }
 
   @media (max-width: 380px){
@@ -300,6 +362,12 @@
     <div class="ratio-grid" id="ratiosGrid"></div>
   </div>
 
+  <div class="tabs-nav">
+    <button class="tab-btn active" data-tab="resumen">Resumen</button>
+    <button class="tab-btn" data-tab="detalle">Detalle de Gastos</button>
+  </div>
+
+  <div class="tab-panel active" id="tab-resumen">
   <div class="main-grid">
     <div class="col">
       <div class="panel">
@@ -358,6 +426,31 @@
         <div class="evol-chart"><svg id="evolSvg" width="100%" height="70" preserveAspectRatio="none"></svg></div>
         <table class="evol-table" id="evolTable"></table>
         <div class="evol-note" id="evolNote"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="tab-panel" id="tab-detalle">
+    <div class="panel">
+      <h2>Detalle de movimientos <span class="count" id="detalleHeading"></span></h2>
+      <div class="detalle-controls">
+        <select id="filtroCategoria">
+          <option value="">Todas las categorías</option>
+        </select>
+        <input type="text" id="filtroTexto" placeholder="Buscar por concepto o proveedor...">
+        <span class="detalle-count" id="detalleCount"></span>
+      </div>
+      <div class="detalle-table-wrap">
+        <table class="detalle">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Concepto</th><th>Categoría</th><th>Proveedor</th>
+              <th class="num">Importe</th><th>Cuenta</th>
+            </tr>
+          </thead>
+          <tbody id="detalleBody"></tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -460,6 +553,1427 @@
     {
       "label": "Educación",
       "value": 17.19
+    }
+  ],
+  "movimientos": [
+    {
+      "fecha": "05.08.2026",
+      "concepto": "Hospital San... (compra en comercio)",
+      "categoria": "Salud",
+      "nivel2": "Atención médica",
+      "nivel3": "Hospital",
+      "proveedor": "Hospital San...",
+      "importe": -99.43,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": ""
+    },
+    {
+      "fecha": "05.08.2026",
+      "concepto": "Fitness Barcelona (cuota)",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Gimnasio",
+      "nivel3": "",
+      "proveedor": "Fitness Barcelona",
+      "importe": -31.95,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": ""
+    },
+    {
+      "fecha": "05.08.2026",
+      "concepto": "Com. de Prop. Cl... (comunidad)",
+      "categoria": "Vivienda",
+      "nivel2": "Zamora 13 (residencia, padres)",
+      "nivel3": "Comunidad",
+      "proveedor": "Com. de Prop.",
+      "importe": -120.0,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Calle Zamora 13, Alcorcón -- vivienda de sus padres donde Alejandro reside (vivienda habitual cedida por ellos). Alejandro cubre estos gastos de comunidad"
+    },
+    {
+      "fecha": "04.08.2026",
+      "concepto": "O2 Fibra (teléfono)",
+      "categoria": "Vivienda",
+      "nivel2": "Zamora 13 (residencia)",
+      "nivel3": "Internet / Teléfono",
+      "proveedor": "O2",
+      "importe": -82.58,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": ""
+    },
+    {
+      "fecha": "03.08.2026",
+      "concepto": "Hospital San... (compra en comercio)",
+      "categoria": "Salud",
+      "nivel2": "Atención médica",
+      "nivel3": "Hospital",
+      "proveedor": "Hospital San...",
+      "importe": -639.43,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": ""
+    },
+    {
+      "fecha": "03.08.2026",
+      "concepto": "Ayt. Miramar (impuestos)",
+      "categoria": "Vivienda",
+      "nivel2": "Miramar (padres)",
+      "nivel3": "IBI / Impuesto municipal",
+      "proveedor": "Ayto. Miramar",
+      "importe": -19.55,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Vivienda de playa de sus padres en Miramar -- Alejandro cubre los gastos, no es de su propiedad"
+    },
+    {
+      "fecha": "03.08.2026",
+      "concepto": "Ayt. Miramar (impuestos)",
+      "categoria": "Vivienda",
+      "nivel2": "Miramar (padres)",
+      "nivel3": "IBI / Impuesto municipal",
+      "proveedor": "Ayto. Miramar",
+      "importe": -215.42,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Vivienda de playa de sus padres en Miramar -- Alejandro cubre los gastos, no es de su propiedad"
+    },
+    {
+      "fecha": "03.08.2026",
+      "concepto": "Fitness Barcelona (cuota)",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Gimnasio",
+      "nivel3": "",
+      "proveedor": "Fitness Barcelona",
+      "importe": -24.95,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": ""
+    },
+    {
+      "fecha": "03.08.2026",
+      "concepto": "Cdad Vistas al... (comunidad)",
+      "categoria": "Vivienda",
+      "nivel2": "Miramar (padres)",
+      "nivel3": "Comunidad",
+      "proveedor": "Cdad Vistas al Mar",
+      "importe": -90.22,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Vivienda de playa de sus padres en Miramar -- Alejandro cubre los gastos, no es de su propiedad"
+    },
+    {
+      "fecha": "03.08.2026",
+      "concepto": "Sanitas (previsión)",
+      "categoria": "Salud",
+      "nivel2": "Reembolsos",
+      "nivel3": "Reembolso Sanitas",
+      "proveedor": "Sanitas",
+      "importe": 297.8,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Reembolso 90% de gasto médico ya pagado"
+    },
+    {
+      "fecha": "03.08.2026",
+      "concepto": "Suscripción Premium MyInvestor",
+      "categoria": "Impuestos y seguros personales",
+      "nivel2": "Seguros",
+      "nivel3": "Cuota bancaria",
+      "proveedor": "MyInvestor",
+      "importe": -7.99,
+      "cuenta": "MyInvestor",
+      "nota": ""
+    },
+    {
+      "fecha": "03.08.2026",
+      "concepto": "Transferencia SEPA (interna)",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Entre bancos",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "MyInvestor",
+      "nota": "2000 EUR recibidos -- transferencia entre cuentas propias, confirmado por el usuario. No es ingreso real"
+    },
+    {
+      "fecha": "02.08.2026",
+      "concepto": "Vencimiento de préstamo",
+      "categoria": "Financiación",
+      "nivel2": "CaixaBank",
+      "nivel3": "Préstamo personal",
+      "proveedor": "CaixaBank",
+      "importe": -397.9,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Préstamo no incluido aún en BALANCE -- pendiente añadir como pasivo"
+    },
+    {
+      "fecha": "02.08.2026",
+      "concepto": "Mybox (cuota agrupada)",
+      "categoria": "Impuestos y seguros personales",
+      "nivel2": "Seguros",
+      "nivel3": "Seguro de vida",
+      "proveedor": "Mybox",
+      "importe": -79.9,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": ""
+    },
+    {
+      "fecha": "01.08.2026",
+      "concepto": "Traspaso - Luis Miguel Perez",
+      "categoria": "Familia / Terceros",
+      "nivel2": "Luis Miguel Pérez (padre)",
+      "nivel3": "Traspaso",
+      "proveedor": "",
+      "importe": -600.0,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Padre"
+    },
+    {
+      "fecha": "31.07.2026",
+      "concepto": "TGSS Cotizaciones",
+      "categoria": "Impuestos y seguros personales",
+      "nivel2": "Impuestos",
+      "nivel3": "Cuota autónomos",
+      "proveedor": "TGSS",
+      "importe": -88.56,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": ""
+    },
+    {
+      "fecha": "31.07.2026",
+      "concepto": "Recibo Duo Credit (interés pago aplazado)",
+      "categoria": "Financiación",
+      "nivel2": "Bankinter",
+      "nivel3": "Intereses tarjeta crédito",
+      "proveedor": "Duo Credit",
+      "importe": -30.0,
+      "cuenta": "Bankinter Tarjeta Duo Credit 0128.6001.76.0601296208",
+      "nota": "1.054€ pagado - 1.024€ dispuesto = coste financiero por aplazar el pago"
+    },
+    {
+      "fecha": "30.07.2026",
+      "concepto": "American Express",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "American Express",
+      "importe": -49.1,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Liquidación de otra tarjeta, sin desglose todavía"
+    },
+    {
+      "fecha": "30.07.2026",
+      "concepto": "Trans Inm/ Muro Hidalgo Capita",
+      "categoria": "Movimientos internos",
+      "nivel2": "Aportación M&H",
+      "nivel3": "Capital socio",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "Bankinter Cta Corriente Oro Nómina 0128.6001.76.0100187824",
+      "nota": "Aportación de capital como socio, no es gasto -- ya sumado en BALANCE como activo pendiente de devolución"
+    },
+    {
+      "fecha": "28.07.2026",
+      "concepto": "Liquidación préstamo 6654035991",
+      "categoria": "Financiación",
+      "nivel2": "MyInvestor",
+      "nivel3": "Préstamo pignorado",
+      "proveedor": "MyInvestor",
+      "importe": -89.89,
+      "cuenta": "MyInvestor",
+      "nota": "Cuota del préstamo pignorado MyInvestor"
+    },
+    {
+      "fecha": "27.07.2026",
+      "concepto": "Trans /Muro Hidalgo Capital Pa",
+      "categoria": "Movimientos internos",
+      "nivel2": "Aportación M&H",
+      "nivel3": "Capital socio",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "Bankinter Cta Corriente Oro Nómina 0128.6001.76.0100187824",
+      "nota": "Aportación de capital como socio, no es gasto -- ya sumado en BALANCE como activo pendiente de devolución"
+    },
+    {
+      "fecha": "24.07.2026",
+      "concepto": "Bizum recibido",
+      "categoria": "Otros",
+      "nivel2": "Devolución viaje (no realizado)",
+      "nivel3": "Tarifa",
+      "proveedor": "",
+      "importe": 156.0,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Compensa gasto de viaje anterior no realizado"
+    },
+    {
+      "fecha": "24.07.2026",
+      "concepto": "Bizum recibido",
+      "categoria": "Otros",
+      "nivel2": "Devolución viaje (no realizado)",
+      "nivel3": "Tarifa",
+      "proveedor": "",
+      "importe": 54.0,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Compensa gasto de viaje anterior no realizado"
+    },
+    {
+      "fecha": "23.07.2026",
+      "concepto": "24 Express",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "24 Express",
+      "importe": -3.6,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "22.07.2026",
+      "concepto": "Amazon",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -7.58,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "22.07.2026",
+      "concepto": "Amazon",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -82.53,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "22.07.2026",
+      "concepto": "Whisper.Money",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Suscripciones canceladas",
+      "nivel3": "",
+      "proveedor": "Whisper.Money",
+      "importe": -3.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": "App de control financiero, ya cancelada"
+    },
+    {
+      "fecha": "22.07.2026",
+      "concepto": "Amazon",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -15.96,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "22.07.2026",
+      "concepto": "Alimentacion Shan",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "Alimentación Shan",
+      "importe": -3.6,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "22.07.2026",
+      "concepto": "24 Express",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "24 Express",
+      "importe": -1.8,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "21.07.2026",
+      "concepto": "Amazon",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -18.45,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "21.07.2026",
+      "concepto": "Amazon",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -35.6,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "21.07.2026",
+      "concepto": "Prime Video (ad free)",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Prime Video",
+      "importe": -1.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "21.07.2026",
+      "concepto": "SP Farmaciasdirect",
+      "categoria": "Salud",
+      "nivel2": "Farmacia",
+      "nivel3": "",
+      "proveedor": "SP Farmaciasdirect",
+      "importe": -59.79,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "20.07.2026",
+      "concepto": "Amazon",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -12.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "20.07.2026",
+      "concepto": "Spotify",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Spotify",
+      "importe": -11.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "19.07.2026",
+      "concepto": "Uber Eats",
+      "categoria": "Restauración",
+      "nivel2": "Delivery",
+      "nivel3": "",
+      "proveedor": "Uber Eats",
+      "importe": -63.71,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "18.07.2026",
+      "concepto": "Apple.com/Bill",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Servicios técnicos personales",
+      "nivel3": "",
+      "proveedor": "Apple",
+      "importe": -9.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "18.07.2026",
+      "concepto": "BanaHosting",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Servicios técnicos personales",
+      "nivel3": "",
+      "proveedor": "BanaHosting",
+      "importe": -6.32,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": "Revisar si debería pasar a M&H en el futuro"
+    },
+    {
+      "fecha": "18.07.2026",
+      "concepto": "Avis Rent-a-Car",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Viajes",
+      "nivel3": "Valencia",
+      "proveedor": "Avis",
+      "importe": -85.59,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": "Viaje a Valencia"
+    },
+    {
+      "fecha": "18.07.2026",
+      "concepto": "Apple.com/Bill",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Servicios técnicos personales",
+      "nivel3": "",
+      "proveedor": "Apple",
+      "importe": -2.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "18.07.2026",
+      "concepto": "Himlaya Supermercados",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "Himlaya",
+      "importe": -6.07,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "18.07.2026",
+      "concepto": "Carrefour Móstoles",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "Carrefour",
+      "importe": -68.7,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "18.07.2026",
+      "concepto": "Liquidación préstamo 6652008882",
+      "categoria": "Financiación",
+      "nivel2": "MyInvestor",
+      "nivel3": "Préstamo pignorado",
+      "proveedor": "MyInvestor",
+      "importe": -304.48,
+      "cuenta": "MyInvestor",
+      "nota": "Cuota del préstamo pignorado MyInvestor"
+    },
+    {
+      "fecha": "17.07.2026",
+      "concepto": "Energía XXI (electricidad)",
+      "categoria": "Vivienda",
+      "nivel2": "Zamora 13 (residencia)",
+      "nivel3": "Luz",
+      "proveedor": "Energía XXI",
+      "importe": -29.87,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Confirmar si es 2º suministro o duplicado con Iberdrola"
+    },
+    {
+      "fecha": "17.07.2026",
+      "concepto": "Bizum enviado",
+      "categoria": "M&H / Inversión",
+      "nivel2": "Pendiente de cobro",
+      "nivel3": "Adelanto a M&H",
+      "proveedor": "",
+      "importe": -500.0,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Adelanto a M&H, pendiente que la empresa lo devuelva"
+    },
+    {
+      "fecha": "17.07.2026",
+      "concepto": "Bizum enviado",
+      "categoria": "M&H / Inversión",
+      "nivel2": "Pendiente de cobro",
+      "nivel3": "Adelanto a M&H",
+      "proveedor": "",
+      "importe": -60.0,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Adelanto a M&H, pendiente que la empresa lo devuelva"
+    },
+    {
+      "fecha": "17.07.2026",
+      "concepto": "AliExpress",
+      "categoria": "Otros",
+      "nivel2": "Compra anulada (neto 0)",
+      "nivel3": "",
+      "proveedor": "AliExpress",
+      "importe": 0.0,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": "Comprado y devuelto el 18.07 (neto 0) -- iba a ser para M&H, se anuló para cargarlo con tarjeta de M&H"
+    },
+    {
+      "fecha": "17.07.2026",
+      "concepto": "Disney Plus",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Disney Plus",
+      "importe": -15.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "17.07.2026",
+      "concepto": "NYX*ServeoServiciosSAU",
+      "categoria": "Restauración",
+      "nivel2": "Bares y restaurantes",
+      "nivel3": "",
+      "proveedor": "NYX*Serveo",
+      "importe": -2.6,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": "Probable bebida"
+    },
+    {
+      "fecha": "17.07.2026",
+      "concepto": "Uber Trip (Alcorcón a Chamartín)",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Viajes",
+      "nivel3": "Valencia",
+      "proveedor": "Uber",
+      "importe": -37.21,
+      "cuenta": "American Express Corporate Gold (uso personal)",
+      "nota": "Trayecto a la estación para el viaje a Valencia -- mismo viaje que Budget/RentalCover/Avis. Tarjeta corporativa de uso mixto, no se pasó a la empresa (uso personal)"
+    },
+    {
+      "fecha": "16.07.2026",
+      "concepto": "Transferencia recibida - Luis Miguel Perez",
+      "categoria": "Familia / Terceros",
+      "nivel2": "Luis Miguel Pérez (padre)",
+      "nivel3": "Transferencia recibida",
+      "proveedor": "",
+      "importe": 92.7,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Padre"
+    },
+    {
+      "fecha": "16.07.2026",
+      "concepto": "CRED Alcorcón",
+      "categoria": "Transporte",
+      "nivel2": "Combustible",
+      "nivel3": "",
+      "proveedor": "CRED Alcorcón",
+      "importe": -87.17,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "16.07.2026",
+      "concepto": "Alimentacion Shan",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "Alimentación Shan",
+      "importe": -3.2,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "16.07.2026",
+      "concepto": "Suscripción IIC Vanguard Global Stock",
+      "categoria": "Movimientos internos",
+      "nivel2": "Compra de fondo",
+      "nivel3": "Vanguard Global Stock",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "MyInvestor",
+      "nota": "264,00€ de efectivo pasa a inversión -- ya reflejado en el valor de mercado del activo"
+    },
+    {
+      "fecha": "16.07.2026",
+      "concepto": "Transferencia inmediata (interna)",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Entre bancos",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "MyInvestor",
+      "nota": "700 EUR recibidos -- transferencia entre cuentas propias, confirmado por el usuario"
+    },
+    {
+      "fecha": "15.07.2026",
+      "concepto": "Waylet",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Waylet",
+      "importe": -13.41,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "15.07.2026",
+      "concepto": "Renfe",
+      "categoria": "Transporte",
+      "nivel2": "Transporte público",
+      "nivel3": "",
+      "proveedor": "Renfe",
+      "importe": -6.0,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "15.07.2026",
+      "concepto": "Renfe",
+      "categoria": "Transporte",
+      "nivel2": "Transporte público",
+      "nivel3": "",
+      "proveedor": "Renfe",
+      "importe": -6.0,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "15.07.2026",
+      "concepto": "Amazon",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -7.59,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "15.07.2026",
+      "concepto": "AEAT (pago de impuestos)",
+      "categoria": "Impuestos y seguros personales",
+      "nivel2": "Impuestos",
+      "nivel3": "IRPF",
+      "proveedor": "AEAT",
+      "importe": -20.81,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "15.07.2026",
+      "concepto": "Budget Rent-a-Car",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Viajes",
+      "nivel3": "Valencia",
+      "proveedor": "Budget",
+      "importe": -77.92,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": "Viaje a Valencia"
+    },
+    {
+      "fecha": "15.07.2026",
+      "concepto": "RentalCover.com",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Viajes",
+      "nivel3": "Valencia",
+      "proveedor": "RentalCover",
+      "importe": -13.52,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": "Viaje a Valencia"
+    },
+    {
+      "fecha": "15.07.2026",
+      "concepto": "Renfe Viajeros App",
+      "categoria": "Transporte",
+      "nivel2": "Transporte público",
+      "nivel3": "",
+      "proveedor": "Renfe",
+      "importe": -166.5,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "15.07.2026",
+      "concepto": "Renfe Viajeros App",
+      "categoria": "Transporte",
+      "nivel2": "Transporte público",
+      "nivel3": "",
+      "proveedor": "Renfe",
+      "importe": -99.9,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "15.07.2026",
+      "concepto": "Renfe Viajeros App",
+      "categoria": "Transporte",
+      "nivel2": "Transporte público",
+      "nivel3": "",
+      "proveedor": "Renfe",
+      "importe": -29.0,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "15.07.2026",
+      "concepto": "Trans Inm/ Muro Hidalgo Capita",
+      "categoria": "Movimientos internos",
+      "nivel2": "Aportación M&H",
+      "nivel3": "Capital socio",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "Bankinter Cta Corriente Oro Nómina 0128.6001.76.0100187824",
+      "nota": "Aportación de capital como socio, no es gasto -- ya sumado en BALANCE como activo pendiente de devolución"
+    },
+    {
+      "fecha": "14.07.2026",
+      "concepto": "AC Farma Directo",
+      "categoria": "Salud",
+      "nivel2": "Farmacia",
+      "nivel3": "",
+      "proveedor": "AC Farma Directo",
+      "importe": -5.3,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "14.07.2026",
+      "concepto": "Grupo Sup Ahorramas",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "Ahorramas",
+      "importe": -22.67,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "14.07.2026",
+      "concepto": "Transferencia inmediata (interna)",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Entre bancos",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "MyInvestor",
+      "nota": "500 EUR recibidos -- transferencia entre cuentas propias, confirmado por el usuario"
+    },
+    {
+      "fecha": "11.07.2026",
+      "concepto": "Amazon",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -84.32,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "10.07.2026",
+      "concepto": "Sanitas (previsión)",
+      "categoria": "Salud",
+      "nivel2": "Reembolsos",
+      "nivel3": "Reembolso Sanitas",
+      "proveedor": "Sanitas",
+      "importe": 297.8,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Reembolso 90% de gasto médico ya pagado -- no es ingreso neto, compensa gasto previo"
+    },
+    {
+      "fecha": "10.07.2026",
+      "concepto": "Casa del Libro",
+      "categoria": "Educación",
+      "nivel2": "Libros",
+      "nivel3": "",
+      "proveedor": "Casa del Libro",
+      "importe": -17.19,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "10.07.2026",
+      "concepto": "Wellhub (gimnasio)",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Gimnasio",
+      "nivel3": "",
+      "proveedor": "Wellhub",
+      "importe": -49.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "09.07.2026",
+      "concepto": "Legalitas (previsión)",
+      "categoria": "Impuestos y seguros personales",
+      "nivel2": "Seguros",
+      "nivel3": "Seguro jurídico",
+      "proveedor": "Legálitas",
+      "importe": -20.9,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": ""
+    },
+    {
+      "fecha": "09.07.2026",
+      "concepto": "Bizum enviado",
+      "categoria": "Familia / Terceros",
+      "nivel2": "Luis Miguel Pérez (padre)",
+      "nivel3": "Fisioterapeuta",
+      "proveedor": "Bizum",
+      "importe": -360.0,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Fisioterapeuta de su padre"
+    },
+    {
+      "fecha": "09.07.2026",
+      "concepto": "Casa del Libro",
+      "categoria": "Educación",
+      "nivel2": "Libros",
+      "nivel3": "",
+      "proveedor": "Casa del Libro",
+      "importe": -1.0,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "09.07.2026",
+      "concepto": "Casa del Libro (devolución)",
+      "categoria": "Educación",
+      "nivel2": "Libros",
+      "nivel3": "Devolución",
+      "proveedor": "Casa del Libro",
+      "importe": 1.0,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": "Devolución de compra"
+    },
+    {
+      "fecha": "09.07.2026",
+      "concepto": "Bar Mesón González",
+      "categoria": "Restauración",
+      "nivel2": "Bares y restaurantes",
+      "nivel3": "",
+      "proveedor": "Bar Mesón González",
+      "importe": -4.0,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "09.07.2026",
+      "concepto": "Alimentacion",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "",
+      "importe": -5.1,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "08.07.2026",
+      "concepto": "Cedreo (software diseño)",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Hobbies",
+      "nivel3": "Software diseño",
+      "proveedor": "Cedreo",
+      "importe": -95.59,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": "Pensado para M&H pero decidido como gasto personal"
+    },
+    {
+      "fecha": "08.07.2026",
+      "concepto": "PayPal *Github",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Servicios técnicos personales",
+      "nivel3": "",
+      "proveedor": "Github",
+      "importe": -3.65,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": "Revisar si debería pasar a M&H en el futuro"
+    },
+    {
+      "fecha": "08.07.2026",
+      "concepto": "V_TheLiven.com",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Servicios técnicos personales",
+      "nivel3": "",
+      "proveedor": "V_TheLiven.com",
+      "importe": -24.19,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": "App, sin más detalle"
+    },
+    {
+      "fecha": "08.07.2026",
+      "concepto": "Fourvenues (entradas)",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Viajes",
+      "nivel3": "Tarifa (cancelado)",
+      "proveedor": "Fourvenues",
+      "importe": -154.0,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": "Viaje a Tarifa (cancelado) -- no se anula porque no hay certeza de que esté cubierto por los 210€ devueltos"
+    },
+    {
+      "fecha": "08.07.2026",
+      "concepto": "Estacionam. y Garajes Vir.",
+      "categoria": "Transporte",
+      "nivel2": "Parking",
+      "nivel3": "",
+      "proveedor": "Estacionam. y Garajes Vir.",
+      "importe": -4.35,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "07.07.2026",
+      "concepto": "Iberdrola Electricidad",
+      "categoria": "Vivienda",
+      "nivel2": "Zamora 13 (residencia)",
+      "nivel3": "Luz",
+      "proveedor": "Iberdrola",
+      "importe": -19.93,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": ""
+    },
+    {
+      "fecha": "07.07.2026",
+      "concepto": "Iberdrola Electricidad",
+      "categoria": "Vivienda",
+      "nivel2": "Zamora 13 (residencia)",
+      "nivel3": "Luz",
+      "proveedor": "Iberdrola",
+      "importe": -34.8,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": ""
+    },
+    {
+      "fecha": "07.07.2026",
+      "concepto": "HSNSTORE.com",
+      "categoria": "Alimentación",
+      "nivel2": "Suplementos",
+      "nivel3": "",
+      "proveedor": "HSNstore",
+      "importe": -34.89,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "07.07.2026",
+      "concepto": "Alimentacion",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "",
+      "importe": -0.8,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "06.07.2026",
+      "concepto": "Farmacia Juan Atienza Serna",
+      "categoria": "Salud",
+      "nivel2": "Farmacia",
+      "nivel3": "",
+      "proveedor": "Farmacia Juan Atienza Serna",
+      "importe": -163.05,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "06.07.2026",
+      "concepto": "24 Express",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "24 Express",
+      "importe": -4.8,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "06.07.2026",
+      "concepto": "Hostelera Castillo",
+      "categoria": "Restauración",
+      "nivel2": "Bares y restaurantes",
+      "nivel3": "",
+      "proveedor": "Hostelera Castillo",
+      "importe": -2.0,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "04.07.2026",
+      "concepto": "Amazon",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -21.75,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "04.07.2026",
+      "concepto": "Apple.com/Bill",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Servicios técnicos personales",
+      "nivel3": "",
+      "proveedor": "Apple",
+      "importe": -10.99,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "04.07.2026",
+      "concepto": "BK12390 Alcorcón (Burger King)",
+      "categoria": "Restauración",
+      "nivel2": "Bares y restaurantes",
+      "nivel3": "",
+      "proveedor": "Burger King",
+      "importe": -31.0,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "04.07.2026",
+      "concepto": "BK12390 Alcorcón (Burger King)",
+      "categoria": "Restauración",
+      "nivel2": "Bares y restaurantes",
+      "nivel3": "",
+      "proveedor": "Burger King",
+      "importe": -3.0,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "03.07.2026",
+      "concepto": "Hetzner Online",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Servicios técnicos personales",
+      "nivel3": "",
+      "proveedor": "Hetzner",
+      "importe": -20.92,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": "Revisar si debería pasar a M&H en el futuro"
+    },
+    {
+      "fecha": "03.07.2026",
+      "concepto": "Aparcam. Hosp. Univ. Fund.",
+      "categoria": "Transporte",
+      "nivel2": "Parking",
+      "nivel3": "",
+      "proveedor": "Aparcam. Hosp. Univ.",
+      "importe": -1.6,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "03.07.2026",
+      "concepto": "Expbustam2 (Alcobendas)",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Expbustam2",
+      "importe": -7.09,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": "Origen incierto -- posiblemente M&H, posiblemente un consumo trivial (ej. bebida). Sin identificar con certeza, importe bajo, no requiere más seguimiento"
+    },
+    {
+      "fecha": "03.07.2026",
+      "concepto": "Trans Inm/ Muro Hidalgo Capita",
+      "categoria": "Movimientos internos",
+      "nivel2": "Aportación M&H",
+      "nivel3": "Capital socio",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "Bankinter Cta Corriente Oro Nómina 0128.6001.76.0100187824",
+      "nota": "Aportación de capital como socio, no es gasto -- ya sumado en BALANCE como activo pendiente de devolución"
+    },
+    {
+      "fecha": "03.07.2026",
+      "concepto": "Paddle.net *N8N Cloud1",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Servicios técnicos personales",
+      "nivel3": "",
+      "proveedor": "N8N Cloud",
+      "importe": -24.0,
+      "cuenta": "Bankinter Tarjeta Duo Credit 0128.6001.76.0601296208",
+      "nota": ""
+    },
+    {
+      "fecha": "03.07.2026",
+      "concepto": "Disposición de crédito (dinero a cuenta)",
+      "categoria": "Movimientos internos",
+      "nivel2": "Disposición de crédito",
+      "nivel3": "Bankinter Duo Credit",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "Bankinter Tarjeta Duo Credit 0128.6001.76.0601296208",
+      "nota": "Disposición de 1.000€ de crédito hacia la cuenta corriente -- no es gasto nuevo, el dinero ya se gastó por otra vía"
+    },
+    {
+      "fecha": "03.07.2026",
+      "concepto": "Suscripción Premium MyInvestor",
+      "categoria": "Impuestos y seguros personales",
+      "nivel2": "Seguros",
+      "nivel3": "Cuota bancaria",
+      "proveedor": "MyInvestor",
+      "importe": -7.99,
+      "cuenta": "MyInvestor",
+      "nota": ""
+    },
+    {
+      "fecha": "03.07.2026",
+      "concepto": "Suscripción IIC Vanguard Emerging Markets",
+      "categoria": "Movimientos internos",
+      "nivel2": "Compra de fondo",
+      "nivel3": "Vanguard Emerging Markets",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "MyInvestor",
+      "nota": "33,69€ de efectivo pasa a inversión -- ya reflejado en el valor de mercado del activo"
+    },
+    {
+      "fecha": "02.07.2026",
+      "concepto": "Spliiit",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Spliiit",
+      "importe": -4.67,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "02.07.2026",
+      "concepto": "Fcia Juan Atienza Serna",
+      "categoria": "Salud",
+      "nivel2": "Farmacia",
+      "nivel3": "",
+      "proveedor": "Fcia Juan Atienza Serna",
+      "importe": -15.36,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "02.07.2026",
+      "concepto": "Alimentacion Shan",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "Alimentación Shan",
+      "importe": -4.65,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "02.07.2026",
+      "concepto": "Lidl Alcorcón",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "Lidl",
+      "importe": -7.75,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "01.07.2026",
+      "concepto": "Movistar Plus",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Movistar Plus",
+      "importe": -9.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "30.06.2026",
+      "concepto": "Netflix",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Netflix",
+      "importe": -28.98,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "30.06.2026",
+      "concepto": "Amazon",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -59.74,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "30.06.2026",
+      "concepto": "Prime Video",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Prime Video",
+      "importe": -5.49,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "30.06.2026",
+      "concepto": "Prime Video",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Prime Video",
+      "importe": -3.49,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "30.06.2026",
+      "concepto": "Apple.com/Bill",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Servicios técnicos personales",
+      "nivel3": "",
+      "proveedor": "Apple",
+      "importe": -33.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "30.06.2026",
+      "concepto": "Alimentacion Shan",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "Alimentación Shan",
+      "importe": -1.8,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "29.06.2026",
+      "concepto": "Prime Video",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Prime Video",
+      "importe": -9.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "29.06.2026",
+      "concepto": "Amazon",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -35.6,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "29.06.2026",
+      "concepto": "Grafites (copistería)",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Grafites",
+      "importe": -3.0,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "28.06.2026",
+      "concepto": "Alimentacion Shan",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "Alimentación Shan",
+      "importe": -1.7,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "28.06.2026",
+      "concepto": "Liquidación préstamo 6654035991",
+      "categoria": "Financiación",
+      "nivel2": "MyInvestor",
+      "nivel3": "Préstamo pignorado",
+      "proveedor": "MyInvestor",
+      "importe": -89.89,
+      "cuenta": "MyInvestor",
+      "nota": "Cuota del préstamo pignorado MyInvestor"
+    },
+    {
+      "fecha": "26.06.2026",
+      "concepto": "Apple.com/Bill",
+      "categoria": "Ocio y suscripciones",
+      "nivel2": "Servicios técnicos personales",
+      "nivel3": "",
+      "proveedor": "Apple",
+      "importe": -9.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "24.06.2026",
+      "concepto": "Aportación socio",
+      "categoria": "Movimientos internos",
+      "nivel2": "Aportación M&H",
+      "nivel3": "Capital socio",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "MyInvestor",
+      "nota": "Aportación de capital como socio, no es gasto -- ya sumado en BALANCE como activo pendiente de devolución"
+    },
+    {
+      "fecha": "24.06.2026",
+      "concepto": "Transferencia inmediata (interna)",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Entre bancos",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "MyInvestor",
+      "nota": "1000 EUR recibidos -- transferencia entre cuentas propias, confirmado por el usuario"
+    },
+    {
+      "fecha": "19.06.2026",
+      "concepto": "Suscripción IIC Vanguard Emerging Markets",
+      "categoria": "Movimientos internos",
+      "nivel2": "Compra de fondo",
+      "nivel3": "Vanguard Emerging Markets",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "MyInvestor",
+      "nota": "35,62€ de efectivo pasa a inversión -- ya reflejado en el valor de mercado del activo"
+    },
+    {
+      "fecha": "19.06.2026",
+      "concepto": "Aportación socio",
+      "categoria": "Movimientos internos",
+      "nivel2": "Aportación M&H",
+      "nivel3": "Capital socio",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "MyInvestor",
+      "nota": "Aportación de capital como socio, no es gasto -- ya sumado en BALANCE como activo pendiente de devolución"
+    },
+    {
+      "fecha": "19.06.2026",
+      "concepto": "Transferencia desde MyInvestor (interna)",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Entre bancos",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "MyInvestor",
+      "nota": "-250€ enviados a CaixaBank Cta Corriente ES09...8164, misma titularidad -- transferencia entre cuentas propias, confirmado en el detalle de la orden"
+    },
+    {
+      "fecha": "19.06.2026",
+      "concepto": "Transferencia inmediata (interna)",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Entre bancos",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "MyInvestor",
+      "nota": "5500 EUR recibidos -- transferencia entre cuentas propias, confirmado por el usuario"
+    },
+    {
+      "fecha": "18.06.2026",
+      "concepto": "Liquidación préstamo 6652008882",
+      "categoria": "Financiación",
+      "nivel2": "MyInvestor",
+      "nivel3": "Préstamo pignorado",
+      "proveedor": "MyInvestor",
+      "importe": -304.48,
+      "cuenta": "MyInvestor",
+      "nota": "Cuota del préstamo pignorado MyInvestor"
+    },
+    {
+      "fecha": "18.06.2026",
+      "concepto": "Suscripción IIC Vanguard Global Stock",
+      "categoria": "Movimientos internos",
+      "nivel2": "Compra de fondo",
+      "nivel3": "Vanguard Global Stock",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "MyInvestor",
+      "nota": "263,42€ de efectivo pasa a inversión -- ya reflejado en el valor de mercado del activo"
     }
   ],
   "real_estate": [
@@ -769,6 +2283,71 @@
     rows += `<tr><td>${e.mes}</td><td class="num">${fmt(e.patrimonio_neto)}</td><td class="num ${deltaClass}">${deltaTxt}</td></tr>`;
   });
   evolTable.innerHTML = rows;
+
+  // ---------- tabs ----------
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ---------- detalle de gastos ----------
+  const movimientos = DATA.movimientos || [];
+  document.getElementById('detalleHeading').textContent = `${movimientos.length} movimientos`;
+
+  const categoriasUnicas = [...new Set(movimientos.map(m => m.categoria))].sort();
+  const filtroCategoria = document.getElementById('filtroCategoria');
+  categoriasUnicas.forEach(cat => {
+    const opt = document.createElement('option');
+    opt.value = cat; opt.textContent = cat;
+    filtroCategoria.appendChild(opt);
+  });
+
+  const detalleBody = document.getElementById('detalleBody');
+  const detalleCount = document.getElementById('detalleCount');
+
+  function renderDetalle() {
+    const catFiltro = filtroCategoria.value;
+    const textoFiltro = document.getElementById('filtroTexto').value.trim().toLowerCase();
+
+    const filtrados = movimientos.filter(m => {
+      if (catFiltro && m.categoria !== catFiltro) return false;
+      if (textoFiltro) {
+        const haystack = `${m.concepto} ${m.proveedor} ${m.nivel2} ${m.nivel3}`.toLowerCase();
+        if (!haystack.includes(textoFiltro)) return false;
+      }
+      return true;
+    });
+
+    if (filtrados.length === 0) {
+      detalleBody.innerHTML = `<tr><td colspan="6" class="empty-note">Sin movimientos que coincidan con el filtro.</td></tr>`;
+    } else {
+      detalleBody.innerHTML = filtrados.map(m => {
+        const esInterno = m.categoria === 'Movimientos internos';
+        const importeClass = m.importe > 0 ? 'pos' : 'neg';
+        const importeTxt = (m.importe >= 0 ? '+' : '') + fmt(m.importe);
+        return `<tr class="${esInterno ? 'interno' : ''}">
+          <td data-label="Fecha">${m.fecha}</td>
+          <td data-label="Concepto">${m.concepto}${m.nota ? `<div class="muted">${m.nota}</div>` : ''}</td>
+          <td data-label="Categoría">${m.categoria}${m.nivel2 ? ` · ${m.nivel2}` : ''}</td>
+          <td data-label="Proveedor" class="muted">${m.proveedor || '—'}</td>
+          <td data-label="Importe" class="num ${importeClass}">${importeTxt}</td>
+          <td data-label="Cuenta" class="muted">${m.cuenta || '—'}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    const total = filtrados.reduce((s, m) => s + m.importe, 0);
+    detalleCount.textContent = `${filtrados.length} movimientos · ${fmt(total)}`;
+  }
+
+  filtroCategoria.addEventListener('change', renderDetalle);
+  document.getElementById('filtroTexto').addEventListener('input', renderDetalle);
+  renderDetalle();
 
   // ---------- theme toggle ----------
   const toggle = document.getElementById('themeToggle');

@@ -403,6 +403,9 @@
     <div class="col">
       <div class="panel">
         <h2 id="gastosHeading">Gasto por categoría</h2>
+        <div class="detalle-controls" style="margin-bottom:12px;">
+          <select id="filtroMesResumen"></select>
+        </div>
         <div id="bars"></div>
         <div class="bar-foot">
           <span class="lbl">Total gasto real</span>
@@ -435,6 +438,7 @@
     <div class="panel">
       <h2>Detalle de movimientos <span class="count" id="detalleHeading"></span></h2>
       <div class="detalle-controls">
+        <select id="filtroMesDetalle"></select>
         <select id="filtroCategoria">
           <option value="">Todas las categorías</option>
         </select>
@@ -2189,20 +2193,72 @@
     legend.appendChild(row);
   });
 
-  // ---------- gasto bars ----------
-  document.getElementById('gastosHeading').innerHTML = `Gasto por categoría <span class="count">${DATA.gastos_periodo_label}</span>`;
-  document.getElementById('gastosTotal').textContent = fmt(DATA.kpi.gastos_mes);
-  const bars = document.getElementById('bars');
-  const maxGasto = Math.max(...DATA.gastos.map(g=>g.value), 1);
-  DATA.gastos.forEach(g => {
-    const pct = (g.value / maxGasto * 100).toFixed(0);
-    const row = document.createElement('div');
-    row.className = 'bar-row';
-    row.innerHTML = `<span class="cat">${g.label}</span>
-      <span class="bar-track"><span class="bar-fill" style="width:${pct}%"></span></span>
-      <span class="amt num">${fmt(g.value)}</span>`;
-    bars.appendChild(row);
+  // ---------- meses disponibles (a partir de los movimientos reales) ----------
+  const EXCLUIR_DEL_GASTO_REAL = ['Movimientos internos', 'M&H / Inversión'];
+  function mesKeyDe(fecha) {
+    // fecha viene como dd.mm.yyyy
+    const partes = fecha.split('.');
+    if (partes.length !== 3) return null;
+    return `${partes[2]}-${partes[1]}`; // yyyy-mm, ordenable como texto
+  }
+  const NOMBRES_MES = ['', 'Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  function nombreMes(key) {
+    const [y, m] = key.split('-');
+    return `${NOMBRES_MES[parseInt(m,10)]} ${y}`;
+  }
+  const movimientosAll = DATA.movimientos || [];
+  const mesesDisponibles = [...new Set(movimientosAll.map(m => mesKeyDe(m.fecha)).filter(Boolean))].sort().reverse();
+
+  function calcularGastosPorMes(mesKey) {
+    const enMes = mesKey === 'todos'
+      ? movimientosAll
+      : movimientosAll.filter(m => mesKeyDe(m.fecha) === mesKey);
+    const porCategoria = {};
+    enMes.forEach(m => {
+      if (EXCLUIR_DEL_GASTO_REAL.includes(m.categoria)) return;
+      porCategoria[m.categoria] = (porCategoria[m.categoria] || 0) + Math.abs(m.importe);
+    });
+    const gastos = Object.entries(porCategoria)
+      .map(([label, value]) => ({ label, value }))
+      .sort((a,b) => b.value - a.value);
+    const total = gastos.reduce((s,g) => s+g.value, 0);
+    return { gastos, total };
+  }
+
+  function renderBars(mesKey) {
+    const { gastos, total } = calcularGastosPorMes(mesKey);
+    const etiquetaPeriodo = mesKey === 'todos' ? 'todos los meses cargados' : `${nombreMes(mesKey)} · excl. movimientos internos`;
+    document.getElementById('gastosHeading').innerHTML = `Gasto por categoría <span class="count">${etiquetaPeriodo}</span>`;
+    document.getElementById('gastosTotal').textContent = fmt(total);
+    const bars = document.getElementById('bars');
+    if (gastos.length === 0) {
+      bars.innerHTML = `<div class="empty-note">Sin gastos registrados en este periodo.</div>`;
+      return;
+    }
+    const maxGasto = Math.max(...gastos.map(g=>g.value), 1);
+    bars.innerHTML = gastos.map(g => {
+      const pct = (g.value / maxGasto * 100).toFixed(0);
+      return `<div class="bar-row">
+        <span class="cat">${g.label}</span>
+        <span class="bar-track"><span class="bar-fill" style="width:${pct}%"></span></span>
+        <span class="amt num">${fmt(g.value)}</span>
+      </div>`;
+    }).join('');
+  }
+
+  const filtroMesResumen = document.getElementById('filtroMesResumen');
+  const mesActualKey = mesesDisponibles[0]; // mes más reciente con datos
+  mesesDisponibles.forEach(key => {
+    const opt = document.createElement('option');
+    opt.value = key; opt.textContent = nombreMes(key);
+    filtroMesResumen.appendChild(opt);
   });
+  const optTodos = document.createElement('option');
+  optTodos.value = 'todos'; optTodos.textContent = 'Todos los meses';
+  filtroMesResumen.appendChild(optTodos);
+  filtroMesResumen.value = mesActualKey;
+  filtroMesResumen.addEventListener('change', () => renderBars(filtroMesResumen.value));
+  renderBars(mesActualKey);
 
   // ---------- real estate table ----------
   const reTotal = DATA.real_estate.reduce((s,r)=>s+r.valor, 0);
@@ -2300,7 +2356,7 @@
   });
 
   // ---------- detalle de gastos ----------
-  const movimientos = DATA.movimientos || [];
+  const movimientos = movimientosAll;
   document.getElementById('detalleHeading').textContent = `${movimientos.length} movimientos`;
 
   const categoriasUnicas = [...new Set(movimientos.map(m => m.categoria))].sort();
@@ -2311,14 +2367,28 @@
     filtroCategoria.appendChild(opt);
   });
 
+  const filtroMesDetalle = document.getElementById('filtroMesDetalle');
+  const optTodosDetalle = document.createElement('option');
+  optTodosDetalle.value = ''; optTodosDetalle.textContent = 'Todos los meses';
+  filtroMesDetalle.appendChild(optTodosDetalle);
+  mesesDisponibles.forEach(key => {
+    const opt = document.createElement('option');
+    opt.value = key; opt.textContent = nombreMes(key);
+    filtroMesDetalle.appendChild(opt);
+  });
+  // por defecto, ver todos los meses en el detalle (a diferencia del resumen,
+  // que arranca en el mes más reciente) -- el detalle es para bucear libremente
+
   const detalleBody = document.getElementById('detalleBody');
   const detalleCount = document.getElementById('detalleCount');
 
   function renderDetalle() {
+    const mesFiltro = filtroMesDetalle.value;
     const catFiltro = filtroCategoria.value;
     const textoFiltro = document.getElementById('filtroTexto').value.trim().toLowerCase();
 
     const filtrados = movimientos.filter(m => {
+      if (mesFiltro && mesKeyDe(m.fecha) !== mesFiltro) return false;
       if (catFiltro && m.categoria !== catFiltro) return false;
       if (textoFiltro) {
         const haystack = `${m.concepto} ${m.proveedor} ${m.nivel2} ${m.nivel3}`.toLowerCase();
@@ -2349,6 +2419,7 @@
     detalleCount.textContent = `${filtrados.length} movimientos · ${fmt(total)}`;
   }
 
+  filtroMesDetalle.addEventListener('change', renderDetalle);
   filtroCategoria.addEventListener('change', renderDetalle);
   document.getElementById('filtroTexto').addEventListener('input', renderDetalle);
   renderDetalle();

@@ -92,15 +92,23 @@
     font-size:12.5px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em;
     color:var(--muted); margin:0 0 14px;
   }
-  .ratio-grid{ display:grid; grid-template-columns: repeat(5, 1fr); gap:16px; }
-  .ratio-item{ display:flex; flex-direction:column; gap:6px; }
-  .ratio-item .rlabel{ font-size:11px; color:var(--faint); line-height:1.3; min-height:28px; }
+  .ratio-grid{ display:grid; grid-template-columns: repeat(5, 1fr); gap:0; }
+  .ratio-item{
+    display:flex; flex-direction:column; gap:6px; padding:0 16px;
+    border-left:1px solid var(--border-2);
+  }
+  .ratio-item:first-child{ border-left:none; padding-left:0; }
+  .ratio-item:last-child{ padding-right:0; }
+  .ratio-item .rlabel{
+    font-size:10px; color:var(--faint); line-height:1.3; min-height:26px;
+    text-transform:uppercase; letter-spacing:0.04em; font-weight:500;
+  }
   .ratio-item .rvalue{ font-size:20px; font-weight:600; display:flex; align-items:center; gap:6px; }
   .ratio-item .rdot{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
   .ratio-item .rdot.ok{ background:var(--accent); }
   .ratio-item .rdot.warn{ background:oklch(75% 0.14 75); }
   .ratio-item .rdot.bad{ background:var(--danger); }
-  .ratio-item .rnote{ font-size:10.5px; color:var(--faint); }
+  .ratio-item .rnote{ font-size:10.5px; color:var(--muted); }
 
   .main-grid{ display:grid; grid-template-columns: 1.35fr 1fr; gap:14px; margin-bottom:14px; }
   .col{ display:flex; flex-direction:column; gap:14px; }
@@ -359,7 +367,7 @@
 
 <script type="application/json" id="dashboard-data">
 {
-  "generated_at": "17.08.2026",
+  "generated_at": "18.08.2026",
   "kpi": {
     "patrimonio_neto": 303778.98,
     "total_activos": 439092.89,

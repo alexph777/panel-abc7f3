@@ -466,13 +466,13 @@
 {
   "generated_at": "18.09.2026",
   "kpi": {
-    "patrimonio_neto": 290187.47,
-    "total_activos": 424878.14,
+    "patrimonio_neto": 294933.01,
+    "total_activos": 429623.68,
     "total_pasivos": 134690.67,
-    "cashflow_mes": -11777.51,
-    "ingresos_mes": 8974.58,
-    "gastos_mes": 20752.09,
-    "delta_neto_texto": "Activos − Pasivos · primer registro, sin histórico previo",
+    "cashflow_mes": 706.59,
+    "ingresos_mes": 11409.58,
+    "gastos_mes": 10702.99,
+    "delta_neto_texto": "-8.845,97 € vs mes anterior",
     "cuota_mensual_total": 1290.75
   },
   "activos": [
@@ -498,7 +498,7 @@
     },
     {
       "label": "Cuentas bancarias",
-      "value": 8480.32,
+      "value": 13225.86,
       "color": "oklch(74% 0.06 165)"
     },
     {
@@ -515,10 +515,6 @@
   "gastos_periodo_label": "09/2026 · excl. movimientos internos",
   "gastos": [
     {
-      "label": "Otros",
-      "value": 11083.75
-    },
-    {
       "label": "Financiación",
       "value": 2503.86
     },
@@ -529,6 +525,10 @@
     {
       "label": "Impuestos y seguros personales",
       "value": 1193.36
+    },
+    {
+      "label": "Otros",
+      "value": 1034.65
     },
     {
       "label": "Vivienda",
@@ -577,14 +577,25 @@
     },
     {
       "fecha": "10.09.2026",
-      "concepto": "Transferencia (destino desconocido)",
-      "categoria": "Otros",
-      "nivel2": "Sin clasificar",
-      "nivel3": "Pendiente confirmar destino",
+      "concepto": "Transferencia interna a CaixaBank (salida)",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Entre bancos",
       "proveedor": "",
-      "importe": -10000.0,
+      "importe": 0.0,
       "cuenta": "Trade Republic ES73...9111",
-      "nota": "PENDIENTE: destino desconocido, el usuario no lo tiene identificado todavia -- confirmar cuando se aclare"
+      "nota": "10.000 EUR enviados a CaixaBank Cta Corriente ES09...8164 (comprobante verificado, captura de la app Trade Republic) -- transferencia entre cuentas propias, confirmado por el usuario"
+    },
+    {
+      "fecha": "10.09.2026",
+      "concepto": "Transferencia inmediata (interna, entrada)",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Entre bancos",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "10.000 EUR recibidos desde Trade Republic (comprobante verificado, captura de la app) -- transferencia entre cuentas propias, resuelve el pendiente de Trade Republic. Nota: aún fuera del rango de extractos CaixaBank ya procesados (último hasta 06.09), pendiente de verificar contra el próximo extracto real de CaixaBank"
     },
     {
       "fecha": "03.09.2026",
@@ -610,14 +621,14 @@
     },
     {
       "fecha": "02.09.2026",
-      "concepto": "Transferencia SEPA recibida (posible destino de -2.000€ CaixaBank 01.09)",
-      "categoria": "Otros",
-      "nivel2": "Sin clasificar",
-      "nivel3": "Pendiente confirmar origen",
+      "concepto": "Transferencia interna desde CaixaBank (entrada)",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Entre bancos",
       "proveedor": "",
       "importe": 0.0,
       "cuenta": "MyInvestor",
-      "nota": "PENDIENTE: posible contrapartida de la salida -2.000EUR en CaixaBank Cta Corriente del 01.09 (Servicio de pagos-transferencias) -- 1 dia de desfase encaja con el patron habitual, pero el usuario prefiere confirmar mas adelante antes de darlo por cerrado"
+      "nota": "2.000 EUR recibidos desde CaixaBank Cta Corriente ES09...8164 (comprobante verificado, captura de la app CaixaBank: -2.000€ 01.09 15:32, concepto PAGO TRANSFERENCIAS) -- transferencia entre cuentas propias, confirmado por el usuario"
     },
     {
       "fecha": "01.09.2026",
@@ -662,6 +673,17 @@
       "importe": 0.0,
       "cuenta": "CaixaBank Cta Corriente ES09...8164",
       "nota": "10.000 EUR recibidos desde Trade Republic -- transferencia entre cuentas propias, resuelve el pendiente del extracto CaixaBank del 01.09"
+    },
+    {
+      "fecha": "01.09.2026",
+      "concepto": "Servicio de pagos-transferencias (interna, salida)",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Entre bancos",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "2.000 EUR enviados a MyInvestor (comprobante verificado, captura de la app CaixaBank) -- transferencia entre cuentas propias, resuelve el pendiente de MyInvestor. Nota: aún fuera del rango de extractos CaixaBank ya procesados (último hasta 06.09), pendiente de verificar contra el próximo extracto real"
     },
     {
       "fecha": "31.08.2026",
@@ -793,17 +815,6 @@
       "proveedor": "Ikea",
       "importe": -74.78,
       "cuenta": "CaixaBank Visa Oro",
-      "nota": ""
-    },
-    {
-      "fecha": "26.08.2026",
-      "concepto": "Nómina Accenture",
-      "categoria": "Nómina",
-      "nivel2": "Accenture",
-      "nivel3": "",
-      "proveedor": "Accenture SL",
-      "importe": 2435.0,
-      "cuenta": "Bankinter Cta Corriente Oro Nómina 0128.6001.76.0100187824",
       "nota": ""
     },
     {
@@ -1721,14 +1732,14 @@
     },
     {
       "fecha": "05.08.2026",
-      "concepto": "V_Theliven.com (suscripción, pendiente cancelar)",
+      "concepto": "V_Theliven.com (suscripción)",
       "categoria": "Suscripciones",
       "nivel2": "Servicios técnicos personales",
-      "nivel3": "Pendiente cancelación",
+      "nivel3": "Cancelada por el usuario",
       "proveedor": "Theliven",
       "importe": -48.39,
       "cuenta": "CaixaBank Visa Oro",
-      "nota": ""
+      "nota": "Cancelada -- último cargo esperado, no debería repetirse en extractos futuros"
     },
     {
       "fecha": "04.08.2026",
@@ -2227,14 +2238,14 @@
     },
     {
       "fecha": "30.07.2026",
-      "concepto": "American Express",
-      "categoria": "Otros",
-      "nivel2": "Sin clasificar",
-      "nivel3": "",
-      "proveedor": "American Express",
-      "importe": -49.1,
+      "concepto": "Pago American Express (pago tarjeta)",
+      "categoria": "Movimientos internos",
+      "nivel2": "Pago tarjeta de crédito",
+      "nivel3": "American Express",
+      "proveedor": "",
+      "importe": 0.0,
       "cuenta": "CaixaBank Cta Corriente ES09...8164",
-      "nota": "Liquidación de otra tarjeta, sin desglose todavía"
+      "nota": "49,10 EUR -- pago que liquida el saldo anterior de Amex (previo al periodo 03.07-02.08), confirmado como interno tras procesar el extracto real de Amex de esta ronda"
     },
     {
       "fecha": "30.07.2026",
@@ -4028,33 +4039,38 @@
   ],
   "evolucion": [
     {
-      "mes": "Agosto 2026",
-      "patrimonio_neto": 290187.47,
+      "mes": "18.08.2026 (snapshot real, backup verificado)",
+      "patrimonio_neto": 303778.98,
       "es_primero": true
+    },
+    {
+      "mes": "18.09.2026 (snapshot real, tras hardening + correcciones de datos + robustez auditoria)",
+      "patrimonio_neto": 294933.01,
+      "es_primero": false
     }
   ],
   "ratios": [
     {
       "label": "Deuda / Activos",
-      "display": "31,7%",
+      "display": "31,4%",
       "status": "ok",
       "nota": "Sano: menos de 40%"
     },
     {
       "label": "Esfuerzo de deuda (cuota/ingresos)",
-      "display": "14,4%",
+      "display": "11,3%",
       "status": "ok",
       "nota": "Alerta: más de 35-40%"
     },
     {
       "label": "Tasa de ahorro mensual",
-      "display": "-131,2%",
-      "status": "bad",
+      "display": "6,2%",
+      "status": "warn",
       "nota": "Objetivo: 10-15% o más"
     },
     {
       "label": "Colchón de liquidez",
-      "display": "0,4 meses",
+      "display": "1,2 meses",
       "status": "bad",
       "nota": "Estándar: 3-6 meses"
     },

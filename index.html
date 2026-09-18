@@ -193,11 +193,20 @@
   .tag.mora{ background:var(--risk-soft); color:var(--risk-ink); }
   .empty-note{ font-size:12px; color:var(--faint); padding:6px 0; }
 
-  .bar-row{ display:grid; grid-template-columns: 130px 1fr 78px; align-items:center; gap:10px; margin-bottom:9px; font-size:12.5px; }
+  .bar-row{ display:grid; grid-template-columns: 130px 1fr 78px; align-items:center; gap:10px; margin-bottom:9px; font-size:12.5px; cursor:pointer; }
   .bar-row .cat{ color:var(--ink); }
+  .bar-row .cat::before{ content:'▸'; display:inline-block; width:12px; color:var(--muted); transition:transform .15s ease; }
+  .bar-row.expanded .cat::before{ transform:rotate(90deg); }
   .bar-track{ height:16px; background:var(--surface-2); border-radius:4px; overflow:hidden; }
   .bar-fill{ display:block; height:100%; background:var(--accent); border-radius:4px 0 0 4px; }
   .bar-row .amt{ text-align:right; color:var(--muted); }
+  .subcat-panel{ display:none; padding:2px 0 10px 22px; margin-bottom:2px; }
+  .subcat-panel.open{ display:block; }
+  .subcat-row{ display:grid; grid-template-columns: 108px 1fr 70px; align-items:center; gap:10px; margin-bottom:5px; font-size:11.5px; }
+  .subcat-row .subcat{ color:var(--muted); }
+  .subcat-track{ height:10px; background:var(--surface-2); border-radius:3px; overflow:hidden; }
+  .subcat-fill{ display:block; height:100%; background:var(--accent); opacity:.55; border-radius:3px 0 0 3px; }
+  .subcat-row .subamt{ text-align:right; color:var(--muted); }
   .bar-foot{ display:flex; justify-content:space-between; margin-top:10px; padding-top:10px; border-top:1px solid var(--border); font-size:12.5px; }
   .bar-foot .lbl{ color:var(--muted); }
   .bar-foot .val{ font-weight:600; color:var(--ink); }
@@ -252,6 +261,7 @@
     .composicion{ flex-direction:column; align-items:stretch; }
     .donut-wrap{ align-self:center; }
     .bar-row{ grid-template-columns: 100px 1fr 66px; }
+    .subcat-row{ grid-template-columns: 88px 1fr 60px; }
     .detalle-table-wrap{ max-height:520px; }
   }
 
@@ -277,6 +287,8 @@
 
     .bar-row{ grid-template-columns: 82px 1fr 62px; gap:7px; font-size:11.5px; }
     .bar-track{ height:14px; }
+    .subcat-row{ grid-template-columns: 70px 1fr 56px; gap:6px; font-size:10.5px; }
+    .subcat-track{ height:8px; }
     .bar-foot{ font-size:12px; }
 
     .flag{
@@ -1653,7 +1665,7 @@
       "proveedor": "Fitness Barcelona",
       "importe": -31.95,
       "cuenta": "CaixaBank Cta Corriente ES09...8164",
-      "nota": ""
+      "nota": "PENDIENTE: gimnasio duplicado con Wellhub -- usuario confirmó 18.09.2026 cancelar Fitness Barcelona (FitnessPark), acción manual pendiente por su parte"
     },
     {
       "fecha": "05.08.2026",
@@ -1939,7 +1951,7 @@
       "proveedor": "CaixaBank",
       "importe": -397.9,
       "cuenta": "CaixaBank Cta Corriente ES09...8164",
-      "nota": "Préstamo no incluido aún en BALANCE -- pendiente añadir como pasivo"
+      "nota": "Préstamo nº 9620.32455596448 -- ya incluido en BALANCE (Hipoteca/préstamo personal, 25.978,77€, saldo a 02.08.2026), nota actualizada 18.09.2026"
     },
     {
       "fecha": "02.08.2026",
@@ -4111,6 +4123,21 @@
     return { gastos, total };
   }
 
+  function calcularSubcategorias(mesKey, categoria) {
+    const enMes = mesKey === 'todos'
+      ? movimientosAll
+      : movimientosAll.filter(m => mesKeyDe(m.fecha) === mesKey);
+    const porNivel2 = {};
+    enMes.forEach(m => {
+      if (m.categoria !== categoria) return;
+      const label = m.nivel2 && m.nivel2.trim() ? m.nivel2 : '(sin subcategoría)';
+      porNivel2[label] = (porNivel2[label] || 0) + Math.abs(m.importe);
+    });
+    return Object.entries(porNivel2)
+      .map(([label, value]) => ({ label, value }))
+      .sort((a,b) => b.value - a.value);
+  }
+
   function renderBars(mesKey) {
     const { gastos, total } = calcularGastosPorMes(mesKey);
     const etiquetaPeriodo = mesKey === 'todos' ? 'todos los meses cargados' : `${nombreMes(mesKey)} · excl. movimientos internos`;
@@ -4122,14 +4149,48 @@
       return;
     }
     const maxGasto = Math.max(...gastos.map(g=>g.value), 1);
-    bars.innerHTML = gastos.map(g => {
+    bars.innerHTML = gastos.map((g, i) => {
       const pct = (g.value / maxGasto * 100).toFixed(0);
-      return `<div class="bar-row">
+      return `<div class="bar-row" data-idx="${i}" data-cat="${g.label.replace(/"/g,'&quot;')}">
         <span class="cat">${g.label}</span>
         <span class="bar-track"><span class="bar-fill" style="width:${pct}%"></span></span>
         <span class="amt num">${fmt(g.value)}</span>
-      </div>`;
+      </div>
+      <div class="subcat-panel" id="subcat-${i}"></div>`;
     }).join('');
+
+    // Click en una fila de categoría expande/colapsa su desglose por
+    // subcategoría (Nivel2) -- se calcula bajo demanda, no de antemano,
+    // para no recorrer movimientosAll una vez por categoría en cada render.
+    bars.querySelectorAll('.bar-row').forEach(row => {
+      row.addEventListener('click', () => {
+        const idx = row.dataset.idx;
+        const categoria = row.dataset.cat;
+        const panel = document.getElementById(`subcat-${idx}`);
+        const yaAbierto = panel.classList.contains('open');
+        // Colapsar cualquier otro panel abierto (solo uno expandido a la vez,
+        // evita una lista larguísima si el usuario abre varias categorías).
+        bars.querySelectorAll('.subcat-panel.open').forEach(p => p.classList.remove('open'));
+        bars.querySelectorAll('.bar-row.expanded').forEach(r => r.classList.remove('expanded'));
+        if (yaAbierto) return;
+        const subs = calcularSubcategorias(mesKey, categoria);
+        if (subs.length === 0) {
+          panel.innerHTML = `<div class="empty-note">Sin desglose por subcategoría disponible.</div>`;
+        } else {
+          const maxSub = Math.max(...subs.map(s=>s.value), 1);
+          panel.innerHTML = subs.map(s => {
+            const pct = (s.value / maxSub * 100).toFixed(0);
+            return `<div class="subcat-row">
+              <span class="subcat">${s.label}</span>
+              <span class="subcat-track"><span class="subcat-fill" style="width:${pct}%"></span></span>
+              <span class="subamt num">${fmt(s.value)}</span>
+            </div>`;
+          }).join('');
+        }
+        panel.classList.add('open');
+        row.classList.add('expanded');
+      });
+    });
   }
 
   const filtroMesResumen = document.getElementById('filtroMesResumen');

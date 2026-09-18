@@ -469,9 +469,10 @@
     "patrimonio_neto": 294933.01,
     "total_activos": 429623.68,
     "total_pasivos": 134690.67,
-    "cashflow_mes": 706.59,
-    "ingresos_mes": 11409.58,
-    "gastos_mes": 10702.99,
+    "cashflow_mes": -5307.71,
+    "ingresos_mes": 2730.67,
+    "gastos_mes": 8038.38,
+    "mes_label": "08/2026",
     "delta_neto_texto": "-8.845,97 € vs mes anterior",
     "cuota_mensual_total": 1290.75
   },
@@ -1925,7 +1926,7 @@
       "nivel3": "N8N Cloud",
       "proveedor": "Paddle",
       "importe": -29.04,
-      "cuenta": "Bankinter Tarjeta Duo Credit",
+      "cuenta": "Bankinter Tarjeta Duo Credit 0128.6001.76.0601296208",
       "nota": ""
     },
     {
@@ -4052,20 +4053,20 @@
     },
     {
       "label": "Esfuerzo de deuda (cuota/ingresos)",
-      "display": "11,3%",
-      "status": "ok",
+      "display": "47,3%",
+      "status": "bad",
       "nota": "Alerta: más de 35-40%"
     },
     {
       "label": "Tasa de ahorro mensual",
-      "display": "6,2%",
-      "status": "warn",
+      "display": "-194,4%",
+      "status": "bad",
       "nota": "Objetivo: 10-15% o más"
     },
     {
       "label": "Colchón de liquidez",
-      "display": "1,2 meses",
-      "status": "bad",
+      "display": "1,6 meses",
+      "status": "warn",
       "nota": "Estándar: 3-6 meses"
     },
     {
@@ -4106,9 +4107,9 @@
       <div class="delta">Cuota mensual total: ${fmt(DATA.kpi.cuota_mensual_total)}</div>
     </div>
     <div class="kpi">
-      <div class="label">Cashflow del mes</div>
+      <div class="label">Cashflow (${DATA.kpi.mes_label})</div>
       <div class="value num ${cashflowClass}" style="color:${DATA.kpi.cashflow_mes >= 0 ? 'var(--accent-ink)' : 'var(--danger)'}">${cashflowSign}${fmt(DATA.kpi.cashflow_mes)}</div>
-      <div class="delta">Ingresos ${fmt(DATA.kpi.ingresos_mes)} · Gastos ${fmt(DATA.kpi.gastos_mes)}</div>
+      <div class="delta">Ingresos ${fmt(DATA.kpi.ingresos_mes)} · Gastos ${fmt(DATA.kpi.gastos_mes)} · último mes completo</div>
     </div>`;
 
   // ---------- ratios de salud financiera ----------

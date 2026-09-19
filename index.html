@@ -4186,29 +4186,31 @@
       "compromisos_pendientes": 17100.0,
       "libre_disposicion": -3874.14,
       "activos_liquidos_invertibles": 218630.56,
+      "financiero_pignorado": 169022.18,
+      "financiero_libre_o_sin_confirmar": 49608.38,
       "capital_iliquido_comprometido": 168624.1,
       "en_mora": 20000.0
     },
     "cartera_financiera": [
       {
-        "detalle": "MyInvestor - Cartera fondos Vanguard (Emerging Markets, US 500, Global Stock)",
+        "detalle": "MyInvestor - Cartera fondos Vanguard (Emerging Markets, US 500, Global Stock) (pignorado)",
         "valor": 166812.08,
-        "nota": "Valor de mercado a 19.09.2026 vía Yahoo Finance (fuente pública en vivo, no captura de app): Emerging Markets 22.260,41€ + US 500 561,68€ + Global Stock 143.989,99€. Nota: mercado secundario (Frankfurt), puede diferir del NAV oficial en ~0,5-1,5%"
+        "nota": "Valor de mercado a 19.09.2026 vía Yahoo Finance (fuente pública en vivo, no captura de app): Emerging Markets 22.260,41€ + US 500 561,68€ + Global Stock 143.989,99€. Nota: mercado secundario (Frankfurt), puede diferir del NAV oficial en ~0,5-1,5%. ⚠️ PIGNORADO como colateral de los 2 préstamos MyInvestor (nº 6652008882 y 6654035991, total 65.072,59€) -- confirmado por el usuario 20.09.2026, vinculado a la misma cuenta de Valores (665011650) que respalda ambos préstamos."
       },
       {
         "detalle": "MyInvestor - iShares Physical Gold ETC (pignorado)",
         "valor": 2210.1,
-        "nota": "Valor de mercado a 19.09.2026 vía Yahoo Finance (fuente pública en vivo, EGLN.L London EUR-hedged)"
+        "nota": "Valor de mercado a 19.09.2026 vía Yahoo Finance (fuente pública en vivo, EGLN.L London EUR-hedged). ⚠️ PIGNORADO como colateral de los 2 préstamos MyInvestor -- confirmado por el usuario 20.09.2026."
       },
       {
         "detalle": "MyInvestor - iShares Bitcoin ETP",
         "valor": 45042.45,
-        "nota": "Valor de mercado según app MyInvestor, 18.09.2026"
+        "nota": "Valor de mercado según app MyInvestor, 18.09.2026. Estado de pignoración SIN CONFIRMAR -- no se encontró contrato de constitución de los préstamos archivado que detalle qué activos exactos quedan en garantía; el extracto de MyInvestor solo confirma que ambos préstamos están vinculados a la cuenta de Valores general (665011650), la misma que aloja todos los activos. No asumir libre ni pignorado hasta verificar."
       },
       {
         "detalle": "MyInvestor Indexado (plan de pensiones)",
         "valor": 4565.93,
-        "nota": "Plan de pensiones indexado normal de MyInvestor -- sin problemas, valor de mercado según app MyInvestor, 18.09.2026"
+        "nota": "Plan de pensiones indexado normal de MyInvestor -- sin problemas, valor de mercado según app MyInvestor, 18.09.2026. Estado de pignoración SIN CONFIRMAR -- mismo motivo que Bitcoin ETP (fila superior): sin contrato de constitución archivado, no asumir libre ni pignorado."
       }
     ],
     "coinversiones_activas": [
@@ -4648,7 +4650,7 @@
         <div class="liq-item">
           <div class="liq-label">Activos líquidos invertibles</div>
           <div class="liq-value num">${fmt(liq.activos_liquidos_invertibles)}</div>
-          <div class="liq-sub">Fondos, cripto, pensiones — realizable en días</div>
+          <div class="liq-sub">de las cuales <strong style="color:var(--danger)">${fmt(liq.financiero_pignorado)} pignoradas</strong> (colateral MyInvestor) · ${fmt(liq.financiero_libre_o_sin_confirmar)} libres/sin confirmar</div>
         </div>
         <div class="liq-item">
           <div class="liq-label">Capital ilíquido comprometido</div>

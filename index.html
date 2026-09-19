@@ -473,24 +473,24 @@
           </table>
         </div>
         <div class="panel">
-          <h2>Participación M&amp;H Capital Partners</h2>
-          <div id="invMhBody" style="font-size:12.5px; color:var(--muted); line-height:1.5;"></div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="panel">
-          <h2 id="invActivasHeading">Coinversiones inmobiliarias activas (Mayela) — valoradas a coste</h2>
+          <h2 id="invActivasHeading">Coinversiones inmobiliarias activas (Mayela)</h2>
           <table class="re">
             <thead><tr><th>Inversión</th><th>Participación</th><th class="num">Comprometido</th><th class="num">Desembolsado</th></tr></thead>
             <tbody id="invActivasBody"></tbody>
           </table>
         </div>
+      </div>
+      <div class="col">
         <div class="panel">
-          <h2 id="invRiesgoHeading">⚠️ Posiciones en riesgo (UrbanFlip, en mora)</h2>
+          <h2 id="invRiesgoHeading">Posiciones en riesgo (UrbanFlip)</h2>
           <table class="re">
             <thead><tr><th>Inversión</th><th>Participación</th><th class="num">Comprometido</th><th class="num">Desembolsado</th></tr></thead>
             <tbody id="invRiesgoBody"></tbody>
           </table>
+        </div>
+        <div class="panel">
+          <h2>Participación M&amp;H Capital Partners</h2>
+          <div class="flags" id="invMhBody"></div>
         </div>
       </div>
     </div>
@@ -4224,7 +4224,7 @@
       }
     ],
     "mh_detalle": "Prestamo de socio pendiente de devolver (no capital social)",
-    "mh_nota": "Simplificado 19.09.2026, corregido 19.09.2026 tras verificar contra extractos bancarios reales. M&H se lleva por contabilidad separada (PL_MH.xlsx); aqui solo el dinero real que Alejandro tiene metido como socio (prestamo a devolver, no capital social, salvo 3.000€ fundacionales no capturados). Desglose verificado importe por importe: 66.000€ libro M&H (Movimientos_Capital, hasta 03.07.2026, incl. los 11.000€ MyInvestor 19-24/06 -- NO duplicar) + 5.000€ Bankinter (4 transferencias verificadas contra extracto: 03.07=1.000, 15.07=1.000, 27.07=2.000, 30.07=1.000) + 17.000€ Trade Republic (verificado contra extracto: 25.08=1.000+3.000+3.000, 14.09=10.000). Fuente primaria libro: PL_MH.xlsx hoja Movimientos_Capital. Patrimonio Personal NO reclasifica ni corrige el libro de MH -- solo lee y suma lo que ya existe."
+    "mh_nota": "Préstamo de socio pendiente de devolver a Alejandro (no es capital social). Contabilidad de la empresa llevada por separado en PL_MH.xlsx."
   },
   "ratios": [
     {
@@ -4637,7 +4637,7 @@
       ).join('');
     }
     document.getElementById('invActivasHeading').innerHTML =
-      `Coinversiones inmobiliarias activas (Mayela) — valoradas a coste <span class="count">${inv.coinversiones_activas.length} · ${fmt(inv.kpis.coinversiones_desembolsado)}</span>`;
+      `Coinversiones inmobiliarias activas (Mayela) <span class="count">${inv.coinversiones_activas.length} · ${fmt(inv.kpis.coinversiones_desembolsado)}</span>`;
 
     const invRiesgoBody = document.getElementById('invRiesgoBody');
     if (inv.coinversiones_riesgo.length === 0) {
@@ -4648,10 +4648,14 @@
       ).join('');
     }
     document.getElementById('invRiesgoHeading').innerHTML =
-      `⚠️ Posiciones en riesgo (UrbanFlip, en mora) <span class="count">${inv.coinversiones_riesgo.length} · ${fmt(inv.kpis.en_mora)}</span>`;
+      `Posiciones en riesgo (UrbanFlip) <span class="count">${inv.coinversiones_riesgo.length} · ${fmt(inv.kpis.en_mora)}</span>`;
 
-    document.getElementById('invMhBody').innerHTML =
-      `<div style="font-weight:600; color:var(--ink); margin-bottom:4px;">${fmt(inv.kpis.mh)} — ${inv.mh_detalle}</div><div>${inv.mh_nota}</div>`;
+    document.getElementById('invMhBody').innerHTML = `
+      <div class="flag">
+        <span class="badge pend">Socio 50%</span>
+        <div class="desc"><div class="t">${inv.mh_detalle}</div><div class="d">${inv.mh_nota}</div></div>
+        <div class="amt">${fmt(inv.kpis.mh)}</div>
+      </div>`;
   }
 
   // ---------- tabs ----------

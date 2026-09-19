@@ -74,6 +74,7 @@
 
   .kpi-row{ display:grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap:14px; margin-bottom:18px; }
   .kpi-row.kpi-row-3col{ grid-template-columns: 1.6fr 1fr 1fr; }
+  .kpi-row.kpi-row-2col{ grid-template-columns: 1.6fr 1fr; }
   .kpi{
     background:var(--surface); border:1px solid var(--border); border-radius:10px;
     padding:18px 20px; box-shadow:var(--shadow);
@@ -490,7 +491,7 @@
 
   <div class="tab-panel" id="tab-inversiones">
     <div class="panel" id="liqPanel" style="margin-bottom:20px;"></div>
-    <div class="kpi-row kpi-row-3col" id="invKpiRow" style="margin-bottom:20px;"></div>
+    <div class="kpi-row kpi-row-2col" id="invKpiRow" style="margin-bottom:20px;"></div>
     <div class="main-grid">
       <div class="col">
         <div class="panel">
@@ -564,6 +565,7 @@
     "ingresos_mes": 2730.67,
     "gastos_mes": 6893.83,
     "gastos_promedio_2m": 4852.25,
+    "ingresos_promedio_2m": 5653.5,
     "mes_label": "08/2026",
     "delta_neto_texto": "-7.000,00 € vs mes anterior",
     "cuota_mensual_total": 1290.75
@@ -4312,9 +4314,9 @@
     },
     {
       "label": "Tasa de ahorro mensual",
-      "display": "-152,5%",
-      "status": "bad",
-      "nota": "Objetivo: 10-15% o más"
+      "display": "14,2%",
+      "status": "warn",
+      "nota": "Objetivo: 10-15% o más (promedio últimos 2 meses)"
     },
     {
       "label": "Colchón de liquidez",
@@ -4726,11 +4728,6 @@
         <div class="label">Ganancia realizada acumulada</div>
         <div class="value num" style="color:var(--accent-ink)">${fmt(inv.kpis.ganancia_realizada)}</div>
         <div class="delta">Concentración Mayela: ${(inv.kpis.concentracion_mayela*100).toFixed(1).replace('.', ',')}% del comprometido</div>
-      </div>
-      <div class="kpi">
-        <div class="label">En mora / en riesgo</div>
-        <div class="value num" style="color:var(--risk-ink)">${fmt(inv.kpis.en_mora)}</div>
-        <div class="delta">UrbanFlip (Castelló 98 + Maldonado 33) — sin cobro desde otoño 2025</div>
       </div>`;
 
     const invFinBody = document.getElementById('invFinBody');

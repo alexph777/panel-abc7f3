@@ -228,6 +228,13 @@
   .bar-row.expanded .cat::before{ transform:rotate(90deg); }
   .bar-track{ height:16px; background:var(--surface-2); border-radius:4px; overflow:hidden; }
   .bar-fill{ display:block; height:100%; background:var(--accent); border-radius:4px 0 0 4px; }
+  .bar-fill.reembolso{ background:var(--accent-ink); opacity:0.55; }
+  .amt.reembolso{ color:var(--accent-ink); }
+  .tag-reembolso{
+    display:inline-block; font-size:10px; font-weight:500; margin-left:6px;
+    padding:1px 6px; border-radius:4px; background:var(--accent-soft); color:var(--accent-ink);
+    vertical-align:middle; white-space:nowrap;
+  }
   .bar-row .amt{ text-align:right; color:var(--muted); }
   .subcat-panel{ display:none; padding:2px 0 10px 22px; margin-bottom:2px; }
   .subcat-panel.open{ display:block; }
@@ -238,6 +245,8 @@
   .subcat-row.has-n3.expanded .subcat::before{ transform:rotate(90deg); }
   .subcat-track{ height:10px; background:var(--surface-2); border-radius:3px; overflow:hidden; }
   .subcat-fill{ display:block; height:100%; background:var(--accent); opacity:.55; border-radius:3px 0 0 3px; }
+  .subcat-fill.reembolso{ background:var(--accent-ink); opacity:0.4; }
+  .subamt.reembolso{ color:var(--accent-ink); }
   .subcat-row .subamt{ text-align:right; color:var(--muted); }
   .nivel3-panel{ display:none; padding:1px 0 8px 20px; margin-bottom:2px; }
   .nivel3-panel.open{ display:block; }
@@ -4445,22 +4454,17 @@
       if (EXCLUIR_DEL_GASTO_REAL.includes(m.categoria)) return;
       porCategoria[m.categoria] = (porCategoria[m.categoria] || 0) - m.importe;
     });
-    // Categorías con neto <= 0 significan que ese mes se reembolsó más de lo
-    // que se gastó (ej. Transporte en agosto: -105,44€ neto por la devolución
-    // de Renfe) -- no son "gasto cero", son ingreso neto. Se excluyen de la
-    // lista de barras de gasto (que solo tiene sentido mostrar en positivo,
-    // como en activos_por_cat) pero SÍ se conserva su neto real (negativo) en
-    // netosPorCategoria para que el total general del periodo siga cuadrando
-    // exacto contra la suma real de GASTOS, sin que ese dinero "desaparezca".
+    // Todas las categorías con movimiento se muestran, incluidas las que
+    // terminan en neto negativo (más devuelto que gastado, ej. Transporte en
+    // agosto: -105,44€ por la devolución de Renfe) -- ocultarlas silenciosamente
+    // parecía "faltan categorías" al usuario (dinero real, pero invisible en
+    // pantalla). Se marcan con reembolso:true para que el render las pinte
+    // en un estilo distinto (verde/positivo) en vez de como barra de gasto.
     const gastos = Object.entries(porCategoria)
-      .filter(([, value]) => value > 0)
-      .map(([label, value]) => ({ label, value: round2(value) }))
+      .map(([label, value]) => ({ label, value: round2(Math.abs(value)), reembolso: value < 0 }))
       .sort((a,b) => b.value - a.value);
-    const netosPorCategoria = Object.fromEntries(
-      Object.entries(porCategoria).map(([k,v]) => [k, round2(v)])
-    );
     const total = round2(Object.values(porCategoria).reduce((s,v) => s+v, 0));
-    return { gastos, total, netosPorCategoria };
+    return { gastos, total };
   }
   function round2(n) { return Math.round(n * 100) / 100; }
 
@@ -4479,8 +4483,7 @@
       if (m.nivel3 && m.nivel3.trim()) tieneNivel3[label] = true;
     });
     return Object.entries(porNivel2)
-      .filter(([, value]) => value > 0)
-      .map(([label, value]) => ({ label, value: round2(value), tieneNivel3: !!tieneNivel3[label] }))
+      .map(([label, value]) => ({ label, value: round2(Math.abs(value)), reembolso: value < 0, tieneNivel3: !!tieneNivel3[label] }))
       .sort((a,b) => b.value - a.value);
   }
 
@@ -4503,8 +4506,7 @@
       porNivel3[n3] = (porNivel3[n3] || 0) - m.importe;
     });
     return Object.entries(porNivel3)
-      .filter(([, value]) => value > 0)
-      .map(([label, value]) => ({ label, value: round2(value) }))
+      .map(([label, value]) => ({ label, value: round2(Math.abs(value)), reembolso: value < 0 }))
       .sort((a,b) => b.value - a.value);
   }
 
@@ -4521,10 +4523,14 @@
     const maxGasto = Math.max(...gastos.map(g=>g.value), 1);
     bars.innerHTML = gastos.map((g, i) => {
       const pct = (g.value / maxGasto * 100).toFixed(0);
+      const signo = g.reembolso ? '−' : '';
+      const claseImporte = g.reembolso ? 'amt num reembolso' : 'amt num';
+      const claseFill = g.reembolso ? 'bar-fill reembolso' : 'bar-fill';
+      const notaReembolso = g.reembolso ? ' <span class="tag-reembolso" title="Este mes se devolvió/reembolsó más de lo gastado en esta categoría">↩ neto devuelto</span>' : '';
       return `<div class="bar-row" data-idx="${i}" data-cat="${g.label.replace(/"/g,'&quot;')}">
-        <span class="cat">${g.label}</span>
-        <span class="bar-track"><span class="bar-fill" style="width:${pct}%"></span></span>
-        <span class="amt num">${fmt(g.value)}</span>
+        <span class="cat">${g.label}${notaReembolso}</span>
+        <span class="bar-track"><span class="${claseFill}" style="width:${pct}%"></span></span>
+        <span class="${claseImporte}">${signo}${fmt(g.value)}</span>
       </div>
       <div class="subcat-panel" id="subcat-${i}"></div>`;
     }).join('');
@@ -4551,10 +4557,14 @@
           panel.innerHTML = subs.map((s, j) => {
             const pct = (s.value / maxSub * 100).toFixed(0);
             const claseN3 = s.tieneNivel3 ? ' has-n3' : '';
+            const signoS = s.reembolso ? '−' : '';
+            const claseFillS = s.reembolso ? 'subcat-fill reembolso' : 'subcat-fill';
+            const claseAmtS = s.reembolso ? 'subamt num reembolso' : 'subamt num';
+            const notaS = s.reembolso ? ' <span class="tag-reembolso">↩</span>' : '';
             return `<div class="subcat-row${claseN3}" data-n2idx="${j}" data-n2="${s.label.replace(/"/g,'&quot;')}">
-              <span class="subcat">${s.label}</span>
-              <span class="subcat-track"><span class="subcat-fill" style="width:${pct}%"></span></span>
-              <span class="subamt num">${fmt(s.value)}</span>
+              <span class="subcat">${s.label}${notaS}</span>
+              <span class="subcat-track"><span class="${claseFillS}" style="width:${pct}%"></span></span>
+              <span class="${claseAmtS}">${signoS}${fmt(s.value)}</span>
             </div>
             ${s.tieneNivel3 ? `<div class="nivel3-panel" id="subcat-${idx}-n3-${j}"></div>` : ''}`;
           }).join('');

@@ -94,12 +94,16 @@
   .liq-sep{ border-top:1px solid var(--border-2); margin:18px 0; }
   .liq-row-3{ gap:24px; }
   .liq-row-3 .liq-value{ font-size:17px; }
+  .liq-row-4{ gap:20px; }
+  .liq-row-4 .liq-item{ min-width:150px; }
+  .liq-row-4 .liq-value{ font-size:17px; }
   .liq-sub{ font-size:11px; color:var(--muted); margin-top:3px; }
   @media (max-width: 640px){
     .liq-row{ flex-direction:column; align-items:stretch; gap:10px; }
     .liq-item.liq-total{ padding-left:0; border-left:none; border-top:2px solid var(--border); padding-top:10px; }
     .liq-op{ text-align:center; }
     .liq-row-3{ flex-direction:column; gap:14px; }
+    .liq-row-4{ flex-direction:column; gap:14px; }
   }
 
   .ratios-panel{
@@ -4185,9 +4189,10 @@
       "liquidez_inmediata": 13225.86,
       "compromisos_pendientes": 17100.0,
       "libre_disposicion": -3874.14,
-      "activos_liquidos_invertibles": 218630.56,
+      "activos_liquidos_invertibles": 214064.63,
       "financiero_pignorado": 169022.18,
-      "financiero_libre_o_sin_confirmar": 49608.38,
+      "financiero_libre_o_sin_confirmar": 45042.45,
+      "plan_pensiones": 4565.93,
       "capital_iliquido_comprometido": 168624.1,
       "en_mora": 20000.0
     },
@@ -4646,11 +4651,16 @@
       </div>
       <div class="liq-note">${liqPositivo ? 'Cubre los capital calls ya comprometidos (ej. Torredembarra) con margen.' : '⚠️ Si se pidiera hoy el resto de lo comprometido (ej. Torredembarra), la liquidez bancaria no llegaría a cubrirlo.'}</div>
       <div class="liq-sep"></div>
-      <div class="liq-row liq-row-3">
+      <div class="liq-row liq-row-4">
         <div class="liq-item">
           <div class="liq-label">Activos líquidos invertibles</div>
           <div class="liq-value num">${fmt(liq.activos_liquidos_invertibles)}</div>
           <div class="liq-sub">de las cuales <strong style="color:var(--danger)">${fmt(liq.financiero_pignorado)} pignoradas</strong> (colateral MyInvestor) · ${fmt(liq.financiero_libre_o_sin_confirmar)} libres/sin confirmar</div>
+        </div>
+        <div class="liq-item">
+          <div class="liq-label">Plan de pensiones</div>
+          <div class="liq-value num">${fmt(liq.plan_pensiones)}</div>
+          <div class="liq-sub">Iliquidez estructural — rescate restringido por ley, no vendible en días</div>
         </div>
         <div class="liq-item">
           <div class="liq-label">Capital ilíquido comprometido</div>

@@ -4216,6 +4216,20 @@
       ],
       "plan_pensiones": 4565.93,
       "capital_iliquido_comprometido": 168624.1,
+      "detalle_iliquido": [
+        {
+          "nombre": "Coinversiones Mayela (Torredembarra+Escala 2+Reus)",
+          "valor": 72600.0
+        },
+        {
+          "nombre": "Participación M&H Capital Partners",
+          "valor": 88000.0
+        },
+        {
+          "nombre": "Préstamo privado otorgado (Gabriel/Lucia)",
+          "valor": 8024.1
+        }
+      ],
       "en_mora": 20000.0
     },
     "cartera_financiera": [
@@ -4689,7 +4703,9 @@
         <div class="liq-item">
           <div class="liq-label">Capital ilíquido ya desembolsado</div>
           <div class="liq-value num">${fmt(liq.capital_iliquido_comprometido)}</div>
-          <div class="liq-sub">Coinversiones Mayela + Participación M&amp;H + préstamo privado — sin salida a la vista</div>
+          <div class="liq-detalle">
+            ${liq.detalle_iliquido.map(d => `<div class="liq-detalle-row"><span class="liq-detalle-nombre">${d.nombre}</span><span class="liq-detalle-valor num">${fmt(d.valor)}</span></div>`).join('')}
+          </div>
         </div>
         <div class="liq-item">
           <div class="liq-label">En mora / en riesgo</div>

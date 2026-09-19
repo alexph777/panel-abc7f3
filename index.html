@@ -73,6 +73,7 @@
   .theme-toggle:hover{ color:var(--ink); border-color:var(--faint); }
 
   .kpi-row{ display:grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap:14px; margin-bottom:18px; }
+  .kpi-row.kpi-row-3col{ grid-template-columns: 1.6fr 1fr 1fr; }
   .kpi{
     background:var(--surface); border:1px solid var(--border); border-radius:10px;
     padding:18px 20px; box-shadow:var(--shadow);
@@ -489,7 +490,7 @@
 
   <div class="tab-panel" id="tab-inversiones">
     <div class="panel" id="liqPanel" style="margin-bottom:20px;"></div>
-    <div class="kpi-row" id="invKpiRow" style="margin-bottom:20px;"></div>
+    <div class="kpi-row kpi-row-3col" id="invKpiRow" style="margin-bottom:20px;"></div>
     <div class="main-grid">
       <div class="col">
         <div class="panel">
@@ -4722,19 +4723,14 @@
         <div class="delta">Financiero + inmobiliario (a coste) + M&amp;H + préstamos privados</div>
       </div>
       <div class="kpi">
-        <div class="label">Cartera financiera</div>
-        <div class="value num">${fmt(inv.kpis.financiero)}</div>
-        <div class="delta">Fondos, cripto, plan de pensiones — valor de mercado</div>
-      </div>
-      <div class="kpi">
-        <div class="label">Coinversiones inmobiliarias (Mayela + UrbanFlip)</div>
-        <div class="value num">${fmt(inv.kpis.coinversiones_desembolsado)}</div>
-        <div class="delta">Desembolsado a coste · ${fmt(inv.kpis.en_mora)} en mora (UrbanFlip) · NO incluye M&amp;H (ver tarjeta aparte)</div>
-      </div>
-      <div class="kpi">
         <div class="label">Ganancia realizada acumulada</div>
         <div class="value num" style="color:var(--accent-ink)">${fmt(inv.kpis.ganancia_realizada)}</div>
         <div class="delta">Concentración Mayela: ${(inv.kpis.concentracion_mayela*100).toFixed(1).replace('.', ',')}% del comprometido</div>
+      </div>
+      <div class="kpi">
+        <div class="label">En mora / en riesgo</div>
+        <div class="value num" style="color:var(--risk-ink)">${fmt(inv.kpis.en_mora)}</div>
+        <div class="delta">UrbanFlip (Castelló 98 + Maldonado 33) — sin cobro desde otoño 2025</div>
       </div>`;
 
     const invFinBody = document.getElementById('invFinBody');

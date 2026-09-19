@@ -4430,17 +4430,39 @@
     const enMes = mesKey === 'todos'
       ? movimientosAll
       : movimientosAll.filter(m => mesKeyDe(m.fecha) === mesKey);
+    // Bug real corregido (20.09.2026, detectado por el usuario: "en el
+    // dashboard no se sabe si es positivo o negativo... por eso en agosto
+    // se ha gastado 8000" cuando el gasto real neto era 6.893,83€). Antes
+    // se sumaba Math.abs(importe) de CADA movimiento, así que una devolución
+    // (ej. Renfe +126,50€, reembolso Amazon +133,63€) se sumaba como gasto
+    // adicional en vez de restar del gasto real -- una devolución de 126,50€
+    // inflaba el total en +253€ (se contaba dos veces: como si fuera gasto Y
+    // como si no compensara nada). Ahora se suma el NETO con signo invertido
+    // (los gastos ya son negativos en GASTOS, así que -importe los vuelve
+    // positivos y una devolución positiva resta correctamente del total).
     const porCategoria = {};
     enMes.forEach(m => {
       if (EXCLUIR_DEL_GASTO_REAL.includes(m.categoria)) return;
-      porCategoria[m.categoria] = (porCategoria[m.categoria] || 0) + Math.abs(m.importe);
+      porCategoria[m.categoria] = (porCategoria[m.categoria] || 0) - m.importe;
     });
+    // Categorías con neto <= 0 significan que ese mes se reembolsó más de lo
+    // que se gastó (ej. Transporte en agosto: -105,44€ neto por la devolución
+    // de Renfe) -- no son "gasto cero", son ingreso neto. Se excluyen de la
+    // lista de barras de gasto (que solo tiene sentido mostrar en positivo,
+    // como en activos_por_cat) pero SÍ se conserva su neto real (negativo) en
+    // netosPorCategoria para que el total general del periodo siga cuadrando
+    // exacto contra la suma real de GASTOS, sin que ese dinero "desaparezca".
     const gastos = Object.entries(porCategoria)
-      .map(([label, value]) => ({ label, value }))
+      .filter(([, value]) => value > 0)
+      .map(([label, value]) => ({ label, value: round2(value) }))
       .sort((a,b) => b.value - a.value);
-    const total = gastos.reduce((s,g) => s+g.value, 0);
-    return { gastos, total };
+    const netosPorCategoria = Object.fromEntries(
+      Object.entries(porCategoria).map(([k,v]) => [k, round2(v)])
+    );
+    const total = round2(Object.values(porCategoria).reduce((s,v) => s+v, 0));
+    return { gastos, total, netosPorCategoria };
   }
+  function round2(n) { return Math.round(n * 100) / 100; }
 
   function calcularSubcategorias(mesKey, categoria) {
     const enMes = mesKey === 'todos'
@@ -4451,11 +4473,14 @@
     enMes.forEach(m => {
       if (m.categoria !== categoria) return;
       const label = m.nivel2 && m.nivel2.trim() ? m.nivel2 : '(sin subcategoría)';
-      porNivel2[label] = (porNivel2[label] || 0) + Math.abs(m.importe);
+      // Mismo fix de neto-con-signo que calcularGastosPorMes (ver comentario
+      // ahí) -- una devolución dentro de esta categoría debe restar, no sumar.
+      porNivel2[label] = (porNivel2[label] || 0) - m.importe;
       if (m.nivel3 && m.nivel3.trim()) tieneNivel3[label] = true;
     });
     return Object.entries(porNivel2)
-      .map(([label, value]) => ({ label, value, tieneNivel3: !!tieneNivel3[label] }))
+      .filter(([, value]) => value > 0)
+      .map(([label, value]) => ({ label, value: round2(value), tieneNivel3: !!tieneNivel3[label] }))
       .sort((a,b) => b.value - a.value);
   }
 
@@ -4474,10 +4499,12 @@
       // real: "Atención médica" con 635€ en una fila sin Nivel3 -- sin este
       // bucket, el desglose solo suma 795,16€ de 1.430,16€ reales).
       const n3 = m.nivel3 && m.nivel3.trim() ? m.nivel3 : '(sin detalle)';
-      porNivel3[n3] = (porNivel3[n3] || 0) + Math.abs(m.importe);
+      // Mismo fix de neto-con-signo (ver calcularGastosPorMes).
+      porNivel3[n3] = (porNivel3[n3] || 0) - m.importe;
     });
     return Object.entries(porNivel3)
-      .map(([label, value]) => ({ label, value }))
+      .filter(([, value]) => value > 0)
+      .map(([label, value]) => ({ label, value: round2(value) }))
       .sort((a,b) => b.value - a.value);
   }
 

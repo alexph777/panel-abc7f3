@@ -4689,7 +4689,7 @@
         <div class="liq-item">
           <div class="liq-label">Capital ilíquido ya desembolsado</div>
           <div class="liq-value num">${fmt(liq.capital_iliquido_comprometido)}</div>
-          <div class="liq-sub">Coinversiones + M&amp;H + préstamos privados — sin salida a la vista</div>
+          <div class="liq-sub">Coinversiones Mayela + Participación M&amp;H + préstamo privado — sin salida a la vista</div>
         </div>
         <div class="liq-item">
           <div class="liq-label">En mora / en riesgo</div>
@@ -4711,9 +4711,9 @@
         <div class="delta">Fondos, cripto, plan de pensiones — valor de mercado</div>
       </div>
       <div class="kpi">
-        <div class="label">Coinversiones inmobiliarias</div>
+        <div class="label">Coinversiones inmobiliarias (Mayela + UrbanFlip)</div>
         <div class="value num">${fmt(inv.kpis.coinversiones_desembolsado)}</div>
-        <div class="delta">Desembolsado a coste · ${fmt(inv.kpis.en_mora)} en mora (UrbanFlip)</div>
+        <div class="delta">Desembolsado a coste · ${fmt(inv.kpis.en_mora)} en mora (UrbanFlip) · NO incluye M&amp;H (ver tarjeta aparte)</div>
       </div>
       <div class="kpi">
         <div class="label">Ganancia realizada acumulada</div>
@@ -4741,7 +4741,7 @@
       ).join('');
     }
     document.getElementById('invActivasHeading').innerHTML =
-      `Coinversiones inmobiliarias activas (Mayela) <span class="count">${inv.coinversiones_activas.length} · ${fmt(inv.kpis.coinversiones_desembolsado)}</span>`;
+      `Coinversiones inmobiliarias activas (Mayela, excl. M&amp;H) <span class="count">${inv.coinversiones_activas.length} · ${fmt(inv.kpis.coinversiones_desembolsado)}</span>`;
 
     const invRiesgoBody = document.getElementById('invRiesgoBody');
     if (inv.coinversiones_riesgo.length === 0) {

@@ -215,6 +215,9 @@
   table.re td{ padding:8px 8px 8px 0; border-bottom:1px solid var(--border-2); color:var(--ink); }
   table.re tr:last-child td{ border-bottom:none; }
   table.re td.muted{ color:var(--muted); font-size:11.5px; }
+  table.re td.pos{ color:var(--accent-ink); font-weight:600; }
+  table.re td.neg{ color:var(--risk-ink); font-weight:600; }
+  table.re tr.total-row td{ font-weight:600; border-top:2px solid var(--border); border-bottom:none; }
   .tag{
     display:inline-block; font-size:10px; padding:2px 6px; border-radius:4px; font-weight:500;
     background:var(--accent-soft); color:var(--accent-ink);
@@ -514,7 +517,7 @@
         <div class="panel">
           <h2 id="invActivasHeading">Coinversiones inmobiliarias activas (Mayela)</h2>
           <table class="re">
-            <thead><tr><th>Inversión</th><th>Participación</th><th class="num">Comprometido</th><th class="num">Desembolsado</th></tr></thead>
+            <thead><tr><th>Inversión</th><th>Participación</th><th class="num">Comprometido</th><th class="num">Desembolsado</th><th class="num">Distribuido</th><th class="num">Años</th></tr></thead>
             <tbody id="invActivasBody"></tbody>
           </table>
         </div>
@@ -523,7 +526,7 @@
         <div class="panel">
           <h2 id="invRiesgoHeading">Posiciones en riesgo (UrbanFlip)</h2>
           <table class="re">
-            <thead><tr><th>Inversión</th><th>Participación</th><th class="num">Comprometido</th><th class="num">Desembolsado</th></tr></thead>
+            <thead><tr><th>Inversión</th><th>Participación</th><th class="num">Comprometido</th><th class="num">Desembolsado</th><th class="num">Distribuido</th><th class="num">Años</th></tr></thead>
             <tbody id="invRiesgoBody"></tbody>
           </table>
         </div>
@@ -532,6 +535,14 @@
           <div class="flags" id="invMhBody"></div>
         </div>
       </div>
+    </div>
+    <div class="panel" style="margin-top:12px;">
+      <h2 id="invRealizadasHeading">Posiciones liquidadas (ganancia ya materializada)</h2>
+      <table class="re">
+        <thead><tr><th>Inversión</th><th>Gestor</th><th>Participación</th><th class="num">Año</th><th class="num">Desembolsado</th><th class="num">Distribuido</th><th class="num">Ganancia/Pérdida</th><th class="num">% Rentabilidad</th><th class="num">Años mantenida</th></tr></thead>
+        <tbody id="invRealizadasBody"></tbody>
+        <tfoot id="invRealizadasFoot"></tfoot>
+      </table>
     </div>
   </div>
 
@@ -4272,21 +4283,27 @@
         "gestor": "Mayela",
         "participacion": "Individual 100%",
         "comprometido": 53000.0,
-        "desembolsado": 35900.0
+        "desembolsado": 35900.0,
+        "distribuido": 0,
+        "anios_en_cartera": 2
       },
       {
         "inversion": "Escala 2",
         "gestor": "Mayela",
         "participacion": "Conjunta 33,3% (sin Óscar)",
         "comprometido": 16700.0,
-        "desembolsado": 16700.0
+        "desembolsado": 16700.0,
+        "distribuido": 0,
+        "anios_en_cartera": 1
       },
       {
         "inversion": "Reus",
         "gestor": "Mayela",
         "participacion": "Individual 100%",
         "comprometido": 20000.0,
-        "desembolsado": 20000.0
+        "desembolsado": 20000.0,
+        "distribuido": 0,
+        "anios_en_cartera": 0
       }
     ],
     "coinversiones_riesgo": [
@@ -4295,14 +4312,86 @@
         "gestor": "UrbanFlip",
         "participacion": "Individual 100%",
         "comprometido": 10000.0,
-        "desembolsado": 10000.0
+        "desembolsado": 10000.0,
+        "distribuido": 0,
+        "anios_en_cartera": 1
       },
       {
         "inversion": "Maldonado 33",
         "gestor": "UrbanFlip",
         "participacion": "Individual 100%",
         "comprometido": 10000.0,
-        "desembolsado": 10000.0
+        "desembolsado": 10000.0,
+        "distribuido": 0,
+        "anios_en_cartera": 1
+      }
+    ],
+    "coinversiones_realizadas": [
+      {
+        "inversion": "Ampuriabrava",
+        "gestor": "Jarque",
+        "participacion": "Conjunta 25%",
+        "anio": 2022,
+        "desembolsado": 42000.0,
+        "distribuido": 52400.0,
+        "ganancia": 10400.0,
+        "rentabilidad": 0.2476,
+        "anios_mantenida": 4
+      },
+      {
+        "inversion": "Escala — Fase 1",
+        "gestor": "Mayela",
+        "participacion": "Conjunta 25%",
+        "anio": 2023,
+        "desembolsado": 9400.0,
+        "distribuido": 10700.0,
+        "ganancia": 1300.0,
+        "rentabilidad": 0.1383,
+        "anios_mantenida": 3
+      },
+      {
+        "inversion": "Escala — Fase 2",
+        "gestor": "Mayela",
+        "participacion": "Conjunta 25%",
+        "anio": 2023,
+        "desembolsado": 30000.0,
+        "distribuido": 34800.0,
+        "ganancia": 4800.0,
+        "rentabilidad": 0.16,
+        "anios_mantenida": 3
+      },
+      {
+        "inversion": "Ibiza & Manacor",
+        "gestor": "Mayela",
+        "participacion": "Conjunta 25%",
+        "anio": 2024,
+        "desembolsado": 23200.0,
+        "distribuido": 26100.0,
+        "ganancia": 2900.0,
+        "rentabilidad": 0.125,
+        "anios_mantenida": 2
+      },
+      {
+        "inversion": "Manacor — Oficina",
+        "gestor": "Mayela",
+        "participacion": "Individual 100%",
+        "anio": 2024,
+        "desembolsado": 100000.0,
+        "distribuido": 126800.0,
+        "ganancia": 26800.0,
+        "rentabilidad": 0.268,
+        "anios_mantenida": 2
+      },
+      {
+        "inversion": "Salt",
+        "gestor": "Mayela",
+        "participacion": "Conjunta 25%",
+        "anio": 2024,
+        "desembolsado": 23800.0,
+        "distribuido": 28500.0,
+        "ganancia": 4700.0,
+        "rentabilidad": 0.1975,
+        "anios_mantenida": 2
       }
     ],
     "mh_detalle": "Prestamo de socio pendiente de devolver (no capital social)",
@@ -4780,25 +4869,49 @@
 
     const invActivasBody = document.getElementById('invActivasBody');
     if (inv.coinversiones_activas.length === 0) {
-      invActivasBody.innerHTML = `<tr><td colspan="4" class="empty-note">Sin posiciones activas registradas.</td></tr>`;
+      invActivasBody.innerHTML = `<tr><td colspan="6" class="empty-note">Sin posiciones activas registradas.</td></tr>`;
     } else {
-      invActivasBody.innerHTML = inv.coinversiones_activas.map(c =>
-        `<tr><td data-label="Inversión">${c.inversion}</td><td data-label="Participación" class="muted">${c.participacion}</td><td data-label="Comprometido" class="num">${fmt(c.comprometido)}</td><td data-label="Desembolsado" class="num">${fmt(c.desembolsado)}</td></tr>`
-      ).join('');
+      invActivasBody.innerHTML = inv.coinversiones_activas.map(c => {
+        const distribuidoTxt = c.distribuido > 0 ? fmt(c.distribuido) : '<span class="muted">En curso</span>';
+        const aniosTxt = c.anios_en_cartera != null ? c.anios_en_cartera : '—';
+        return `<tr><td data-label="Inversión">${c.inversion}</td><td data-label="Participación" class="muted">${c.participacion}</td><td data-label="Comprometido" class="num">${fmt(c.comprometido)}</td><td data-label="Desembolsado" class="num">${fmt(c.desembolsado)}</td><td data-label="Distribuido" class="num">${distribuidoTxt}</td><td data-label="Años" class="num muted">${aniosTxt}</td></tr>`;
+      }).join('');
     }
     document.getElementById('invActivasHeading').innerHTML =
       `Coinversiones inmobiliarias activas (Mayela, excl. M&amp;H) <span class="count">${inv.coinversiones_activas.length} · ${fmt(inv.kpis.coinversiones_desembolsado)}</span>`;
 
     const invRiesgoBody = document.getElementById('invRiesgoBody');
     if (inv.coinversiones_riesgo.length === 0) {
-      invRiesgoBody.innerHTML = `<tr><td colspan="4" class="empty-note">Sin posiciones en riesgo registradas.</td></tr>`;
+      invRiesgoBody.innerHTML = `<tr><td colspan="6" class="empty-note">Sin posiciones en riesgo registradas.</td></tr>`;
     } else {
-      invRiesgoBody.innerHTML = inv.coinversiones_riesgo.map(c =>
-        `<tr><td data-label="Inversión">${c.inversion}</td><td data-label="Participación" class="muted">${c.participacion}</td><td data-label="Comprometido" class="num">${fmt(c.comprometido)}</td><td data-label="Desembolsado" class="num">${fmt(c.desembolsado)}</td></tr>`
-      ).join('');
+      invRiesgoBody.innerHTML = inv.coinversiones_riesgo.map(c => {
+        const distribuidoTxt = c.distribuido > 0 ? fmt(c.distribuido) : '<span class="muted">Sin cobro</span>';
+        const aniosTxt = c.anios_en_cartera != null ? c.anios_en_cartera : '—';
+        return `<tr><td data-label="Inversión">${c.inversion}</td><td data-label="Participación" class="muted">${c.participacion}</td><td data-label="Comprometido" class="num">${fmt(c.comprometido)}</td><td data-label="Desembolsado" class="num">${fmt(c.desembolsado)}</td><td data-label="Distribuido" class="num">${distribuidoTxt}</td><td data-label="Años" class="num muted">${aniosTxt}</td></tr>`;
+      }).join('');
     }
     document.getElementById('invRiesgoHeading').innerHTML =
       `Posiciones en riesgo (UrbanFlip) <span class="count">${inv.coinversiones_riesgo.length} · ${fmt(inv.kpis.en_mora)}</span>`;
+
+    const invRealizadasBody = document.getElementById('invRealizadasBody');
+    const realizadas = inv.coinversiones_realizadas || [];
+    if (realizadas.length === 0) {
+      invRealizadasBody.innerHTML = `<tr><td colspan="9" class="empty-note">Sin posiciones liquidadas registradas.</td></tr>`;
+    } else {
+      invRealizadasBody.innerHTML = realizadas.map(c => {
+        const rentTxt = c.rentabilidad != null ? (c.rentabilidad*100).toFixed(1).replace('.',',') + '%' : 'N/D';
+        const ganClase = c.ganancia >= 0 ? 'pos' : 'neg';
+        return `<tr><td data-label="Inversión">${c.inversion}</td><td data-label="Gestor" class="muted">${c.gestor}</td><td data-label="Participación" class="muted">${c.participacion}</td><td data-label="Año" class="num muted">${c.anio ?? '—'}</td><td data-label="Desembolsado" class="num">${fmt(c.desembolsado)}</td><td data-label="Distribuido" class="num">${fmt(c.distribuido)}</td><td data-label="Ganancia/Pérdida" class="num ${ganClase}">${fmt(c.ganancia)}</td><td data-label="% Rentabilidad" class="num ${ganClase}">${rentTxt}</td><td data-label="Años mantenida" class="num muted">${c.anios_mantenida ?? '—'}</td></tr>`;
+      }).join('');
+    }
+    const totalDesemb = realizadas.reduce((s,c)=>s+c.desembolsado,0);
+    const totalDistrib = realizadas.reduce((s,c)=>s+c.distribuido,0);
+    const totalGanancia = realizadas.reduce((s,c)=>s+c.ganancia,0);
+    const totalRent = totalDesemb ? (totalGanancia/totalDesemb*100).toFixed(1).replace('.',',') + '%' : 'N/D';
+    document.getElementById('invRealizadasFoot').innerHTML =
+      `<tr class="total-row"><td>TOTAL (${realizadas.length})</td><td></td><td></td><td></td><td class="num">${fmt(totalDesemb)}</td><td class="num">${fmt(totalDistrib)}</td><td class="num pos">${fmt(totalGanancia)}</td><td class="num pos">${totalRent}</td><td></td></tr>`;
+    document.getElementById('invRealizadasHeading').innerHTML =
+      `Posiciones liquidadas (ganancia ya materializada) <span class="count">${realizadas.length} · ${fmt(totalGanancia)} ganancia total</span>`;
 
     document.getElementById('invMhBody').innerHTML = `
       <div class="flag">

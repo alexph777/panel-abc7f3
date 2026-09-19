@@ -84,6 +84,24 @@
   .kpi .delta.pos{ color:var(--accent-ink); }
   .kpi .delta.neg{ color:var(--danger); }
 
+  .liq-row{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+  .liq-item{ flex:1; min-width:140px; }
+  .liq-item.liq-total{ padding-left:18px; border-left:2px solid var(--border); }
+  .liq-op{ font-size:20px; color:var(--faint); font-weight:300; flex-shrink:0; }
+  .liq-label{ font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--faint); margin-bottom:6px; }
+  .liq-value{ font-size:22px; font-weight:600; line-height:1.1; }
+  .liq-note{ font-size:12px; color:var(--muted); margin-top:14px; }
+  .liq-sep{ border-top:1px solid var(--border-2); margin:18px 0; }
+  .liq-row-3{ gap:24px; }
+  .liq-row-3 .liq-value{ font-size:17px; }
+  .liq-sub{ font-size:11px; color:var(--muted); margin-top:3px; }
+  @media (max-width: 640px){
+    .liq-row{ flex-direction:column; align-items:stretch; gap:10px; }
+    .liq-item.liq-total{ padding-left:0; border-left:none; border-top:2px solid var(--border); padding-top:10px; }
+    .liq-op{ text-align:center; }
+    .liq-row-3{ flex-direction:column; gap:14px; }
+  }
+
   .ratios-panel{
     background:var(--surface); border:1px solid var(--border); border-radius:10px;
     padding:18px 20px; box-shadow:var(--shadow); margin-bottom:18px;
@@ -461,6 +479,7 @@
   </div>
 
   <div class="tab-panel" id="tab-inversiones">
+    <div class="panel" id="liqPanel" style="margin-bottom:20px;"></div>
     <div class="kpi-row" id="invKpiRow" style="margin-bottom:20px;"></div>
     <div class="main-grid">
       <div class="col">
@@ -4162,6 +4181,14 @@
       "ganancia_realizada": 50900.0,
       "concentracion_mayela": 0.8166
     },
+    "liquidez": {
+      "liquidez_inmediata": 13225.86,
+      "compromisos_pendientes": 17100.0,
+      "libre_disposicion": -3874.14,
+      "activos_liquidos_invertibles": 218630.56,
+      "capital_iliquido_comprometido": 168624.1,
+      "en_mora": 20000.0
+    },
     "cartera_financiera": [
       {
         "detalle": "MyInvestor - Cartera fondos Vanguard (Emerging Markets, US 500, Global Stock)",
@@ -4594,6 +4621,47 @@
   // ---------- inversiones ----------
   const inv = DATA.inversiones;
   if (inv) {
+    // ---------- escalera de liquidez ----------
+    const liq = inv.liquidez;
+    const liqPositivo = liq.libre_disposicion >= 0;
+    document.getElementById('liqPanel').innerHTML = `
+      <h2>Liquidez y disponibilidad</h2>
+      <div class="liq-row">
+        <div class="liq-item">
+          <div class="liq-label">Liquidez inmediata</div>
+          <div class="liq-value num">${fmt(liq.liquidez_inmediata)}</div>
+        </div>
+        <div class="liq-op">−</div>
+        <div class="liq-item">
+          <div class="liq-label">Compromisos pendientes</div>
+          <div class="liq-value num" style="color:var(--danger)">${fmt(liq.compromisos_pendientes)}</div>
+        </div>
+        <div class="liq-op">=</div>
+        <div class="liq-item liq-total">
+          <div class="liq-label">Libre disposición neta</div>
+          <div class="liq-value num" style="color:${liqPositivo ? 'var(--accent-ink)' : 'var(--danger)'}">${fmt(liq.libre_disposicion)}</div>
+        </div>
+      </div>
+      <div class="liq-note">${liqPositivo ? 'Cubre los capital calls ya comprometidos (ej. Torredembarra) con margen.' : '⚠️ Si se pidiera hoy el resto de lo comprometido (ej. Torredembarra), la liquidez bancaria no llegaría a cubrirlo.'}</div>
+      <div class="liq-sep"></div>
+      <div class="liq-row liq-row-3">
+        <div class="liq-item">
+          <div class="liq-label">Activos líquidos invertibles</div>
+          <div class="liq-value num">${fmt(liq.activos_liquidos_invertibles)}</div>
+          <div class="liq-sub">Fondos, cripto, pensiones — realizable en días</div>
+        </div>
+        <div class="liq-item">
+          <div class="liq-label">Capital ilíquido comprometido</div>
+          <div class="liq-value num">${fmt(liq.capital_iliquido_comprometido)}</div>
+          <div class="liq-sub">Coinversiones + M&amp;H + préstamos privados</div>
+        </div>
+        <div class="liq-item">
+          <div class="liq-label">En mora / en riesgo</div>
+          <div class="liq-value num" style="color:var(--risk-ink)">${fmt(liq.en_mora)}</div>
+          <div class="liq-sub">UrbanFlip — sin certeza de cobro</div>
+        </div>
+      </div>`;
+
     const invKpiRow = document.getElementById('invKpiRow');
     invKpiRow.innerHTML = `
       <div class="kpi primary">

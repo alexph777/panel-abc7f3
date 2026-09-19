@@ -204,9 +204,19 @@
   .subcat-panel.open{ display:block; }
   .subcat-row{ display:grid; grid-template-columns: 108px 1fr 70px; align-items:center; gap:10px; margin-bottom:5px; font-size:11.5px; }
   .subcat-row .subcat{ color:var(--muted); }
+  .subcat-row.has-n3{ cursor:pointer; }
+  .subcat-row.has-n3 .subcat::before{ content:'▸'; display:inline-block; width:11px; color:var(--faint); transition:transform .15s ease; }
+  .subcat-row.has-n3.expanded .subcat::before{ transform:rotate(90deg); }
   .subcat-track{ height:10px; background:var(--surface-2); border-radius:3px; overflow:hidden; }
   .subcat-fill{ display:block; height:100%; background:var(--accent); opacity:.55; border-radius:3px 0 0 3px; }
   .subcat-row .subamt{ text-align:right; color:var(--muted); }
+  .nivel3-panel{ display:none; padding:1px 0 8px 20px; margin-bottom:2px; }
+  .nivel3-panel.open{ display:block; }
+  .nivel3-row{ display:grid; grid-template-columns: 96px 1fr 62px; align-items:center; gap:8px; margin-bottom:4px; font-size:10.5px; }
+  .nivel3-row .n3lbl{ color:var(--faint); }
+  .nivel3-track{ height:7px; background:var(--surface-2); border-radius:2px; overflow:hidden; }
+  .nivel3-fill{ display:block; height:100%; background:var(--accent); opacity:.35; border-radius:2px 0 0 2px; }
+  .nivel3-row .n3amt{ text-align:right; color:var(--faint); }
   .bar-foot{ display:flex; justify-content:space-between; margin-top:10px; padding-top:10px; border-top:1px solid var(--border); font-size:12.5px; }
   .bar-foot .lbl{ color:var(--muted); }
   .bar-foot .val{ font-weight:600; color:var(--ink); }
@@ -262,6 +272,7 @@
     .donut-wrap{ align-self:center; }
     .bar-row{ grid-template-columns: 100px 1fr 66px; }
     .subcat-row{ grid-template-columns: 88px 1fr 60px; }
+    .nivel3-row{ grid-template-columns: 78px 1fr 54px; }
     .detalle-table-wrap{ max-height:520px; }
   }
 
@@ -289,6 +300,8 @@
     .bar-track{ height:14px; }
     .subcat-row{ grid-template-columns: 70px 1fr 56px; gap:6px; font-size:10.5px; }
     .subcat-track{ height:8px; }
+    .nivel3-row{ grid-template-columns: 62px 1fr 48px; gap:5px; font-size:9.5px; }
+    .nivel3-track{ height:6px; }
     .bar-foot{ font-size:12px; }
 
     .flag{
@@ -476,7 +489,7 @@
 
 <script type="application/json" id="dashboard-data">
 {
-  "generated_at": "18.09.2026",
+  "generated_at": "19.09.2026",
   "kpi": {
     "patrimonio_neto": 294933.01,
     "total_activos": 429623.68,
@@ -4128,12 +4141,36 @@
       ? movimientosAll
       : movimientosAll.filter(m => mesKeyDe(m.fecha) === mesKey);
     const porNivel2 = {};
+    const tieneNivel3 = {};
     enMes.forEach(m => {
       if (m.categoria !== categoria) return;
       const label = m.nivel2 && m.nivel2.trim() ? m.nivel2 : '(sin subcategoría)';
       porNivel2[label] = (porNivel2[label] || 0) + Math.abs(m.importe);
+      if (m.nivel3 && m.nivel3.trim()) tieneNivel3[label] = true;
     });
     return Object.entries(porNivel2)
+      .map(([label, value]) => ({ label, value, tieneNivel3: !!tieneNivel3[label] }))
+      .sort((a,b) => b.value - a.value);
+  }
+
+  function calcularNivel3(mesKey, categoria, nivel2) {
+    const enMes = mesKey === 'todos'
+      ? movimientosAll
+      : movimientosAll.filter(m => mesKeyDe(m.fecha) === mesKey);
+    const porNivel3 = {};
+    enMes.forEach(m => {
+      if (m.categoria !== categoria) return;
+      const n2 = m.nivel2 && m.nivel2.trim() ? m.nivel2 : '(sin subcategoría)';
+      if (n2 !== nivel2) return;
+      // Filas sin Nivel3 relleno se agrupan en "(sin detalle)" en vez de
+      // omitirse -- omitirlas haría que la suma del desglose no coincidiera
+      // con el total de la subcategoría, pareciendo que falta dinero (caso
+      // real: "Atención médica" con 635€ en una fila sin Nivel3 -- sin este
+      // bucket, el desglose solo suma 795,16€ de 1.430,16€ reales).
+      const n3 = m.nivel3 && m.nivel3.trim() ? m.nivel3 : '(sin detalle)';
+      porNivel3[n3] = (porNivel3[n3] || 0) + Math.abs(m.importe);
+    });
+    return Object.entries(porNivel3)
       .map(([label, value]) => ({ label, value }))
       .sort((a,b) => b.value - a.value);
   }
@@ -4178,14 +4215,44 @@
           panel.innerHTML = `<div class="empty-note">Sin desglose por subcategoría disponible.</div>`;
         } else {
           const maxSub = Math.max(...subs.map(s=>s.value), 1);
-          panel.innerHTML = subs.map(s => {
+          panel.innerHTML = subs.map((s, j) => {
             const pct = (s.value / maxSub * 100).toFixed(0);
-            return `<div class="subcat-row">
+            const claseN3 = s.tieneNivel3 ? ' has-n3' : '';
+            return `<div class="subcat-row${claseN3}" data-n2idx="${j}" data-n2="${s.label.replace(/"/g,'&quot;')}">
               <span class="subcat">${s.label}</span>
               <span class="subcat-track"><span class="subcat-fill" style="width:${pct}%"></span></span>
               <span class="subamt num">${fmt(s.value)}</span>
-            </div>`;
+            </div>
+            ${s.tieneNivel3 ? `<div class="nivel3-panel" id="subcat-${idx}-n3-${j}"></div>` : ''}`;
           }).join('');
+          // Click en una fila de subcategoría (solo las que tienen Nivel3
+          // real este periodo) expande/colapsa su desglose de Nivel3 --
+          // mismo patrón lazy-on-click y "un panel abierto a la vez" que el
+          // nivel de arriba, anidado un nivel más.
+          panel.querySelectorAll('.subcat-row.has-n3').forEach(subRow => {
+            subRow.addEventListener('click', (ev) => {
+              ev.stopPropagation(); // no burbujear al bar-row padre
+              const n2idx = subRow.dataset.n2idx;
+              const nivel2 = subRow.dataset.n2;
+              const n3panel = document.getElementById(`subcat-${idx}-n3-${n2idx}`);
+              const n3YaAbierto = n3panel.classList.contains('open');
+              panel.querySelectorAll('.nivel3-panel.open').forEach(p => p.classList.remove('open'));
+              panel.querySelectorAll('.subcat-row.expanded').forEach(r => r.classList.remove('expanded'));
+              if (n3YaAbierto) return;
+              const n3s = calcularNivel3(mesKey, categoria, nivel2);
+              const maxN3 = Math.max(...n3s.map(x=>x.value), 1);
+              n3panel.innerHTML = n3s.map(x => {
+                const pct3 = (x.value / maxN3 * 100).toFixed(0);
+                return `<div class="nivel3-row">
+                  <span class="n3lbl">${x.label}</span>
+                  <span class="nivel3-track"><span class="nivel3-fill" style="width:${pct3}%"></span></span>
+                  <span class="n3amt num">${fmt(x.value)}</span>
+                </div>`;
+              }).join('');
+              n3panel.classList.add('open');
+              subRow.classList.add('expanded');
+            });
+          });
         }
         panel.classList.add('open');
         row.classList.add('expanded');

@@ -98,6 +98,11 @@
   .liq-row-4 .liq-item{ min-width:150px; }
   .liq-row-4 .liq-value{ font-size:17px; }
   .liq-sub{ font-size:11px; color:var(--muted); margin-top:3px; }
+  .liq-detalle{ margin-top:8px; display:flex; flex-direction:column; gap:4px; }
+  .liq-detalle-row{ display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted); }
+  .liq-detalle-tag{ font-size:10px; flex-shrink:0; }
+  .liq-detalle-nombre{ flex:1; }
+  .liq-detalle-valor{ font-weight:600; color:var(--ink); font-size:11px; }
   @media (max-width: 640px){
     .liq-row{ flex-direction:column; align-items:stretch; gap:10px; }
     .liq-item.liq-total{ padding-left:0; border-left:none; border-top:2px solid var(--border); padding-top:10px; }
@@ -4192,6 +4197,23 @@
       "activos_liquidos_invertibles": 214064.63,
       "financiero_pignorado": 169022.18,
       "financiero_libre_o_sin_confirmar": 45042.45,
+      "detalle_liquidas": [
+        {
+          "nombre": "Cartera fondos Vanguard (Emerging Markets, US 500, Global Stock)",
+          "valor": 166812.08,
+          "pignorado": true
+        },
+        {
+          "nombre": "iShares Physical Gold ETC",
+          "valor": 2210.1,
+          "pignorado": true
+        },
+        {
+          "nombre": "iShares Bitcoin ETP",
+          "valor": 45042.45,
+          "pignorado": false
+        }
+      ],
       "plan_pensiones": 4565.93,
       "capital_iliquido_comprometido": 168624.1,
       "en_mora": 20000.0
@@ -4655,7 +4677,9 @@
         <div class="liq-item">
           <div class="liq-label">Inversiones líquidas</div>
           <div class="liq-value num">${fmt(liq.activos_liquidos_invertibles)}</div>
-          <div class="liq-sub">de las cuales <strong style="color:var(--danger)">${fmt(liq.financiero_pignorado)} pignoradas</strong> (colateral MyInvestor) · ${fmt(liq.financiero_libre_o_sin_confirmar)} libres/sin confirmar</div>
+          <div class="liq-detalle">
+            ${liq.detalle_liquidas.map(d => `<div class="liq-detalle-row"><span class="liq-detalle-tag">${d.pignorado ? '🔒' : '⚪'}</span><span class="liq-detalle-nombre">${d.nombre}</span><span class="liq-detalle-valor num">${fmt(d.valor)}</span></div>`).join('')}
+          </div>
         </div>
         <div class="liq-item">
           <div class="liq-label">Plan de pensiones</div>

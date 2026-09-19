@@ -389,6 +389,7 @@
 
   <div class="tabs-nav">
     <button class="tab-btn active" data-tab="resumen">Resumen</button>
+    <button class="tab-btn" data-tab="inversiones">Inversiones</button>
     <button class="tab-btn" data-tab="detalle">Detalle de Gastos</button>
   </div>
 
@@ -457,6 +458,42 @@
       </div>
     </div>
   </div>
+  </div>
+
+  <div class="tab-panel" id="tab-inversiones">
+    <div class="kpi-row" id="invKpiRow" style="margin-bottom:20px;"></div>
+    <div class="main-grid">
+      <div class="col">
+        <div class="panel">
+          <h2>Cartera financiera (líquida / mercado)</h2>
+          <table class="re">
+            <thead><tr><th>Detalle</th><th class="num">Valor</th></tr></thead>
+            <tbody id="invFinBody"></tbody>
+            <tfoot id="invFinFoot"></tfoot>
+          </table>
+        </div>
+        <div class="panel">
+          <h2>Participación M&amp;H Capital Partners</h2>
+          <div id="invMhBody" style="font-size:12.5px; color:var(--muted); line-height:1.5;"></div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="panel">
+          <h2 id="invActivasHeading">Coinversiones inmobiliarias activas (Mayela) — valoradas a coste</h2>
+          <table class="re">
+            <thead><tr><th>Inversión</th><th>Participación</th><th class="num">Comprometido</th><th class="num">Desembolsado</th></tr></thead>
+            <tbody id="invActivasBody"></tbody>
+          </table>
+        </div>
+        <div class="panel">
+          <h2 id="invRiesgoHeading">⚠️ Posiciones en riesgo (UrbanFlip, en mora)</h2>
+          <table class="re">
+            <thead><tr><th>Inversión</th><th>Participación</th><th class="num">Comprometido</th><th class="num">Desembolsado</th></tr></thead>
+            <tbody id="invRiesgoBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="tab-panel" id="tab-detalle">
@@ -542,32 +579,32 @@
   "gastos_periodo_label": "09/2026 · excl. movimientos internos",
   "gastos": [
     {
-      "label": "Salud",
-      "value": 2124.4
+      "label": "Financiación",
+      "value": 2811.88
     },
     {
-      "label": "Financiación",
-      "value": 2109.49
+      "label": "Salud",
+      "value": 2706.41
+    },
+    {
+      "label": "Familia / Terceros",
+      "value": 1707.3
     },
     {
       "label": "Impuestos y seguros personales",
-      "value": 1201.35
+      "value": 1579.05
+    },
+    {
+      "label": "Vivienda",
+      "value": 1097.89
     },
     {
       "label": "Alimentación",
       "value": 948.2
     },
     {
-      "label": "Vivienda",
-      "value": 898.67
-    },
-    {
       "label": "Suscripciones",
       "value": 780.59
-    },
-    {
-      "label": "Familia / Terceros",
-      "value": 557.3
     },
     {
       "label": "Ocio",
@@ -591,6 +628,17 @@
     }
   ],
   "movimientos": [
+    {
+      "fecha": "18.09.2026",
+      "concepto": "Liquidación préstamo 6652008882",
+      "categoria": "Financiación",
+      "nivel2": "MyInvestor",
+      "nivel3": "Préstamo pignorado",
+      "proveedor": "MyInvestor",
+      "importe": -304.48,
+      "cuenta": "MyInvestor",
+      "nota": "Cuota del préstamo pignorado MyInvestor"
+    },
     {
       "fecha": "14.09.2026",
       "concepto": "Aportación M&H (Muro Hidalgo Capital Partners)",
@@ -625,6 +673,17 @@
       "nota": "10.000 EUR recibidos desde Trade Republic (comprobante verificado, captura de la app) -- transferencia entre cuentas propias, resuelve el pendiente de Trade Republic. Nota: aún fuera del rango de extractos CaixaBank ya procesados (último hasta 06.09), pendiente de verificar contra el próximo extracto real de CaixaBank"
     },
     {
+      "fecha": "04.09.2026",
+      "concepto": "O2 Fibra (teléfono)",
+      "categoria": "Vivienda",
+      "nivel2": "Zamora 13 (residencia)",
+      "nivel3": "Internet / Teléfono",
+      "proveedor": "O2",
+      "importe": -82.24,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": ""
+    },
+    {
       "fecha": "03.09.2026",
       "concepto": "Suscripción Premium MyInvestor",
       "categoria": "Impuestos y seguros personales",
@@ -634,6 +693,17 @@
       "importe": -7.99,
       "cuenta": "MyInvestor",
       "nota": ""
+    },
+    {
+      "fecha": "03.09.2026",
+      "concepto": "Sanitas (previsión)",
+      "categoria": "Impuestos y seguros personales",
+      "nivel2": "Seguros",
+      "nivel3": "Prima seguro médico",
+      "proveedor": "Sanitas",
+      "importe": -297.8,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Cuota/prima del seguro Sanitas de este mes (confirmado por el usuario, 19.09.2026) -- distinto de los reembolsos habituales de 297,80€"
     },
     {
       "fecha": "02.09.2026",
@@ -656,6 +726,72 @@
       "importe": 0.0,
       "cuenta": "MyInvestor",
       "nota": "2.000 EUR recibidos desde CaixaBank Cta Corriente ES09...8164 (comprobante verificado, captura de la app CaixaBank: -2.000€ 01.09 15:32, concepto PAGO TRANSFERENCIAS) -- transferencia entre cuentas propias, confirmado por el usuario"
+    },
+    {
+      "fecha": "02.09.2026",
+      "concepto": "Vencimiento de préstamo",
+      "categoria": "Financiación",
+      "nivel2": "CaixaBank",
+      "nivel3": "Préstamo personal",
+      "proveedor": "CaixaBank",
+      "importe": -397.91,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Préstamo nº 9620.32455596448 -- cuota mensual, mismo patrón que 02.08.2026"
+    },
+    {
+      "fecha": "02.09.2026",
+      "concepto": "Mybox (cuota agrupada)",
+      "categoria": "Impuestos y seguros personales",
+      "nivel2": "Seguros",
+      "nivel3": "Seguro de vida",
+      "proveedor": "Mybox",
+      "importe": -79.9,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": ""
+    },
+    {
+      "fecha": "02.09.2026",
+      "concepto": "Iberdrola Electricidad",
+      "categoria": "Vivienda",
+      "nivel2": "Zamora 13 (residencia)",
+      "nivel3": "Luz",
+      "proveedor": "Iberdrola",
+      "importe": -31.35,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": ""
+    },
+    {
+      "fecha": "02.09.2026",
+      "concepto": "Hospital San... (compra en comercio)",
+      "categoria": "Salud",
+      "nivel2": "Atención médica",
+      "nivel3": "Hospital",
+      "proveedor": "Hospital San...",
+      "importe": -557.06,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": ""
+    },
+    {
+      "fecha": "02.09.2026",
+      "concepto": "Fitness Barcelona (cuota)",
+      "categoria": "Salud",
+      "nivel2": "Gimnasio",
+      "nivel3": "",
+      "proveedor": "Fitness Barcelona",
+      "importe": -24.95,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": ""
+    },
+    {
+      "fecha": "02.09.2026",
+      "concepto": "Cdad Vistas al... (comunidad)",
+      "categoria": "Vivienda",
+      "nivel2": "Miramar (padres)",
+      "nivel3": "Comunidad",
+      "proveedor": "Cdad Vistas al Mar",
+      "importe": -85.63,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Vivienda de playa de sus padres en Miramar -- Alejandro cubre los gastos, no es de su propiedad"
     },
     {
       "fecha": "01.09.2026",
@@ -711,6 +847,17 @@
       "importe": 0.0,
       "cuenta": "CaixaBank Cta Corriente ES09...8164",
       "nota": "2.000 EUR enviados a MyInvestor (comprobante verificado, captura de la app CaixaBank) -- transferencia entre cuentas propias, resuelve el pendiente de MyInvestor. Nota: aún fuera del rango de extractos CaixaBank ya procesados (último hasta 06.09), pendiente de verificar contra el próximo extracto real"
+    },
+    {
+      "fecha": "01.09.2026",
+      "concepto": "Transferencia Instantánea a Luis Miguel Pérez",
+      "categoria": "Familia / Terceros",
+      "nivel2": "Luis Miguel Pérez (padre)",
+      "nivel3": "Pago servicio médico",
+      "proveedor": "Luis Miguel Pérez",
+      "importe": -1150.0,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "Dinero para que el padre pague un servicio médico suyo (confirmado por el usuario, 19.09.2026)"
     },
     {
       "fecha": "31.08.2026",
@@ -4003,6 +4150,82 @@
       "es_primero": false
     }
   ],
+  "inversiones": {
+    "kpis": {
+      "total": 407254.66,
+      "financiero": 218630.56,
+      "coinversiones_desembolsado": 72600.0,
+      "coinversiones_comprometido": 89700.0,
+      "en_mora": 20000.0,
+      "mh": 88000.0,
+      "prestamos_privados": 8024.1,
+      "ganancia_realizada": 50900.0,
+      "concentracion_mayela": 0.8166
+    },
+    "cartera_financiera": [
+      {
+        "detalle": "MyInvestor - Cartera fondos Vanguard (Emerging Markets, US 500, Global Stock)",
+        "valor": 166812.08,
+        "nota": "Valor de mercado a 19.09.2026 vía Yahoo Finance (fuente pública en vivo, no captura de app): Emerging Markets 22.260,41€ + US 500 561,68€ + Global Stock 143.989,99€. Nota: mercado secundario (Frankfurt), puede diferir del NAV oficial en ~0,5-1,5%"
+      },
+      {
+        "detalle": "MyInvestor - iShares Physical Gold ETC (pignorado)",
+        "valor": 2210.1,
+        "nota": "Valor de mercado a 19.09.2026 vía Yahoo Finance (fuente pública en vivo, EGLN.L London EUR-hedged)"
+      },
+      {
+        "detalle": "MyInvestor - iShares Bitcoin ETP",
+        "valor": 45042.45,
+        "nota": "Valor de mercado según app MyInvestor, 18.09.2026"
+      },
+      {
+        "detalle": "MyInvestor Indexado (plan de pensiones)",
+        "valor": 4565.93,
+        "nota": "Plan de pensiones indexado normal de MyInvestor -- sin problemas, valor de mercado según app MyInvestor, 18.09.2026"
+      }
+    ],
+    "coinversiones_activas": [
+      {
+        "inversion": "Torredembarra",
+        "gestor": "Mayela",
+        "participacion": "Individual 100%",
+        "comprometido": 53000.0,
+        "desembolsado": 35900.0
+      },
+      {
+        "inversion": "Escala 2",
+        "gestor": "Mayela",
+        "participacion": "Conjunta 33,3% (sin Óscar)",
+        "comprometido": 16700.0,
+        "desembolsado": 16700.0
+      },
+      {
+        "inversion": "Reus",
+        "gestor": "Mayela",
+        "participacion": "Individual 100%",
+        "comprometido": 20000.0,
+        "desembolsado": 20000.0
+      }
+    ],
+    "coinversiones_riesgo": [
+      {
+        "inversion": "Castelló 98",
+        "gestor": "UrbanFlip",
+        "participacion": "Individual 100%",
+        "comprometido": 10000.0,
+        "desembolsado": 10000.0
+      },
+      {
+        "inversion": "Maldonado 33",
+        "gestor": "UrbanFlip",
+        "participacion": "Individual 100%",
+        "comprometido": 10000.0,
+        "desembolsado": 10000.0
+      }
+    ],
+    "mh_detalle": "Prestamo de socio pendiente de devolver (no capital social)",
+    "mh_nota": "Simplificado 19.09.2026, corregido 19.09.2026 tras verificar contra extractos bancarios reales. M&H se lleva por contabilidad separada (PL_MH.xlsx); aqui solo el dinero real que Alejandro tiene metido como socio (prestamo a devolver, no capital social, salvo 3.000€ fundacionales no capturados). Desglose verificado importe por importe: 66.000€ libro M&H (Movimientos_Capital, hasta 03.07.2026, incl. los 11.000€ MyInvestor 19-24/06 -- NO duplicar) + 5.000€ Bankinter (4 transferencias verificadas contra extracto: 03.07=1.000, 15.07=1.000, 27.07=2.000, 30.07=1.000) + 17.000€ Trade Republic (verificado contra extracto: 25.08=1.000+3.000+3.000, 14.09=10.000). Fuente primaria libro: PL_MH.xlsx hoja Movimientos_Capital. Patrimonio Personal NO reclasifica ni corrige el libro de MH -- solo lee y suma lo que ya existe."
+  },
   "ratios": [
     {
       "label": "Deuda / Activos",
@@ -4367,6 +4590,69 @@
     rows += `<tr><td>${e.mes}</td><td class="num">${fmt(e.patrimonio_neto)}</td><td class="num ${deltaClass}">${deltaTxt}</td></tr>`;
   });
   evolTable.innerHTML = rows;
+
+  // ---------- inversiones ----------
+  const inv = DATA.inversiones;
+  if (inv) {
+    const invKpiRow = document.getElementById('invKpiRow');
+    invKpiRow.innerHTML = `
+      <div class="kpi primary">
+        <div class="label">Total cartera de inversiones</div>
+        <div class="value num">${fmt(inv.kpis.total)}</div>
+        <div class="delta">Financiero + inmobiliario (a coste) + M&amp;H + préstamos privados</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Cartera financiera</div>
+        <div class="value num">${fmt(inv.kpis.financiero)}</div>
+        <div class="delta">Fondos, cripto, plan de pensiones — valor de mercado</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Coinversiones inmobiliarias</div>
+        <div class="value num">${fmt(inv.kpis.coinversiones_desembolsado)}</div>
+        <div class="delta">Desembolsado a coste · ${fmt(inv.kpis.en_mora)} en mora (UrbanFlip)</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Ganancia realizada acumulada</div>
+        <div class="value num" style="color:var(--accent-ink)">${fmt(inv.kpis.ganancia_realizada)}</div>
+        <div class="delta">Concentración Mayela: ${(inv.kpis.concentracion_mayela*100).toFixed(1).replace('.', ',')}% del comprometido</div>
+      </div>`;
+
+    const invFinBody = document.getElementById('invFinBody');
+    if (inv.cartera_financiera.length === 0) {
+      invFinBody.innerHTML = `<tr><td colspan="2" class="empty-note">Sin posiciones registradas.</td></tr>`;
+    } else {
+      invFinBody.innerHTML = inv.cartera_financiera.map(c =>
+        `<tr><td data-label="Detalle">${c.detalle}</td><td data-label="Valor" class="num">${fmt(c.valor)}</td></tr>`
+      ).join('');
+    }
+    document.getElementById('invFinFoot').innerHTML =
+      `<tr><td>Total</td><td class="num">${fmt(inv.kpis.financiero)}</td></tr>`;
+
+    const invActivasBody = document.getElementById('invActivasBody');
+    if (inv.coinversiones_activas.length === 0) {
+      invActivasBody.innerHTML = `<tr><td colspan="4" class="empty-note">Sin posiciones activas registradas.</td></tr>`;
+    } else {
+      invActivasBody.innerHTML = inv.coinversiones_activas.map(c =>
+        `<tr><td data-label="Inversión">${c.inversion}</td><td data-label="Participación" class="muted">${c.participacion}</td><td data-label="Comprometido" class="num">${fmt(c.comprometido)}</td><td data-label="Desembolsado" class="num">${fmt(c.desembolsado)}</td></tr>`
+      ).join('');
+    }
+    document.getElementById('invActivasHeading').innerHTML =
+      `Coinversiones inmobiliarias activas (Mayela) — valoradas a coste <span class="count">${inv.coinversiones_activas.length} · ${fmt(inv.kpis.coinversiones_desembolsado)}</span>`;
+
+    const invRiesgoBody = document.getElementById('invRiesgoBody');
+    if (inv.coinversiones_riesgo.length === 0) {
+      invRiesgoBody.innerHTML = `<tr><td colspan="4" class="empty-note">Sin posiciones en riesgo registradas.</td></tr>`;
+    } else {
+      invRiesgoBody.innerHTML = inv.coinversiones_riesgo.map(c =>
+        `<tr><td data-label="Inversión">${c.inversion}</td><td data-label="Participación" class="muted">${c.participacion}</td><td data-label="Comprometido" class="num">${fmt(c.comprometido)}</td><td data-label="Desembolsado" class="num">${fmt(c.desembolsado)}</td></tr>`
+      ).join('');
+    }
+    document.getElementById('invRiesgoHeading').innerHTML =
+      `⚠️ Posiciones en riesgo (UrbanFlip, en mora) <span class="count">${inv.coinversiones_riesgo.length} · ${fmt(inv.kpis.en_mora)}</span>`;
+
+    document.getElementById('invMhBody').innerHTML =
+      `<div style="font-weight:600; color:var(--ink); margin-bottom:4px;">${fmt(inv.kpis.mh)} — ${inv.mh_detalle}</div><div>${inv.mh_nota}</div>`;
+  }
 
   // ---------- tabs ----------
   const tabBtns = document.querySelectorAll('.tab-btn');

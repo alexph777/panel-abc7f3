@@ -225,9 +225,9 @@
   .legend-row.has-detalle.expanded .lbl::before{ transform:rotate(90deg); }
   .activo-detalle-panel{ display:none; padding:4px 0 8px 21px; margin-bottom:2px; }
   .activo-detalle-panel.open{ display:block; }
-  .activo-detalle-row{ display:grid; grid-template-columns: 1fr 70px 88px; align-items:center; gap:8px; margin-bottom:5px; font-size:11px; }
-  .activo-detalle-lbl{ color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .activo-detalle-track{ height:8px; background:var(--surface-2); border-radius:2px; overflow:hidden; }
+  .activo-detalle-row{ display:grid; grid-template-columns: 1fr 70px 88px; align-items:start; gap:8px; margin-bottom:5px; font-size:11px; }
+  .activo-detalle-lbl{ color:var(--muted); overflow-wrap:break-word; line-height:1.35; }
+  .activo-detalle-track{ height:8px; background:var(--surface-2); border-radius:2px; overflow:hidden; margin-top:3px; }
   .activo-detalle-fill{ display:block; height:100%; opacity:.55; border-radius:2px 0 0 2px; }
   .activo-detalle-amt{ text-align:right; color:var(--muted); }
 

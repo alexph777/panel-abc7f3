@@ -138,16 +138,20 @@
   .ratio-item .rdot.warn{ background:oklch(75% 0.14 75); }
   .ratio-item .rdot.bad{ background:var(--danger); }
   .ratio-item .rnote{ font-size:10.5px; color:var(--muted); }
-  .ratio-item .rinfo{
+  /* .rinfo / .rexplain: patrón reutilizable de icono ⓘ + explicación
+     expandible, usado en Salud Financiera, KPIs superiores, Liquidez,
+     Concentración Mayela y Posiciones liquidadas -- global, no solo
+     ratio-item, para que funcione en cualquier contenedor. */
+  .rinfo{
     display:inline-block; cursor:pointer; color:var(--faint); font-size:11px;
     font-weight:400; text-transform:none; letter-spacing:0; vertical-align:middle;
   }
-  .ratio-item .rinfo:hover, .ratio-item .rinfo.active{ color:var(--accent-ink); }
-  .ratio-item .rexplain{
+  .rinfo:hover, .rinfo.active{ color:var(--accent-ink); }
+  .rexplain{
     display:none; font-size:11px; line-height:1.45; color:var(--muted);
-    padding-top:6px; border-top:1px dashed var(--border-2); margin-top:2px;
+    padding-top:6px; border-top:1px dashed var(--border-2); margin-top:6px;
   }
-  .ratio-item .rexplain.open{ display:block; }
+  .rexplain.open{ display:block; }
 
   .main-grid{ display:grid; grid-template-columns: 1.35fr 1fr; gap:14px; margin-bottom:14px; }
   .col{ display:flex; flex-direction:column; gap:14px; }
@@ -4469,30 +4473,62 @@
   document.getElementById('headerSub').textContent = `Datos: Google Sheet "Patrimonio Personal - Alejandro" · Actualizado ${DATA.generated_at}`;
   document.getElementById('footerNote').textContent = `Fuente: Google Sheet "Patrimonio Personal - Alejandro" · Generado automáticamente el ${DATA.generated_at}`;
 
+  // Icono ⓘ reutilizable: genera el span clicable + el panel de explicación
+  // que se despliega debajo. Mismo patrón validado en los ratios de Salud
+  // Financiera -- información siempre disponible inline (nunca oculta tras
+  // hover, que no funciona en móvil), varias explicaciones se pueden tener
+  // abiertas a la vez. `id` debe ser único en toda la página.
+  let infoIconCounter = 0;
+  function infoIcon(texto) {
+    const id = `info-${infoIconCounter++}`;
+    return {
+      icon: `<span class="rinfo" data-infoid="${id}" title="Ver explicación">ⓘ</span>`,
+      panel: `<div class="rexplain" id="${id}">${texto}</div>`,
+    };
+  }
+  function bindInfoIcons(container) {
+    container.querySelectorAll('.rinfo[data-infoid]').forEach(icon => {
+      icon.addEventListener('click', () => {
+        const panel = document.getElementById(icon.dataset.infoid);
+        if (panel) panel.classList.toggle('open');
+        icon.classList.toggle('active');
+      });
+    });
+  }
+
   // ---------- KPI row ----------
   const kpiRow = document.getElementById('kpiRow');
   const cashflowClass = DATA.kpi.cashflow_mes >= 0 ? 'pos' : 'neg';
   const cashflowSign = DATA.kpi.cashflow_mes >= 0 ? '+' : '';
+  const infoPatrimonio = infoIcon(`Patrimonio Neto = Total Activos (${fmt(DATA.kpi.total_activos)}) − Total Pasivos (${fmt(DATA.kpi.total_pasivos)}). Es lo que realmente te quedaría si vendieras todo y pagaras toda la deuda hoy (antes de impuestos sobre plusvalías, ver nota fiscal en la pestaña Inversiones).`);
+  const infoActivos = infoIcon(`Suma de todo lo que posees: cuentas bancarias, inversiones (fondos, oro, cripto), coinversiones inmobiliarias (a coste), participación M&amp;H, préstamos privados otorgados y plan de pensiones. Ver desglose completo en "Composición de Activos" más abajo.`);
+  const infoPasivos = infoIcon(`Suma de todos los préstamos vigentes: personal CaixaBank, Bankinter, y los 2 pignorados de MyInvestor. Ver detalle línea por línea en "Pasivos — detalle" más abajo, incluyendo cuáles son pignorados (riesgo de ejecución automática) y cuáles con recurso general.`);
+  const infoCashflow = infoIcon(`Cashflow = Ingresos del mes − Gastos del mes (último mes completo, no el mes en curso, que casi siempre está incompleto y subestimaría el gasto real). Un valor negativo no es necesariamente alarmante si es puntual (ej. gastos médicos, seguro anual) -- compara con la "Tasa de ahorro mensual" de Salud Financiera, que usa el promedio de 2 meses para suavizar ese ruido.`);
   kpiRow.innerHTML = `
     <div class="kpi primary">
-      <div class="label">Patrimonio Neto</div>
+      <div class="label">Patrimonio Neto ${infoPatrimonio.icon}</div>
       <div class="value num">${fmt(DATA.kpi.patrimonio_neto)}</div>
       <div class="delta">${DATA.kpi.delta_neto_texto}</div>
+      ${infoPatrimonio.panel}
     </div>
     <div class="kpi">
-      <div class="label">Total Activos</div>
+      <div class="label">Total Activos ${infoActivos.icon}</div>
       <div class="value num">${fmt(DATA.kpi.total_activos)}</div>
+      ${infoActivos.panel}
     </div>
     <div class="kpi">
-      <div class="label">Total Pasivos</div>
+      <div class="label">Total Pasivos ${infoPasivos.icon}</div>
       <div class="value num">${fmt(DATA.kpi.total_pasivos)}</div>
       <div class="delta">Cuota mensual total: ${fmt(DATA.kpi.cuota_mensual_total)}</div>
+      ${infoPasivos.panel}
     </div>
     <div class="kpi">
-      <div class="label">Cashflow (${DATA.kpi.mes_label})</div>
+      <div class="label">Cashflow (${DATA.kpi.mes_label}) ${infoCashflow.icon}</div>
       <div class="value num ${cashflowClass}" style="color:${DATA.kpi.cashflow_mes >= 0 ? 'var(--accent-ink)' : 'var(--danger)'}">${cashflowSign}${fmt(DATA.kpi.cashflow_mes)}</div>
       <div class="delta">Ingresos ${fmt(DATA.kpi.ingresos_mes)} · Gastos ${fmt(DATA.kpi.gastos_mes)} · último mes completo</div>
+      ${infoCashflow.panel}
     </div>`;
+  bindInfoIcons(kpiRow);
 
   // ---------- ratios de salud financiera ----------
   const ratiosGrid = document.getElementById('ratiosGrid');
@@ -4846,8 +4882,10 @@
     // ---------- escalera de liquidez ----------
     const liq = inv.liquidez;
     const liqPositivo = liq.libre_disposicion >= 0;
+    const infoLiq = infoIcon(`Liquidez inmediata = Cuentas bancarias. Compromisos pendientes = capital ya asumido en operaciones activas (ej. Torredembarra) pero aún no desembolsado -- es dinero que vas a tener que aportar sí o sí, aunque todavía no haya salido de tu cuenta. Libre disposición neta = Liquidez inmediata − Compromisos pendientes: es lo que te quedaría disponible si tuvieras que cubrir todo lo comprometido hoy mismo.`);
     document.getElementById('liqPanel').innerHTML = `
-      <h2>Liquidez y disponibilidad</h2>
+      <h2>Liquidez y disponibilidad ${infoLiq.icon}</h2>
+      ${infoLiq.panel}
       <div class="liq-row">
         <div class="liq-item">
           <div class="liq-label">Liquidez inmediata</div>
@@ -4894,17 +4932,23 @@
       </div>`;
 
     const invKpiRow = document.getElementById('invKpiRow');
+    const infoTotalCartera = infoIcon(`Total cartera de inversiones = Cartera financiera (${fmt(inv.kpis.financiero)}) + Coinversiones Mayela desembolsado (${fmt(inv.kpis.coinversiones_desembolsado)}) + En mora (${fmt(inv.kpis.en_mora)}) + Participación M&amp;H (${fmt(inv.kpis.mh)}) + Préstamos privados. Las coinversiones inmobiliarias se valoran a coste (no a mercado), por decisión deliberada -- criterio conservador, sin depender de tasaciones no verificables.`);
+    const infoConcentracion = infoIcon(`% del capital COMPROMETIDO (no del desembolsado) en operaciones gestionadas por Mayela, sobre el total comprometido en coinversiones inmobiliarias (Mayela + UrbanFlip). Un porcentaje alto significa que si Mayela como gestor tuviera un problema, afectaría a la mayoría de tu cartera inmobiliaria -- riesgo de concentración, no de rentabilidad.`);
     invKpiRow.innerHTML = `
       <div class="kpi primary">
-        <div class="label">Total cartera de inversiones</div>
+        <div class="label">Total cartera de inversiones ${infoTotalCartera.icon}</div>
         <div class="value num">${fmt(inv.kpis.total)}</div>
         <div class="delta">Financiero + inmobiliario (a coste) + M&amp;H + préstamos privados</div>
+        ${infoTotalCartera.panel}
       </div>
       <div class="kpi">
         <div class="label">Ganancia realizada acumulada <span class="tag-reembolso" title="Distribuido - Desembolsado, sin descontar IRPF. Existe una estimación antigua de ~50,2k€ neta, pero no está recalculada tras corregir Salt -- no se usa como cifra fiable.">bruto, antes de IRPF</span></div>
         <div class="value num" style="color:var(--accent-ink)">${fmt(inv.kpis.ganancia_realizada)}</div>
-        <div class="delta">Concentración Mayela: ${(inv.kpis.concentracion_mayela*100).toFixed(1).replace('.', ',')}% del comprometido</div>
+        <div class="delta">Concentración Mayela: ${(inv.kpis.concentracion_mayela*100).toFixed(1).replace('.', ',')}% del comprometido ${infoConcentracion.icon}</div>
+        ${infoConcentracion.panel}
       </div>`;
+    bindInfoIcons(document.getElementById('liqPanel'));
+    bindInfoIcons(invKpiRow);
 
     const invFinBody = document.getElementById('invFinBody');
     if (inv.cartera_financiera.length === 0) {
@@ -4960,8 +5004,10 @@
     const totalRent = totalDesemb ? (totalGanancia/totalDesemb*100).toFixed(1).replace('.',',') + '%' : 'N/D';
     document.getElementById('invRealizadasFoot').innerHTML =
       `<tr class="total-row"><td>TOTAL (${realizadas.length})</td><td></td><td></td><td></td><td class="num">${fmt(totalDesemb)}</td><td class="num">${fmt(totalDistrib)}</td><td class="num pos">${fmt(totalGanancia)}</td><td class="num pos">${totalRent}</td><td></td></tr>`;
+    const infoRealizadas = infoIcon(`% Rentabilidad = (Distribuido − Desembolsado) ÷ Desembolsado, por posición. Es rentabilidad simple total del periodo, NO anualizada -- una posición mantenida 4 años al 24,8% no rindió lo mismo por año que una mantenida 1 año al mismo 24,8%. "Años mantenida" está al lado para poder comparar mentalmente. Cifras brutas, antes de IRPF.`);
     document.getElementById('invRealizadasHeading').innerHTML =
-      `Posiciones liquidadas (ganancia ya materializada) <span class="count">${realizadas.length} · ${fmt(totalGanancia)} ganancia total</span>`;
+      `Posiciones liquidadas (ganancia ya materializada) ${infoRealizadas.icon} <span class="count">${realizadas.length} · ${fmt(totalGanancia)} ganancia total</span>${infoRealizadas.panel}`;
+    bindInfoIcons(document.getElementById('invRealizadasHeading').parentElement);
 
     document.getElementById('invMhBody').innerHTML = `
       <div class="flag">

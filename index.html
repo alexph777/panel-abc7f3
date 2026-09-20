@@ -632,19 +632,23 @@
       "detalle": [
         {
           "label": "MyInvestor - Vanguard Global Stock (pignorado)",
-          "value": 143989.99
+          "value": 143989.99,
+          "estado": null
         },
         {
           "label": "MyInvestor - Vanguard Emerging Markets (pignorado)",
-          "value": 22260.41
+          "value": 22260.41,
+          "estado": null
         },
         {
           "label": "MyInvestor - iShares Physical Gold ETC (pignorado)",
-          "value": 2210.1
+          "value": 2210.1,
+          "estado": null
         },
         {
           "label": "MyInvestor - Vanguard US 500 (pignorado)",
-          "value": 561.68
+          "value": 561.68,
+          "estado": null
         }
       ]
     },
@@ -655,23 +659,28 @@
       "detalle": [
         {
           "label": "APH Portfolio - Torredembarra (gestor Mayela, individual 100%)",
-          "value": 35900.0
+          "value": 35900.0,
+          "estado": "Activa"
         },
         {
           "label": "APH Portfolio - Reus (gestor Mayela, individual 100%)",
-          "value": 20000.0
+          "value": 20000.0,
+          "estado": "Activa"
         },
         {
           "label": "APH Portfolio - Escala 2 (gestor Mayela, cta conjunta 33,3% sin Óscar)",
-          "value": 16700.0
+          "value": 16700.0,
+          "estado": "Activa"
         },
         {
           "label": "UrbanFlip - Castelló 98",
-          "value": 10000.0
+          "value": 10000.0,
+          "estado": "En mora"
         },
         {
           "label": "UrbanFlip - Maldonado 33",
-          "value": 10000.0
+          "value": 10000.0,
+          "estado": "En mora"
         }
       ]
     },
@@ -682,7 +691,8 @@
       "detalle": [
         {
           "label": "Prestamo de socio pendiente de devolver (no capital social)",
-          "value": 88000.0
+          "value": 88000.0,
+          "estado": null
         }
       ]
     },
@@ -693,7 +703,8 @@
       "detalle": [
         {
           "label": "MyInvestor - iShares Bitcoin ETP",
-          "value": 45042.45
+          "value": 45042.45,
+          "estado": null
         }
       ]
     },
@@ -704,23 +715,28 @@
       "detalle": [
         {
           "label": "CaixaBank Cta Corriente - IBAN ES09...8164",
-          "value": 4136.93
+          "value": 4136.93,
+          "estado": null
         },
         {
           "label": "Trade Republic (cuenta remunerada, sin inversión activa) - IBAN ES73...9111",
-          "value": 4066.5
+          "value": 4066.5,
+          "estado": null
         },
         {
           "label": "MyInvestor (efectivo) - IBAN ES34...9111",
-          "value": 3840.42
+          "value": 3840.42,
+          "estado": null
         },
         {
           "label": "Bankinter Cta Corriente Oro Nómina - Nº ...7824",
-          "value": 608.61
+          "value": 608.61,
+          "estado": null
         },
         {
           "label": "Openbank (cuenta corriente) - IBAN ES60...0626",
-          "value": 573.4
+          "value": 573.4,
+          "estado": null
         }
       ]
     },
@@ -731,7 +747,8 @@
       "detalle": [
         {
           "label": "Préstamo hipotecario a Gabriel Mesquida Marques y Lucia Fedelich (Ciutadella, Menorca)",
-          "value": 8024.1
+          "value": 8024.1,
+          "estado": null
         }
       ]
     },
@@ -742,7 +759,8 @@
       "detalle": [
         {
           "label": "MyInvestor Indexado (plan de pensiones)",
-          "value": 4565.93
+          "value": 4565.93,
+          "estado": null
         }
       ]
     }
@@ -4710,8 +4728,11 @@
       const maxDet = Math.max(...a.detalle.map(d => d.value), 1);
       panel.innerHTML = a.detalle.map(d => {
         const pctD = (d.value / maxDet * 100).toFixed(0);
+        const badgeMora = d.estado === 'En mora'
+          ? ' <span class="tag-pignorado" title="Sin cobro desde otoño 2025 -- ver detalle en \'Riesgos y Pendientes\' más abajo.">⚠️ en mora</span>'
+          : '';
         return `<div class="activo-detalle-row">
-          <span class="activo-detalle-lbl">${d.label}</span>
+          <span class="activo-detalle-lbl">${d.label}${badgeMora}</span>
           <span class="activo-detalle-track"><span class="activo-detalle-fill" style="width:${pctD}%; background:${a.color}"></span></span>
           <span class="activo-detalle-amt num">${fmt(d.value)}</span>
         </div>`;

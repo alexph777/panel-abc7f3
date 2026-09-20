@@ -230,6 +230,7 @@
   .activo-detalle-track{ height:8px; background:var(--surface-2); border-radius:2px; overflow:hidden; margin-top:3px; }
   .activo-detalle-fill{ display:block; height:100%; opacity:.55; border-radius:2px 0 0 2px; }
   .activo-detalle-amt{ text-align:right; color:var(--muted); }
+  .activo-detalle-sub{ font-size:9.5px; color:var(--faint); margin-top:1px; }
 
   table.re{ width:100%; border-collapse:collapse; font-size:12.5px; }
   table.re th{
@@ -536,29 +537,9 @@
   <div class="tab-panel" id="tab-inversiones">
     <div class="panel" id="liqPanel" style="margin-bottom:20px;"></div>
     <div class="kpi-row kpi-row-2col" id="invKpiRow" style="margin-bottom:20px;"></div>
-    <div class="main-grid">
-      <div class="col">
-        <div class="panel">
-          <h2 id="invActivasHeading">Cartera Real Estate (APH) — posiciones activas</h2>
-          <table class="re">
-            <thead><tr><th>Inversión</th><th>Participación</th><th class="num">Comprometido</th><th class="num">Desembolsado</th><th class="num">Distribuido</th><th class="num">Años</th></tr></thead>
-            <tbody id="invActivasBody"></tbody>
-          </table>
-        </div>
-        <div class="panel">
-          <h2 id="invRiesgoHeading">Posiciones en riesgo (UrbanFlip)</h2>
-          <table class="re">
-            <thead><tr><th>Inversión</th><th>Participación</th><th class="num">Comprometido</th><th class="num">Desembolsado</th><th class="num">Distribuido</th><th class="num">Años</th></tr></thead>
-            <tbody id="invRiesgoBody"></tbody>
-          </table>
-        </div>
-      </div>
-      <div class="col">
-        <div class="panel">
-          <h2>Participación M&amp;H Capital Partners</h2>
-          <div class="flags" id="invMhBody"></div>
-        </div>
-      </div>
+    <div class="panel">
+      <h2>Participación M&amp;H Capital Partners</h2>
+      <div class="flags" id="invMhBody"></div>
     </div>
     <div class="panel" style="margin-top:12px;">
       <h2 id="invRealizadasHeading">Posiciones liquidadas (ganancia ya materializada)</h2>
@@ -652,27 +633,42 @@
         {
           "label": "Torredembarra - Mayela · 100%",
           "value": 35900.0,
-          "estado": "Activa"
+          "estado": "Activa",
+          "comprometido": 53000.0,
+          "distribuido": 0,
+          "anios_en_cartera": 2
         },
         {
           "label": "Reus - Mayela · 100%",
           "value": 20000.0,
-          "estado": "Activa"
+          "estado": "Activa",
+          "comprometido": 20000.0,
+          "distribuido": 0,
+          "anios_en_cartera": 0
         },
         {
           "label": "Escala 2 - Mayela · 33,3%",
           "value": 16700.0,
-          "estado": "Activa"
+          "estado": "Activa",
+          "comprometido": 16700.0,
+          "distribuido": 0,
+          "anios_en_cartera": 1
         },
         {
           "label": "Castelló 98 - UrbanFlip",
           "value": 10000.0,
-          "estado": "En mora"
+          "estado": "En mora",
+          "comprometido": 10000.0,
+          "distribuido": 0,
+          "anios_en_cartera": 1
         },
         {
           "label": "Maldonado 33 - UrbanFlip",
           "value": 10000.0,
-          "estado": "En mora"
+          "estado": "En mora",
+          "comprometido": 10000.0,
+          "distribuido": 0,
+          "anios_en_cartera": 1
         }
       ]
     },
@@ -4723,8 +4719,19 @@
         const badgeMora = d.estado === 'En mora'
           ? ' <span class="tag-pignorado" title="Sin cobro desde otoño 2025 -- ver detalle en \'Riesgos y Pendientes\' más abajo.">⚠️ en mora</span>'
           : '';
+        // Sub-línea Comprometido/Distribuido/Años -- solo para posiciones de
+        // Coinversiones Real Estate (traen estos campos, ver
+        // regenerar_dashboard.py). Se omite "Comprometido" si coincide con
+        // el valor ya desembolsado (repetiría el mismo número dos veces).
+        const subInfo = (d.comprometido !== undefined)
+          ? `<div class="activo-detalle-sub">${
+              d.comprometido !== d.value ? `Comprometido ${fmt(d.comprometido)} · ` : ''
+            }${d.distribuido > 0 ? `Distribuido ${fmt(d.distribuido)} · ` : ''}${
+              d.anios_en_cartera != null ? `${d.anios_en_cartera} ${d.anios_en_cartera === 1 ? 'año' : 'años'}` : ''
+            }</div>`
+          : '';
         return `<div class="activo-detalle-row">
-          <span class="activo-detalle-lbl">${d.label}${badgeMora}</span>
+          <span class="activo-detalle-lbl">${d.label}${badgeMora}${subInfo}</span>
           <span class="activo-detalle-track"><span class="activo-detalle-fill" style="width:${pctD}%; background:${a.color}"></span></span>
           <span class="activo-detalle-amt num">${fmt(d.value)}</span>
         </div>`;
@@ -5106,32 +5113,6 @@
       </div>`;
     bindInfoIcons(document.getElementById('liqPanel'));
     bindInfoIcons(invKpiRow);
-
-    const invActivasBody = document.getElementById('invActivasBody');
-    if (inv.coinversiones_activas.length === 0) {
-      invActivasBody.innerHTML = `<tr><td colspan="6" class="empty-note">Sin posiciones activas registradas.</td></tr>`;
-    } else {
-      invActivasBody.innerHTML = inv.coinversiones_activas.map(c => {
-        const distribuidoTxt = c.distribuido > 0 ? fmt(c.distribuido) : '<span class="muted">En curso</span>';
-        const aniosTxt = c.anios_en_cartera != null ? c.anios_en_cartera : '—';
-        return `<tr><td data-label="Inversión">${c.inversion}</td><td data-label="Participación" class="muted">${c.participacion}</td><td data-label="Comprometido" class="num">${fmt(c.comprometido)}</td><td data-label="Desembolsado" class="num">${fmt(c.desembolsado)}</td><td data-label="Distribuido" class="num">${distribuidoTxt}</td><td data-label="Años" class="num muted">${aniosTxt}</td></tr>`;
-      }).join('');
-    }
-    document.getElementById('invActivasHeading').innerHTML =
-      `Coinversiones inmobiliarias activas (Mayela, excl. M&amp;H) <span class="count">${inv.coinversiones_activas.length} · ${fmt(inv.kpis.coinversiones_desembolsado)}</span>`;
-
-    const invRiesgoBody = document.getElementById('invRiesgoBody');
-    if (inv.coinversiones_riesgo.length === 0) {
-      invRiesgoBody.innerHTML = `<tr><td colspan="6" class="empty-note">Sin posiciones en riesgo registradas.</td></tr>`;
-    } else {
-      invRiesgoBody.innerHTML = inv.coinversiones_riesgo.map(c => {
-        const distribuidoTxt = c.distribuido > 0 ? fmt(c.distribuido) : '<span class="muted">Sin cobro</span>';
-        const aniosTxt = c.anios_en_cartera != null ? c.anios_en_cartera : '—';
-        return `<tr><td data-label="Inversión">${c.inversion}</td><td data-label="Participación" class="muted">${c.participacion}</td><td data-label="Comprometido" class="num">${fmt(c.comprometido)}</td><td data-label="Desembolsado" class="num">${fmt(c.desembolsado)}</td><td data-label="Distribuido" class="num">${distribuidoTxt}</td><td data-label="Años" class="num muted">${aniosTxt}</td></tr>`;
-      }).join('');
-    }
-    document.getElementById('invRiesgoHeading').innerHTML =
-      `Posiciones en riesgo (UrbanFlip) <span class="count">${inv.coinversiones_riesgo.length} · ${fmt(inv.kpis.en_mora)}</span>`;
 
     const invRealizadasBody = document.getElementById('invRealizadasBody');
     const realizadas = inv.coinversiones_realizadas || [];

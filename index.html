@@ -238,6 +238,11 @@
     padding:1px 6px; border-radius:4px; background:var(--accent-soft); color:var(--accent-ink);
     vertical-align:middle; white-space:nowrap;
   }
+  .tag-pignorado{
+    display:inline-block; font-size:10px; font-weight:600; margin-left:6px;
+    padding:1px 6px; border-radius:4px; background:color-mix(in oklch, var(--danger) 18%, transparent);
+    color:var(--danger); vertical-align:middle; white-space:nowrap; cursor:help;
+  }
   .bar-row .amt{ text-align:right; color:var(--muted); }
   .subcat-panel{ display:none; padding:2px 0 10px 22px; margin-bottom:2px; }
   .subcat-panel.open{ display:block; }
@@ -489,6 +494,7 @@
           <tbody id="debBody"></tbody>
           <tfoot id="debFoot"></tfoot>
         </table>
+        <div class="liq-note" id="debNota"></div>
       </div>
 
       <div class="panel">
@@ -513,6 +519,7 @@
             <tbody id="invFinBody"></tbody>
             <tfoot id="invFinFoot"></tfoot>
           </table>
+          <div class="liq-note">⚠️ Valor de mercado bruto, sin descontar el IRPF que se devengaría al liquidar (plusvalías de capital, tramos ~19-28% en España). No se calcula una cifra de pasivo fiscal contingente por no tener capturado el coste de adquisición histórico. El patrimonio neto real "tras impuestos si se liquidara todo hoy" es, por tanto, algo menor que el Patrimonio Neto mostrado arriba.</div>
         </div>
         <div class="panel">
           <h2 id="invActivasHeading">Coinversiones inmobiliarias activas (Mayela)</h2>
@@ -576,7 +583,7 @@
 
 <script type="application/json" id="dashboard-data">
 {
-  "generated_at": "19.09.2026",
+  "generated_at": "20.09.2026",
   "kpi": {
     "patrimonio_neto": 285789.85,
     "total_activos": 420480.52,
@@ -4139,30 +4146,36 @@
       "nota": "Vence 04/2033",
       "saldo": 25978.77,
       "cuota_mensual": 397.9,
-      "interes": "6,25%"
+      "interes": "6,25%",
+      "pignorado": false
     },
     {
       "entidad": "Bankinter — préstamo",
       "nota": "Vence aprox. 07/2036",
       "saldo": 43639.31,
       "cuota_mensual": 498.48,
-      "interes": "6,50% TIN"
+      "interes": "6,50% TIN",
+      "pignorado": false
     },
     {
       "entidad": "MyInvestor — pignorado #1",
       "nota": "Vence 03/2045",
       "saldo": 49707.02,
       "cuota_mensual": 304.48,
-      "interes": "3,5%"
+      "interes": "3,5%",
+      "pignorado": true
     },
     {
       "entidad": "MyInvestor — pignorado #2",
       "nota": "Vence 05/2046",
       "saldo": 15365.57,
       "cuota_mensual": 89.89,
-      "interes": "3,5%"
+      "interes": "3,5%",
+      "pignorado": true
     }
   ],
+  "deuda_pignorada": 65072.59,
+  "deuda_personal_con_recurso": 69618.08,
   "riesgos": [
     {
       "badge": "mora",
@@ -4395,7 +4408,8 @@
       }
     ],
     "mh_detalle": "Prestamo de socio pendiente de devolver (no capital social)",
-    "mh_nota": "Préstamo de socio pendiente de devolver a Alejandro (no es capital social). Contabilidad de la empresa llevada por separado en PL_MH.xlsx."
+    "mh_nota": "Préstamo de socio pendiente de devolver a Alejandro (no es capital social). Contabilidad de la empresa llevada por separado en PL_MH.xlsx.",
+    "mh_estado_actualizacion": "POSIBLE DESACTUALIZADO"
   },
   "ratios": [
     {
@@ -4406,9 +4420,9 @@
     },
     {
       "label": "Esfuerzo de deuda (cuota/ingresos)",
-      "display": "47,3%",
-      "status": "bad",
-      "nota": "Alerta: más de 35-40%"
+      "display": "22,8%",
+      "status": "ok",
+      "nota": "Alerta: más de 35-40% (promedio últimos 2 meses)"
     },
     {
       "label": "Tasa de ahorro mensual",
@@ -4744,13 +4758,23 @@
   DATA.pasivos.forEach(p => {
     const tr = document.createElement('tr');
     const cuotaTxt = p.cuota_mensual ? fmt(p.cuota_mensual) : '—';
-    tr.innerHTML = `<td data-label="Entidad">${p.entidad}<div class="muted">${p.nota}</div></td>
+    // Deuda pignorada (colateral: cartera de valores) vs con recurso general
+    // -- riesgo distinto: la pignorada puede ejecutarse automáticamente
+    // (margin call) si cae el valor de la cartera, sin proceso judicial.
+    const badgePignorado = p.pignorado
+      ? ' <span class="tag-pignorado" title="Colateral: cartera de valores MyInvestor. Riesgo de ejecución automática (margin call) si el mercado cae, sin proceso judicial previo.">⚠️ pignorado</span>'
+      : '';
+    tr.innerHTML = `<td data-label="Entidad">${p.entidad}${badgePignorado}<div class="muted">${p.nota}</div></td>
       <td data-label="Saldo" class="num num">${fmt(p.saldo)}</td>
       <td data-label="Cuota/mes" class="num ${p.cuota_mensual ? 'num' : 'muted'}">${cuotaTxt}</td>
       <td data-label="Interés" class="num ${p.interes === '—' ? 'muted' : 'num'}">${p.interes}</td>`;
     debBody.appendChild(tr);
   });
   document.getElementById('debFoot').innerHTML = `<tr><td data-label="Total">Total Pasivos</td><td data-label="Saldo" class="num num">${fmt(DATA.kpi.total_pasivos)}</td><td data-label="Cuota/mes" class="num num">${fmt(DATA.kpi.cuota_mensual_total)}</td><td data-label=""></td></tr>`;
+  const debNotaEl = document.getElementById('debNota');
+  if (debNotaEl) {
+    debNotaEl.innerHTML = `⚠️ De los ${fmt(DATA.kpi.total_pasivos)} de deuda total, <strong>${fmt(DATA.deuda_pignorada)}</strong> están pignorados con colateral en cartera de valores (riesgo de ejecución automática/margin call si el mercado cae) y <strong>${fmt(DATA.deuda_personal_con_recurso)}</strong> son deuda personal con recurso general (impago sigue el cauce normal, sin ejecución automática).`;
+  }
 
   // ---------- evolucion (sparkline + table) ----------
   const evol = DATA.evolucion;
@@ -4851,7 +4875,7 @@
         <div class="delta">Financiero + inmobiliario (a coste) + M&amp;H + préstamos privados</div>
       </div>
       <div class="kpi">
-        <div class="label">Ganancia realizada acumulada</div>
+        <div class="label">Ganancia realizada acumulada <span class="tag-reembolso" title="Distribuido - Desembolsado, sin descontar IRPF. Existe una estimación antigua de ~50,2k€ neta, pero no está recalculada tras corregir Salt -- no se usa como cifra fiable.">bruto, antes de IRPF</span></div>
         <div class="value num" style="color:var(--accent-ink)">${fmt(inv.kpis.ganancia_realizada)}</div>
         <div class="delta">Concentración Mayela: ${(inv.kpis.concentracion_mayela*100).toFixed(1).replace('.', ',')}% del comprometido</div>
       </div>`;
@@ -4918,7 +4942,8 @@
         <span class="badge pend">Socio 50%</span>
         <div class="desc"><div class="t">${inv.mh_detalle}</div><div class="d">${inv.mh_nota}</div></div>
         <div class="amt">${fmt(inv.kpis.mh)}</div>
-      </div>`;
+      </div>
+      <div class="liq-note">${inv.mh_estado_actualizacion === 'POSIBLE DESACTUALIZADO' ? '⚠️ Estado del libro M&amp;H: <strong>posible desactualizado</strong> -- puede haber aportaciones/retiros de socio más recientes no reflejados aquí todavía.' : `Estado del libro M&amp;H: ${inv.mh_estado_actualizacion}`}</div>`;
   }
 
   // ---------- tabs ----------

@@ -138,6 +138,16 @@
   .ratio-item .rdot.warn{ background:oklch(75% 0.14 75); }
   .ratio-item .rdot.bad{ background:var(--danger); }
   .ratio-item .rnote{ font-size:10.5px; color:var(--muted); }
+  .ratio-item .rinfo{
+    display:inline-block; cursor:pointer; color:var(--faint); font-size:11px;
+    font-weight:400; text-transform:none; letter-spacing:0; vertical-align:middle;
+  }
+  .ratio-item .rinfo:hover, .ratio-item .rinfo.active{ color:var(--accent-ink); }
+  .ratio-item .rexplain{
+    display:none; font-size:11px; line-height:1.45; color:var(--muted);
+    padding-top:6px; border-top:1px dashed var(--border-2); margin-top:2px;
+  }
+  .ratio-item .rexplain.open{ display:block; }
 
   .main-grid{ display:grid; grid-template-columns: 1.35fr 1fr; gap:14px; margin-bottom:14px; }
   .col{ display:flex; flex-direction:column; gap:14px; }
@@ -4416,31 +4426,36 @@
       "label": "Deuda / Activos",
       "display": "32,0%",
       "status": "ok",
-      "nota": "Sano: menos de 40%"
+      "nota": "Sano: menos de 40%",
+      "explicacion": "Qué parte de todo lo que tienes está financiado con deuda. Fórmula: Total Pasivos (134.690,67 €) ÷ Total Activos (420.480,52 €). Cuanto más bajo, menos dependes de préstamos para sostener tu patrimonio."
     },
     {
       "label": "Esfuerzo de deuda (cuota/ingresos)",
       "display": "22,8%",
       "status": "ok",
-      "nota": "Alerta: más de 35-40% (promedio últimos 2 meses)"
+      "nota": "Alerta: más de 35-40% (promedio últimos 2 meses)",
+      "explicacion": "Qué parte de tus ingresos mensuales se va en pagar cuotas de préstamos. Fórmula: Cuota mensual total (1.290,75 €) ÷ Ingresos promedio últimos 2 meses (5.653,50 €). Se usa el promedio de 2 meses (no solo el último) para no distorsionarse si un mes cobras menos por timing de nómina."
     },
     {
       "label": "Tasa de ahorro mensual",
       "display": "14,2%",
       "status": "warn",
-      "nota": "Objetivo: 10-15% o más (promedio últimos 2 meses)"
+      "nota": "Objetivo: 10-15% o más (promedio últimos 2 meses)",
+      "explicacion": "De cada 100€ que ingresas, cuántos te quedan sin gastar. Fórmula: (Ingresos promedio 2m 5.653,50 € − Gastos promedio 2m 4.852,25 €) ÷ Ingresos promedio 2m."
     },
     {
       "label": "Colchón de liquidez",
       "display": "-0,8 meses",
       "status": "bad",
-      "nota": "⚠️ Negativo: los compromisos pendientes (ej. resto de Torredembarra) superan la liquidez bancaria disponible"
+      "nota": "⚠️ Negativo: los compromisos pendientes (ej. resto de Torredembarra) superan la liquidez bancaria disponible",
+      "explicacion": "Cuántos meses de gasto normal podrías cubrir con el dinero en cuentas bancarias, después de restar lo que ya debes desembolsar. Fórmula: (Cuentas bancarias 13.225,86 € − Compromisos pendientes 17.100,00 €) ÷ Gasto medio mensual (4.852,25 €)."
     },
     {
       "label": "Apalancamiento (activos/patrimonio)",
       "display": "1,47x",
       "status": "ok",
-      "nota": "Normal invirtiendo con deuda"
+      "nota": "Normal invirtiendo con deuda",
+      "explicacion": "Por cada 1€ de patrimonio neto, cuántos € de activos controlas gracias a la deuda. Fórmula: Total Activos (420.480,52 €) ÷ Patrimonio Neto (285.789,85 €). 1x significaría cero deuda; cuanto más alto, más amplificado está tu patrimonio con préstamos."
     }
   ]
 }
@@ -4481,13 +4496,24 @@
 
   // ---------- ratios de salud financiera ----------
   const ratiosGrid = document.getElementById('ratiosGrid');
-  DATA.ratios.forEach(r => {
+  DATA.ratios.forEach((r, i) => {
     const item = document.createElement('div');
     item.className = 'ratio-item';
-    item.innerHTML = `<div class="rlabel">${r.label}</div>
+    item.innerHTML = `<div class="rlabel">${r.label} <span class="rinfo" data-ridx="${i}" title="Ver explicación">ⓘ</span></div>
       <div class="rvalue num"><span class="rdot ${r.status}"></span>${r.display}</div>
-      <div class="rnote">${r.nota}</div>`;
+      <div class="rnote">${r.nota}</div>
+      <div class="rexplain" id="rexplain-${i}">${r.explicacion || ''}</div>`;
     ratiosGrid.appendChild(item);
+  });
+  // Click en el icono ⓘ expande/colapsa la explicación de ESE ratio en
+  // concreto (no colapsa las demás -- a diferencia del acordeón de gastos,
+  // aquí tiene sentido comparar varias explicaciones abiertas a la vez).
+  ratiosGrid.querySelectorAll('.rinfo').forEach(icon => {
+    icon.addEventListener('click', () => {
+      const idx = icon.dataset.ridx;
+      document.getElementById(`rexplain-${idx}`).classList.toggle('open');
+      icon.classList.toggle('active');
+    });
   });
 
   // ---------- donut + legend ----------

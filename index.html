@@ -577,7 +577,9 @@
         </select>
         <input type="text" id="filtroTexto" placeholder="Buscar por concepto o proveedor...">
         <span class="detalle-count" id="detalleCount"></span>
+        <span class="rinfo" id="detalleInfoIcon" title="Ver explicación">ⓘ</span>
       </div>
+      <div class="rexplain" id="detalleInfoPanel">El total de esta tabla suma TODOS los movimientos visibles (incluye "M&amp;H / Inversión", que en "Gasto por categoría" de la pestaña Resumen se excluye del gasto real por tratarse de aportaciones de capital, no consumo). Por eso este total puede no coincidir exacto con el "Total gasto real" de esa otra vista -- aquí se ve el movimiento bancario completo, allí solo lo que es gasto de consumo.</div>
       <div class="detalle-table-wrap">
         <table class="detalle">
           <thead>
@@ -5097,6 +5099,10 @@
   filtroCategoria.addEventListener('change', renderDetalle);
   document.getElementById('filtroTexto').addEventListener('input', renderDetalle);
   renderDetalle();
+  document.getElementById('detalleInfoIcon').addEventListener('click', function() {
+    document.getElementById('detalleInfoPanel').classList.toggle('open');
+    this.classList.toggle('active');
+  });
 
   // ---------- theme toggle ----------
   const toggle = document.getElementById('themeToggle');

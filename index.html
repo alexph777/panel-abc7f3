@@ -479,6 +479,7 @@
           </div>
           <div class="legend" id="legend"></div>
         </div>
+        <div class="liq-note">⚠️ Valor de mercado bruto, sin descontar el IRPF que se devengaría al liquidar (plusvalías de capital, tramos ~19-28% en España). No se calcula una cifra de pasivo fiscal contingente por no tener capturado el coste de adquisición histórico. El patrimonio neto real "tras impuestos si se liquidara todo hoy" es, por tanto, algo menor que el Patrimonio Neto mostrado arriba.</div>
       </div>
 
       <div class="panel">
@@ -538,23 +539,12 @@
     <div class="main-grid">
       <div class="col">
         <div class="panel">
-          <h2>Cartera financiera (líquida / mercado)</h2>
-          <table class="re">
-            <thead><tr><th>Detalle</th><th class="num">Valor</th></tr></thead>
-            <tbody id="invFinBody"></tbody>
-            <tfoot id="invFinFoot"></tfoot>
-          </table>
-          <div class="liq-note">⚠️ Valor de mercado bruto, sin descontar el IRPF que se devengaría al liquidar (plusvalías de capital, tramos ~19-28% en España). No se calcula una cifra de pasivo fiscal contingente por no tener capturado el coste de adquisición histórico. El patrimonio neto real "tras impuestos si se liquidara todo hoy" es, por tanto, algo menor que el Patrimonio Neto mostrado arriba.</div>
-        </div>
-        <div class="panel">
-          <h2 id="invActivasHeading">Coinversiones inmobiliarias activas (Mayela)</h2>
+          <h2 id="invActivasHeading">Cartera Real Estate (APH) — posiciones activas</h2>
           <table class="re">
             <thead><tr><th>Inversión</th><th>Participación</th><th class="num">Comprometido</th><th class="num">Desembolsado</th><th class="num">Distribuido</th><th class="num">Años</th></tr></thead>
             <tbody id="invActivasBody"></tbody>
           </table>
         </div>
-      </div>
-      <div class="col">
         <div class="panel">
           <h2 id="invRiesgoHeading">Posiciones en riesgo (UrbanFlip)</h2>
           <table class="re">
@@ -562,6 +552,8 @@
             <tbody id="invRiesgoBody"></tbody>
           </table>
         </div>
+      </div>
+      <div class="col">
         <div class="panel">
           <h2>Participación M&amp;H Capital Partners</h2>
           <div class="flags" id="invMhBody"></div>
@@ -5114,17 +5106,6 @@
       </div>`;
     bindInfoIcons(document.getElementById('liqPanel'));
     bindInfoIcons(invKpiRow);
-
-    const invFinBody = document.getElementById('invFinBody');
-    if (inv.cartera_financiera.length === 0) {
-      invFinBody.innerHTML = `<tr><td colspan="2" class="empty-note">Sin posiciones registradas.</td></tr>`;
-    } else {
-      invFinBody.innerHTML = inv.cartera_financiera.map(c =>
-        `<tr><td data-label="Detalle">${c.detalle}</td><td data-label="Valor" class="num">${fmt(c.valor)}</td></tr>`
-      ).join('');
-    }
-    document.getElementById('invFinFoot').innerHTML =
-      `<tr><td>Total</td><td class="num">${fmt(inv.kpis.financiero)}</td></tr>`;
 
     const invActivasBody = document.getElementById('invActivasBody');
     if (inv.coinversiones_activas.length === 0) {

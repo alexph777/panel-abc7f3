@@ -220,6 +220,16 @@
   .legend-row .lbl{ flex:1; color:var(--ink); }
   .legend-row .pct{ color:var(--faint); width:38px; text-align:right; flex-shrink:0; }
   .legend-row .val{ color:var(--muted); width:88px; text-align:right; flex-shrink:0; }
+  .legend-row.has-detalle{ cursor:pointer; }
+  .legend-row.has-detalle .lbl::before{ content:'▸'; display:inline-block; width:12px; color:var(--faint); transition:transform .15s ease; }
+  .legend-row.has-detalle.expanded .lbl::before{ transform:rotate(90deg); }
+  .activo-detalle-panel{ display:none; padding:4px 0 8px 21px; margin-bottom:2px; }
+  .activo-detalle-panel.open{ display:block; }
+  .activo-detalle-row{ display:grid; grid-template-columns: 1fr 70px 88px; align-items:center; gap:8px; margin-bottom:5px; font-size:11px; }
+  .activo-detalle-lbl{ color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .activo-detalle-track{ height:8px; background:var(--surface-2); border-radius:2px; overflow:hidden; }
+  .activo-detalle-fill{ display:block; height:100%; opacity:.55; border-radius:2px 0 0 2px; }
+  .activo-detalle-amt{ text-align:right; color:var(--muted); }
 
   table.re{ width:100%; border-collapse:collapse; font-size:12.5px; }
   table.re th{
@@ -618,37 +628,115 @@
     {
       "label": "Inversiones / bolsa",
       "value": 169022.18,
-      "color": "var(--accent)"
+      "color": "var(--accent)",
+      "detalle": [
+        {
+          "label": "MyInvestor - Cartera fondos Vanguard (Emerging Markets, US 500, Global Stock) (pignorado)",
+          "value": 166812.08
+        },
+        {
+          "label": "MyInvestor - iShares Physical Gold ETC (pignorado)",
+          "value": 2210.1
+        }
+      ]
     },
     {
       "label": "Coinversiones Real Estate",
       "value": 92600.0,
-      "color": "oklch(58% 0.13 250)"
+      "color": "oklch(58% 0.13 250)",
+      "detalle": [
+        {
+          "label": "APH Portfolio - Torredembarra (gestor Mayela, individual 100%)",
+          "value": 35900.0
+        },
+        {
+          "label": "APH Portfolio - Reus (gestor Mayela, individual 100%)",
+          "value": 20000.0
+        },
+        {
+          "label": "APH Portfolio - Escala 2 (gestor Mayela, cta conjunta 33,3% sin Óscar)",
+          "value": 16700.0
+        },
+        {
+          "label": "UrbanFlip - Castelló 98",
+          "value": 10000.0
+        },
+        {
+          "label": "UrbanFlip - Maldonado 33",
+          "value": 10000.0
+        }
+      ]
     },
     {
       "label": "Participación M&H Capital Partners",
       "value": 88000.0,
-      "color": "oklch(70% 0.14 75)"
+      "color": "oklch(70% 0.14 75)",
+      "detalle": [
+        {
+          "label": "Prestamo de socio pendiente de devolver (no capital social)",
+          "value": 88000.0
+        }
+      ]
     },
     {
       "label": "Criptomonedas",
       "value": 45042.45,
-      "color": "oklch(60% 0.15 305)"
+      "color": "oklch(60% 0.15 305)",
+      "detalle": [
+        {
+          "label": "MyInvestor - iShares Bitcoin ETP",
+          "value": 45042.45
+        }
+      ]
     },
     {
       "label": "Cuentas bancarias",
       "value": 13225.86,
-      "color": "oklch(62% 0.11 200)"
+      "color": "oklch(62% 0.11 200)",
+      "detalle": [
+        {
+          "label": "CaixaBank Cta Corriente - IBAN ES09...8164",
+          "value": 4136.93
+        },
+        {
+          "label": "Trade Republic (cuenta remunerada, sin inversión activa) - IBAN ES73...9111",
+          "value": 4066.5
+        },
+        {
+          "label": "MyInvestor (efectivo) - IBAN ES34...9111",
+          "value": 3840.42
+        },
+        {
+          "label": "Bankinter Cta Corriente Oro Nómina - Nº ...7824",
+          "value": 608.61
+        },
+        {
+          "label": "Openbank (cuenta corriente) - IBAN ES60...0626",
+          "value": 573.4
+        }
+      ]
     },
     {
       "label": "Préstamos privados otorgados",
       "value": 8024.1,
-      "color": "oklch(65% 0.15 25)"
+      "color": "oklch(65% 0.15 25)",
+      "detalle": [
+        {
+          "label": "Préstamo hipotecario a Gabriel Mesquida Marques y Lucia Fedelich (Ciutadella, Menorca)",
+          "value": 8024.1
+        }
+      ]
     },
     {
       "label": "Plan de pensiones",
       "value": 4565.93,
-      "color": "oklch(55% 0.02 260)"
+      "color": "oklch(55% 0.02 260)",
+      "detalle": [
+        {
+          "label": "MyInvestor Indexado (plan de pensiones)",
+          "value": 4565.93
+        }
+      ]
     }
   ],
   "gastos_periodo_label": "09/2026 · excl. movimientos internos",
@@ -4576,15 +4664,40 @@
     cumulative += dash;
   });
   const legend = document.getElementById('legend');
-  DATA.activos.forEach(a => {
+  DATA.activos.forEach((a, i) => {
     const pct = (a.value / totalActivos * 100).toFixed(1);
+    const tieneDetalle = a.detalle && a.detalle.length > 0;
     const row = document.createElement('div');
-    row.className = 'legend-row';
+    row.className = tieneDetalle ? 'legend-row has-detalle' : 'legend-row';
+    row.dataset.idx = i;
     row.innerHTML = `<span class="dot" style="background:${a.color}"></span>
       <span class="lbl">${a.label}</span>
       <span class="pct num">${pct}%</span>
       <span class="val num">${fmt(a.value)}</span>`;
     legend.appendChild(row);
+    if (tieneDetalle) {
+      const panel = document.createElement('div');
+      panel.className = 'activo-detalle-panel';
+      panel.id = `activo-detalle-${i}`;
+      const maxDet = Math.max(...a.detalle.map(d => d.value), 1);
+      panel.innerHTML = a.detalle.map(d => {
+        const pctD = (d.value / maxDet * 100).toFixed(0);
+        return `<div class="activo-detalle-row">
+          <span class="activo-detalle-lbl">${d.label}</span>
+          <span class="activo-detalle-track"><span class="activo-detalle-fill" style="width:${pctD}%; background:${a.color}"></span></span>
+          <span class="activo-detalle-amt num">${fmt(d.value)}</span>
+        </div>`;
+      }).join('');
+      legend.appendChild(panel);
+      row.addEventListener('click', () => {
+        const yaAbierto = panel.classList.contains('open');
+        legend.querySelectorAll('.activo-detalle-panel.open').forEach(p => p.classList.remove('open'));
+        legend.querySelectorAll('.legend-row.expanded').forEach(r => r.classList.remove('expanded'));
+        if (yaAbierto) return;
+        panel.classList.add('open');
+        row.classList.add('expanded');
+      });
+    }
   });
 
   // ---------- meses disponibles (a partir de los movimientos reales) ----------

@@ -154,7 +154,7 @@
   }
   .rexplain.open{ display:block; }
 
-  .main-grid{ display:grid; grid-template-columns: 1.35fr 1fr; gap:14px; margin-bottom:14px; }
+  .main-grid{ display:grid; grid-template-columns: 1.35fr 1fr; align-items:start; gap:14px; margin-bottom:14px; }
   .col{ display:flex; flex-direction:column; gap:14px; }
 
   /* ---------- tabs ---------- */
@@ -479,7 +479,7 @@
           </div>
           <div class="legend" id="legend"></div>
         </div>
-        <div class="liq-note">⚠️ Valor de mercado bruto, sin descontar el IRPF que se devengaría al liquidar (plusvalías de capital, tramos ~19-28% en España). No se calcula una cifra de pasivo fiscal contingente por no tener capturado el coste de adquisición histórico. El patrimonio neto real "tras impuestos si se liquidara todo hoy" es, por tanto, algo menor que el Patrimonio Neto mostrado arriba.</div>
+        <div class="liq-note">⚠️ Solo aplica a "Inversiones / bolsa" y "Criptomonedas" (fondos Vanguard, Bitcoin, Oro): valor de mercado bruto, sin descontar el IRPF que se devengaría al liquidar (plusvalías de capital, tramos ~19-28% en España). No se calcula una cifra de pasivo fiscal contingente por no tener capturado el coste de adquisición histórico. Las demás categorías no tributan como plusvalía: Participación M&amp;H es un préstamo de socio a devolver (sin plusvalía), Cuentas bancarias ya es liquidez disponible, y Plan de pensiones tributa como rendimiento del trabajo (escala general, no 19-28%). El patrimonio neto real "tras impuestos si se liquidara todo hoy" es, por tanto, algo menor que el Patrimonio Neto mostrado arriba, pero solo respecto a la parte de bolsa/cripto.</div>
       </div>
 
       <div class="panel">

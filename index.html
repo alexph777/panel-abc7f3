@@ -583,15 +583,15 @@
 
 <script type="application/json" id="dashboard-data">
 {
-  "generated_at": "07.10.2026",
+  "generated_at": "08.10.2026",
   "kpi": {
-    "patrimonio_neto": 296760.63,
-    "total_activos": 431144.13,
+    "patrimonio_neto": 296183.24,
+    "total_activos": 430566.74,
     "total_pasivos": 134383.5,
-    "cashflow_mes": -1282.46,
+    "cashflow_mes": -4689.68,
     "ingresos_mes": 56.9,
-    "gastos_mes": 1339.36,
-    "gastos_promedio_2m": 4448.94,
+    "gastos_mes": 4746.58,
+    "gastos_promedio_2m": 6275.29,
     "ingresos_promedio_2m": 1393.79,
     "mes_label": "09/2026",
     "delta_neto_texto": "-7.000,00 € vs mes anterior",
@@ -600,27 +600,27 @@
   "activos": [
     {
       "label": "Inversiones / bolsa",
-      "value": 177069.77,
+      "value": 177325.8,
       "color": "var(--accent)",
       "detalle": [
         {
           "label": "MyInvestor - Vanguard Global Stock (pignorado)",
-          "value": 150639.47,
+          "value": 150980.63,
           "estado": null
         },
         {
           "label": "MyInvestor - Vanguard Emerging Markets (pignorado)",
-          "value": 23683.1,
+          "value": 23611.12,
           "estado": null
         },
         {
           "label": "MyInvestor - iShares Physical Gold ETC (pignorado)",
-          "value": 2151.9,
+          "value": 2137.8,
           "estado": null
         },
         {
           "label": "MyInvestor - Vanguard US 500 (pignorado)",
-          "value": 595.3,
+          "value": 596.25,
           "estado": null
         }
       ]
@@ -686,19 +686,19 @@
     },
     {
       "label": "Criptomonedas",
-      "value": 48971.17,
+      "value": 47564.39,
       "color": "oklch(60% 0.15 305)",
       "detalle": [
         {
           "label": "MyInvestor - iShares Bitcoin ETP",
-          "value": 48971.17,
+          "value": 47564.39,
           "estado": null
         }
       ]
     },
     {
       "label": "Cuentas bancarias",
-      "value": 12663.16,
+      "value": 13236.52,
       "color": "oklch(62% 0.11 200)",
       "detalle": [
         {
@@ -712,6 +712,11 @@
           "estado": null
         },
         {
+          "label": "Openbank (cuenta corriente) - IBAN ES60...0626",
+          "value": 1146.76,
+          "estado": null
+        },
+        {
           "label": "Bankinter Cta Corriente Oro Nómina - Nº ...7824",
           "value": 1126.03,
           "estado": null
@@ -719,11 +724,6 @@
         {
           "label": "Trade Republic (cuenta remunerada, sin inversión activa) - IBAN ES73...9111",
           "value": 1077.21,
-          "estado": null
-        },
-        {
-          "label": "Openbank (cuenta corriente) - IBAN ES60...0626",
-          "value": 573.4,
           "estado": null
         }
       ]
@@ -773,12 +773,16 @@
   "gastos_periodo_label": "10/2026 · excl. movimientos internos",
   "gastos": [
     {
+      "label": "Salud",
+      "value": 4261.75
+    },
+    {
       "label": "Financiación",
       "value": 3704.73
     },
     {
-      "label": "Salud",
-      "value": 3344.81
+      "label": "Otros",
+      "value": 2481.98
     },
     {
       "label": "Impuestos y seguros personales",
@@ -789,32 +793,28 @@
       "value": 1707.3
     },
     {
+      "label": "Alimentación",
+      "value": 1449.87
+    },
+    {
       "label": "Vivienda",
       "value": 1175.97
     },
     {
-      "label": "Alimentación",
-      "value": 948.2
-    },
-    {
       "label": "Suscripciones",
-      "value": 809.63
+      "value": 1137.7
     },
     {
       "label": "Ocio",
-      "value": 551.12
+      "value": 558.82
     },
     {
       "label": "Transporte",
-      "value": 436.31
-    },
-    {
-      "label": "Otros",
-      "value": 435.19
+      "value": 555.94
     },
     {
       "label": "Restauración",
-      "value": 240.82
+      "value": 551.08
     },
     {
       "label": "Educación",
@@ -832,6 +832,17 @@
       "importe": 7.05,
       "cuenta": "MyInvestor",
       "nota": "Verificado contra extracto real MyInvestor 06.10.2026"
+    },
+    {
+      "fecha": "05.10.2026",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
     },
     {
       "fecha": "03.10.2026",
@@ -856,6 +867,17 @@
       "nota": "2.000 EUR recibidos desde CaixaBank Cta Corriente -- transferencia entre cuentas propias, confirmado por el usuario 07.10.2026 (mismo patrón mensual). Verificado contra extracto real MyInvestor 06.10.2026."
     },
     {
+      "fecha": "02.10.2026",
+      "concepto": "Uber Trip",
+      "categoria": "Ocio",
+      "nivel2": "Viajes",
+      "nivel3": "",
+      "proveedor": "Uber",
+      "importe": -5.0,
+      "cuenta": "American Express Corporate Gold (uso personal)",
+      "nota": "Único cargo del periodo (estado de cuenta 03.09-02.10.2026), saldo anterior 0,00€. Verificado contra extracto real Amex: importe a pagar 5,00€, recibo bancario previsto 30.10.2026."
+    },
+    {
       "fecha": "01.10.2026",
       "concepto": "Interés Trade Republic",
       "categoria": "Ingresos financieros",
@@ -865,6 +887,28 @@
       "importe": 10.71,
       "cuenta": "Trade Republic ES73...9111",
       "nota": "Interest payment, verificado contra extracto real 01.08-05.10.2026"
+    },
+    {
+      "fecha": "01.10.2026",
+      "concepto": "Pago Visa Oro (pago tarjeta)",
+      "categoria": "Movimientos internos",
+      "nivel2": "Pago tarjeta de crédito",
+      "nivel3": "CaixaBank Visa Oro",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "1.137,51 EUR -- pago que liquida la liquidación Visa Oro de 28.08-27.09, ya contabilizado por otro lado (verificado exacto contra extracto real de la tarjeta). PENDIENTE: cruzar contra extracto real CaixaBank Cta Corriente cuando llegue el tramo 07.09-06.10."
+    },
+    {
+      "fecha": "01.10.2026",
+      "concepto": "Pago Visa Platinum (pago tarjeta)",
+      "categoria": "Movimientos internos",
+      "nivel2": "Pago tarjeta de crédito",
+      "nivel3": "CaixaBank Visa Platinum",
+      "proveedor": "",
+      "importe": 0.0,
+      "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": "146,16 EUR -- pago que liquida la liquidación Visa Platinum de 28.08-27.09 (3 tarjetas del contrato), ya contabilizado por otro lado (verificado exacto contra extracto real de la tarjeta). PENDIENTE: cruzar contra extracto real CaixaBank Cta Corriente cuando llegue el tramo 07.09-06.10."
     },
     {
       "fecha": "30.09.2026",
@@ -933,6 +977,28 @@
       "nota": "Verificado contra extracto real MyInvestor 06.10.2026"
     },
     {
+      "fecha": "26.09.2026",
+      "concepto": "Avance de pago (tarjeta 5442)",
+      "categoria": "Movimientos internos",
+      "nivel2": "Pago tarjeta de crédito",
+      "nivel3": "",
+      "proveedor": "",
+      "importe": 2942.39,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": "Pago anticipado hecho por el usuario desde la misma cuenta CaixaBank para reducir deuda de la tarjeta antes de la liquidación oficial, confirmado 07.10.2026. Verificado: cuadra exacto con Total Tarjeta declarado (49,20EUR = 2.991,59 compras - 2.942,39 avance)"
+    },
+    {
+      "fecha": "26.09.2026",
+      "concepto": "Railway (29,15 USD)",
+      "categoria": "Suscripciones",
+      "nivel2": "Servicios técnicos personales",
+      "nivel3": "Hosting/infra",
+      "proveedor": "Railway",
+      "importe": -26.66,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
       "fecha": "25.09.2026",
       "concepto": "Transferencia nómina Accenture",
       "categoria": "Ingresos laborales",
@@ -942,6 +1008,28 @@
       "importe": 2572.0,
       "cuenta": "Bankinter Cta Corriente Oro Nómina ...7824",
       "nota": "Nómina mensual Accenture"
+    },
+    {
+      "fecha": "25.09.2026",
+      "concepto": "Restaurante Azura (Gandía)",
+      "categoria": "Restauración",
+      "nivel2": "Bares y restaurantes",
+      "nivel3": "",
+      "proveedor": "Azura",
+      "importe": -107.0,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "25.09.2026",
+      "concepto": "Fcia. Mas (Guardamar)",
+      "categoria": "Salud",
+      "nivel2": "Farmacia",
+      "nivel3": "",
+      "proveedor": "Farmacia Mas",
+      "importe": -303.78,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
     },
     {
       "fecha": "24.09.2026",
@@ -955,6 +1043,116 @@
       "nota": "Cuota préstamo Bankinter nº 0510092816 -- saldo pendiente tras esta cuota: 43.377,21€ según extracto"
     },
     {
+      "fecha": "24.09.2026",
+      "concepto": "Amazon (devolución)",
+      "categoria": "Otros",
+      "nivel2": "Devolución",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": 15.95,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "24.09.2026",
+      "concepto": "Amazon (devolución)",
+      "categoria": "Otros",
+      "nivel2": "Devolución",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": 15.95,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "24.09.2026",
+      "concepto": "Amazon (devolución)",
+      "categoria": "Otros",
+      "nivel2": "Devolución",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": 17.95,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "24.09.2026",
+      "concepto": "Amazon (devolución)",
+      "categoria": "Otros",
+      "nivel2": "Devolución",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": 33.07,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "24.09.2026",
+      "concepto": "Bitwarden",
+      "categoria": "Suscripciones",
+      "nivel2": "Servicios técnicos personales",
+      "nivel3": "Password manager",
+      "proveedor": "Bitwarden",
+      "importe": -21.91,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "24.09.2026",
+      "concepto": "Restaurante Ven y Ven (Tébar)",
+      "categoria": "Restauración",
+      "nivel2": "Bares y restaurantes",
+      "nivel3": "",
+      "proveedor": "Ven y Ven",
+      "importe": -57.2,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "23.09.2026",
+      "concepto": "El Corte Inglés",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "El Corte Inglés",
+      "importe": -86.6,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "23.09.2026",
+      "concepto": "Repsol Waylet (Madrid)",
+      "categoria": "Transporte",
+      "nivel2": "Combustible",
+      "nivel3": "",
+      "proveedor": "Repsol",
+      "importe": -104.16,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "23.09.2026",
+      "concepto": "Aparcam. Hosp. Univ. Fundación (Alcorcón)",
+      "categoria": "Salud",
+      "nivel2": "Gastos hospitalarios",
+      "nivel3": "",
+      "proveedor": "Hospital",
+      "importe": -0.1,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "23.09.2026",
+      "concepto": "09128 Pedro Félix Alegre (Alcorcón)",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Pedro Félix Alegre",
+      "importe": -10.0,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
       "fecha": "22.09.2026",
       "concepto": "Liquidación propia cuenta (intereses)",
       "categoria": "Ingresos financieros",
@@ -964,6 +1162,226 @@
       "importe": 15.74,
       "cuenta": "Bankinter Cta Corriente Oro Nómina ...7824",
       "nota": "Liquidación de intereses de la propia cuenta"
+    },
+    {
+      "fecha": "22.09.2026",
+      "concepto": "Amazon (devolución)",
+      "categoria": "Otros",
+      "nivel2": "Devolución",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": 10.58,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "22.09.2026",
+      "concepto": "Amazon NU2317GK4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -78.58,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "22.09.2026",
+      "concepto": "Amazon NU6YC4GH4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -18.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "22.09.2026",
+      "concepto": "Cafetería San Roque (Torrejón de Ardoz)",
+      "categoria": "Restauración",
+      "nivel2": "Cafetería",
+      "nivel3": "",
+      "proveedor": "Cafetería San Roque",
+      "importe": -57.4,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "21.09.2026",
+      "concepto": "Amazon NU5L654D4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -11.53,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "21.09.2026",
+      "concepto": "Amazon (devolución)",
+      "categoria": "Otros",
+      "nivel2": "Devolución",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": 4.68,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "21.09.2026",
+      "concepto": "Amazon (devolución)",
+      "categoria": "Otros",
+      "nivel2": "Devolución",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": 16.21,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "21.09.2026",
+      "concepto": "Amazon NU9AI4TY4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -20.66,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "21.09.2026",
+      "concepto": "Amazon NU9IH4JM4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -25.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "21.09.2026",
+      "concepto": "El Corte Inglés",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "El Corte Inglés",
+      "importe": -25.0,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "21.09.2026",
+      "concepto": "Ad free for Prime Video",
+      "categoria": "Suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Amazon Prime Video",
+      "importe": -1.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "21.09.2026",
+      "concepto": "Ikea Alcorcón Food (El Rosal)",
+      "categoria": "Restauración",
+      "nivel2": "Bares y restaurantes",
+      "nivel3": "",
+      "proveedor": "Ikea",
+      "importe": -25.06,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "21.09.2026",
+      "concepto": "Ikea Alcorcón Food (El Rosal)",
+      "categoria": "Restauración",
+      "nivel2": "Bares y restaurantes",
+      "nivel3": "",
+      "proveedor": "Ikea",
+      "importe": -0.8,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "20.09.2026",
+      "concepto": "Amazon NU2QX0FL4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -16.32,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "20.09.2026",
+      "concepto": "SpotifyES",
+      "categoria": "Suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Spotify",
+      "importe": -11.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "20.09.2026",
+      "concepto": "Vision Direct BV ES (Amsterdam)",
+      "categoria": "Salud",
+      "nivel2": "Óptica",
+      "nivel3": "Lentillas",
+      "proveedor": "Vision Direct",
+      "importe": -33.97,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "20.09.2026",
+      "concepto": "San José Valderas H.",
+      "categoria": "Salud",
+      "nivel2": "Gastos hospitalarios",
+      "nivel3": "",
+      "proveedor": "Hospital San José Valderas",
+      "importe": -97.73,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "20.09.2026",
+      "concepto": "ECI - San José de Valderas (Madrid)",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "El Corte Inglés",
+      "importe": -0.85,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "19.09.2026",
+      "concepto": "Amazon NM3G38RV4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -9.21,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "19.09.2026",
+      "concepto": "Mayor18 (Alcorcón)",
+      "categoria": "Restauración",
+      "nivel2": "Bares y restaurantes",
+      "nivel3": "",
+      "proveedor": "Mayor18",
+      "importe": -7.9,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
     },
     {
       "fecha": "18.09.2026",
@@ -1010,6 +1428,94 @@
       "nota": "Verificado contra extracto real MyInvestor 06.10.2026"
     },
     {
+      "fecha": "18.09.2026",
+      "concepto": "Apple.com/Bill",
+      "categoria": "Suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Apple",
+      "importe": -9.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "18.09.2026",
+      "concepto": "Amazon NM6ZP72Y4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -25.19,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "18.09.2026",
+      "concepto": "Banahosting",
+      "categoria": "Suscripciones",
+      "nivel2": "Servicios técnicos personales",
+      "nivel3": "Hosting",
+      "proveedor": "Banahosting",
+      "importe": -6.31,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "18.09.2026",
+      "concepto": "Apple.com/Bill (iTunes)",
+      "categoria": "Suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Apple",
+      "importe": -2.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "18.09.2026",
+      "concepto": "Mercadona (Fte Los Cántaros, Alcorcón)",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "Mercadona",
+      "importe": -55.78,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "17.09.2026",
+      "concepto": "Fireflies.ai",
+      "categoria": "Suscripciones",
+      "nivel2": "Servicios técnicos personales",
+      "nivel3": "",
+      "proveedor": "Fireflies",
+      "importe": -2.05,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "17.09.2026",
+      "concepto": "Disney Plus (Hoofddorp)",
+      "categoria": "Suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Disney+",
+      "importe": -15.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "15.09.2026",
+      "concepto": "Waylet (Madrid)",
+      "categoria": "Transporte",
+      "nivel2": "Combustible",
+      "nivel3": "",
+      "proveedor": "Waylet/Repsol",
+      "importe": -15.47,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
       "fecha": "14.09.2026",
       "concepto": "Aportación M&H (Muro Hidalgo Capital Partners)",
       "categoria": "Movimientos internos",
@@ -1019,6 +1525,270 @@
       "importe": 0.0,
       "cuenta": "Trade Republic ES73...9111",
       "nota": "Aportación de capital como socio, no es gasto -- CORREGIDO 06.10.2026: importe real verificado contra extracto Trade Republic es 3.000EUR (no 10.000EUR como se registró antes por error). Sumado en BALANCE como activo pendiente de devolución"
+    },
+    {
+      "fecha": "14.09.2026",
+      "concepto": "TV y Wifi Hospital (Barcelona)",
+      "categoria": "Salud",
+      "nivel2": "Gastos hospitalarios",
+      "nivel3": "",
+      "proveedor": "Hospital",
+      "importe": -12.0,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "14.09.2026",
+      "concepto": "Levadura Masa Madre (Alcorcón)",
+      "categoria": "Alimentación",
+      "nivel2": "Panadería",
+      "nivel3": "",
+      "proveedor": "Levadura Masa Madre",
+      "importe": -2.65,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "13.09.2026",
+      "concepto": "Amazon NF4C427K4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -10.58,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "13.09.2026",
+      "concepto": "Sancho Pan (Alcorcón)",
+      "categoria": "Alimentación",
+      "nivel2": "Panadería",
+      "nivel3": "",
+      "proveedor": "Sancho Pan",
+      "importe": -13.95,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "13.09.2026",
+      "concepto": "Ilunion Retail y Comercial (Alcorcón)",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Ilunion",
+      "importe": -12.1,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "12.09.2026",
+      "concepto": "Amazon NF4T20QD4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -37.75,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "12.09.2026",
+      "concepto": "Amazon NF4WI62V4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -115.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "12.09.2026",
+      "concepto": "Amazon NF87D32X4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -77.92,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "12.09.2026",
+      "concepto": "Mifer - Unidix Médica (Barcelona)",
+      "categoria": "Salud",
+      "nivel2": "Suplementación",
+      "nivel3": "",
+      "proveedor": "Unidix Médica",
+      "importe": -98.61,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "12.09.2026",
+      "concepto": "Amazon NF9NF6UT4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -25.77,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "12.09.2026",
+      "concepto": "TV y Wifi Hospital (Barcelona)",
+      "categoria": "Salud",
+      "nivel2": "Gastos hospitalarios",
+      "nivel3": "",
+      "proveedor": "Hospital",
+      "importe": -8.0,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "12.09.2026",
+      "concepto": "3191 Medirest (Alcorcón)",
+      "categoria": "Restauración",
+      "nivel2": "Bares y restaurantes",
+      "nivel3": "",
+      "proveedor": "Medirest",
+      "importe": -13.1,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "12.09.2026",
+      "concepto": "Easy Vending",
+      "categoria": "Ocio",
+      "nivel2": "Cuidado personal",
+      "nivel3": "Máquina expendedora",
+      "proveedor": "Easy Vending",
+      "importe": -0.9,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "12.09.2026",
+      "concepto": "Easy Vending",
+      "categoria": "Ocio",
+      "nivel2": "Cuidado personal",
+      "nivel3": "Máquina expendedora",
+      "proveedor": "Easy Vending",
+      "importe": -0.9,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "11.09.2026",
+      "concepto": "Amazon (devolución)",
+      "categoria": "Otros",
+      "nivel2": "Devolución",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": 49.0,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "11.09.2026",
+      "concepto": "Veritas (Ribagorza)",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "Veritas",
+      "importe": -67.19,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "11.09.2026",
+      "concepto": "El Corte Inglés",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "El Corte Inglés",
+      "importe": -185.83,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "11.09.2026",
+      "concepto": "Amazon NF0SH0BM4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -36.85,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "11.09.2026",
+      "concepto": "Amazon NF6N158L4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -45.6,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "11.09.2026",
+      "concepto": "Amazon NF2VM38W4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -7.19,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "11.09.2026",
+      "concepto": "Amazon NF2PA78N4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -12.3,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "11.09.2026",
+      "concepto": "Amazon NF5L008C4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -17.52,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "11.09.2026",
+      "concepto": "Amazon NF7FE4IH4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -49.84,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "11.09.2026",
+      "concepto": "Amazon NF6IG38R4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -18.9,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
     },
     {
       "fecha": "10.09.2026",
@@ -1043,6 +1813,259 @@
       "nota": "10.000 EUR recibidos desde Trade Republic (comprobante verificado, captura de la app) -- transferencia entre cuentas propias, resuelve el pendiente de Trade Republic. Nota: aún fuera del rango de extractos CaixaBank ya procesados (último hasta 06.09), pendiente de verificar contra el próximo extracto real de CaixaBank"
     },
     {
+      "fecha": "10.09.2026",
+      "concepto": "Prime Video NF6LL7JJ4",
+      "categoria": "Suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Amazon Prime Video",
+      "importe": -10.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "10.09.2026",
+      "concepto": "Haschimi/Blessedseed (Harburg)",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Haschimi",
+      "importe": -35.5,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "10.09.2026",
+      "concepto": "Wellhub (Schiphol)",
+      "categoria": "Suscripciones",
+      "nivel2": "Gimnasio/fitness",
+      "nivel3": "",
+      "proveedor": "Wellhub",
+      "importe": -49.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "09.09.2026",
+      "concepto": "Iherb.com",
+      "categoria": "Salud",
+      "nivel2": "Suplementación",
+      "nivel3": "",
+      "proveedor": "iHerb",
+      "importe": -64.49,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "09.09.2026",
+      "concepto": "Herbolario Navarro (Valencia)",
+      "categoria": "Salud",
+      "nivel2": "Suplementación",
+      "nivel3": "",
+      "proveedor": "Herbolario Navarro",
+      "importe": -51.17,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "09.09.2026",
+      "concepto": "Oncológica Metabólica (Avilés)",
+      "categoria": "Salud",
+      "nivel2": "Consulta médica",
+      "nivel3": "",
+      "proveedor": "Oncológica Metabólica",
+      "importe": -113.36,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "09.09.2026",
+      "concepto": "Amazon NF1KR4TL4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -50.0,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "09.09.2026",
+      "concepto": "Naturitas (Sant Cugat)",
+      "categoria": "Salud",
+      "nivel2": "Suplementación",
+      "nivel3": "",
+      "proveedor": "Naturitas",
+      "importe": -72.51,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "08.09.2026",
+      "concepto": "Amazon UFG NV5382YJ4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -54.87,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "08.09.2026",
+      "concepto": "Paypal *Github Inc",
+      "categoria": "Suscripciones",
+      "nivel2": "Servicios técnicos personales",
+      "nivel3": "",
+      "proveedor": "GitHub",
+      "importe": -3.59,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "07.09.2026",
+      "concepto": "Amazon NV1MP6SF4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -12.98,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "07.09.2026",
+      "concepto": "Amazon NF6PJ8FI4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -23.81,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "07.09.2026",
+      "concepto": "Amazon NF61I2FY4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -14.16,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "07.09.2026",
+      "concepto": "Amazon NF1MP3FT4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -12.4,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "07.09.2026",
+      "concepto": "El Corte Inglés",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "El Corte Inglés",
+      "importe": -141.73,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "07.09.2026",
+      "concepto": "Veritas (Ribagorza)",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "Veritas",
+      "importe": -101.92,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "07.09.2026",
+      "concepto": "Veritas (devolución)",
+      "categoria": "Alimentación",
+      "nivel2": "Devolución",
+      "nivel3": "",
+      "proveedor": "Veritas",
+      "importe": 11.05,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "07.09.2026",
+      "concepto": "Amazon NF3PD1FS4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -44.14,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "07.09.2026",
+      "concepto": "Aparcam. Hosp. Univ. Fundación (Alcorcón)",
+      "categoria": "Salud",
+      "nivel2": "Gastos hospitalarios",
+      "nivel3": "",
+      "proveedor": "Hospital",
+      "importe": -1.0,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "07.09.2026",
+      "concepto": "Aparcamiento Hospital La Paz (Madrid)",
+      "categoria": "Salud",
+      "nivel2": "Gastos hospitalarios",
+      "nivel3": "",
+      "proveedor": "Hospital La Paz",
+      "importe": -13.0,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "06.09.2026",
+      "concepto": "Plataforma Villaverde (devolución)",
+      "categoria": "Otros",
+      "nivel2": "Devolución",
+      "nivel3": "",
+      "proveedor": "Plataforma Villaverde",
+      "importe": 131.6,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "06.09.2026",
+      "concepto": "Plataforma Villaverde (devolución)",
+      "categoria": "Otros",
+      "nivel2": "Devolución",
+      "nivel3": "",
+      "proveedor": "Plataforma Villaverde",
+      "importe": 153.35,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "06.09.2026",
+      "concepto": "Amazon NV4Y42KW4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -49.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
       "fecha": "05.09.2026",
       "concepto": "Liquidación intereses MyInvestor (periodo 05.08-05.09)",
       "categoria": "Ingresos financieros",
@@ -1054,6 +2077,61 @@
       "nota": "Verificado contra extracto real MyInvestor 06.10.2026"
     },
     {
+      "fecha": "05.09.2026",
+      "concepto": "El Corte Inglés",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "El Corte Inglés",
+      "importe": -153.35,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "05.09.2026",
+      "concepto": "El Corte Inglés",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "El Corte Inglés",
+      "importe": -183.36,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "05.09.2026",
+      "concepto": "El Corte Inglés",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "El Corte Inglés",
+      "importe": -131.6,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "05.09.2026",
+      "concepto": "Prime Video NV4PQ0VO4",
+      "categoria": "Suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Amazon Prime Video",
+      "importe": -12.49,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "05.09.2026",
+      "concepto": "Fcia. Isabel Delgado (Alcorcón)",
+      "categoria": "Salud",
+      "nivel2": "Farmacia",
+      "nivel3": "",
+      "proveedor": "Farmacia Isabel Delgado",
+      "importe": -15.89,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
       "fecha": "04.09.2026",
       "concepto": "O2 Fibra (teléfono)",
       "categoria": "Vivienda",
@@ -1062,6 +2140,39 @@
       "proveedor": "O2",
       "importe": -82.24,
       "cuenta": "CaixaBank Cta Corriente ES09...8164",
+      "nota": ""
+    },
+    {
+      "fecha": "04.09.2026",
+      "concepto": "Cestaverde.com",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Cestaverde",
+      "importe": -86.71,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "04.09.2026",
+      "concepto": "Amazon NV5716G34",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -30.4,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "04.09.2026",
+      "concepto": "Apple.com/Bill (iTunes)",
+      "categoria": "Suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Apple",
+      "importe": -10.99,
+      "cuenta": "CaixaBank Visa Oro",
       "nota": ""
     },
     {
@@ -1085,6 +2196,72 @@
       "importe": -297.8,
       "cuenta": "CaixaBank Cta Corriente ES09...8164",
       "nota": "Cuota/prima del seguro Sanitas de este mes (confirmado por el usuario, 19.09.2026) -- distinto de los reembolsos habituales de 297,80€"
+    },
+    {
+      "fecha": "03.09.2026",
+      "concepto": "Amazon NV48B9F74",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -23.98,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "03.09.2026",
+      "concepto": "Hetzner Online GmbH",
+      "categoria": "Suscripciones",
+      "nivel2": "Servicios técnicos personales",
+      "nivel3": "VPS/Hosting",
+      "proveedor": "Hetzner",
+      "importe": -20.92,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "03.09.2026",
+      "concepto": "Veritas (Ribagorza)",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "Veritas",
+      "importe": -90.88,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "03.09.2026",
+      "concepto": "El Corte Inglés",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "El Corte Inglés",
+      "importe": -105.32,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "03.09.2026",
+      "concepto": "Amazon NV74B14T4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -62.59,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "03.09.2026",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
     },
     {
       "fecha": "02.09.2026",
@@ -1175,6 +2352,28 @@
       "nota": "Vivienda de playa de sus padres en Miramar -- Alejandro cubre los gastos, no es de su propiedad"
     },
     {
+      "fecha": "02.09.2026",
+      "concepto": "V_Theliven.com (Limassol)",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Theliven",
+      "importe": -48.39,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "02.09.2026",
+      "concepto": "Alimentación Shan (Alcorcón)",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "Alimentación Shan",
+      "importe": -5.6,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
       "fecha": "01.09.2026",
       "concepto": "Pago Visa Oro (pago tarjeta)",
       "categoria": "Movimientos internos",
@@ -1252,6 +2451,50 @@
       "nota": "Interest payment, verificado contra extracto real 01.08-05.10.2026"
     },
     {
+      "fecha": "01.09.2026",
+      "concepto": "Movistar Plus",
+      "categoria": "Suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Movistar",
+      "importe": -9.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "01.09.2026",
+      "concepto": "Amazon NJ1DC7284",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -58.86,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "01.09.2026",
+      "concepto": "3191 Medirest (Alcorcón)",
+      "categoria": "Restauración",
+      "nivel2": "Bares y restaurantes",
+      "nivel3": "",
+      "proveedor": "Medirest",
+      "importe": -5.55,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "01.09.2026",
+      "concepto": "Fcia. Isabel Delgado (Alcorcón)",
+      "categoria": "Salud",
+      "nivel2": "Farmacia",
+      "nivel3": "",
+      "proveedor": "Farmacia Isabel Delgado",
+      "importe": -8.23,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
       "fecha": "31.08.2026",
       "concepto": "Cuotas de Autónomos (TGSS)",
       "categoria": "Impuestos y seguros personales",
@@ -1285,6 +2528,138 @@
       "nota": "29,04 EUR -- pago que liquida la tarjeta Duo Credit, ya contabilizada por otro lado (cargo Paddle.net en Bankinter Tarjeta Duo Credit), no es gasto nuevo"
     },
     {
+      "fecha": "31.08.2026",
+      "concepto": "Amazon NJ5JJ98T4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -70.93,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "31.08.2026",
+      "concepto": "Amazon NJ95M52Y4",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -69.95,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "31.08.2026",
+      "concepto": "3191 Medirest (Alcorcón)",
+      "categoria": "Restauración",
+      "nivel2": "Bares y restaurantes",
+      "nivel3": "",
+      "proveedor": "Medirest",
+      "importe": -4.45,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "31.08.2026",
+      "concepto": "Aparcamiento Hospital La Paz (Madrid)",
+      "categoria": "Salud",
+      "nivel2": "Gastos hospitalarios",
+      "nivel3": "",
+      "proveedor": "Hospital La Paz",
+      "importe": -1.6,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "31.08.2026",
+      "concepto": "Veritas C.C. (El Rosal)",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "Veritas",
+      "importe": -35.86,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "30.08.2026",
+      "concepto": "Netflix.com",
+      "categoria": "Suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Netflix",
+      "importe": -28.98,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "30.08.2026",
+      "concepto": "Prime Video NJ8GR6PT4",
+      "categoria": "Suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Amazon Prime Video",
+      "importe": -5.49,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "30.08.2026",
+      "concepto": "Apple.com/Bill (iTunes)",
+      "categoria": "Suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Apple",
+      "importe": -33.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "30.08.2026",
+      "concepto": "SP Matcha N Co (Barcelona)",
+      "categoria": "Restauración",
+      "nivel2": "Cafetería",
+      "nivel3": "",
+      "proveedor": "Matcha N Co",
+      "importe": -31.8,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "29.08.2026",
+      "concepto": "Prime Video RB2179EP5",
+      "categoria": "Suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Amazon Prime Video",
+      "importe": -9.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "29.08.2026",
+      "concepto": "Espacio Orgánico (Majadahonda)",
+      "categoria": "Alimentación",
+      "nivel2": "Supermercado",
+      "nivel3": "",
+      "proveedor": "Espacio Orgánico",
+      "importe": -138.89,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "29.08.2026",
+      "concepto": "TV-Wifi Hospital (Alcorcón)",
+      "categoria": "Salud",
+      "nivel2": "Gastos hospitalarios",
+      "nivel3": "",
+      "proveedor": "Hospital",
+      "importe": -12.0,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
       "fecha": "28.08.2026",
       "concepto": "Liquidación préstamo 6654035991",
       "categoria": "Financiación",
@@ -1293,6 +2668,28 @@
       "proveedor": "MyInvestor",
       "importe": -89.89,
       "cuenta": "MyInvestor",
+      "nota": ""
+    },
+    {
+      "fecha": "28.08.2026",
+      "concepto": "Aparcamiento Hospital La Paz (Madrid)",
+      "categoria": "Salud",
+      "nivel2": "Gastos hospitalarios",
+      "nivel3": "",
+      "proveedor": "Hospital La Paz",
+      "importe": -9.5,
+      "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "28.08.2026",
+      "concepto": "Easy Vending",
+      "categoria": "Ocio",
+      "nivel2": "Cuidado personal",
+      "nivel3": "Máquina expendedora",
+      "proveedor": "Easy Vending",
+      "importe": -0.9,
+      "cuenta": "CaixaBank Visa Oro",
       "nota": ""
     },
     {
@@ -1351,6 +2748,17 @@
       "nota": "2.500 EUR recibidos desde Bankinter -- transferencia recurrente mensual entre cuentas propias, confirmado por el usuario"
     },
     {
+      "fecha": "27.08.2026",
+      "concepto": "Obsidian (Oakville)",
+      "categoria": "Suscripciones",
+      "nivel2": "Servicios técnicos personales",
+      "nivel3": "Obsidian Sync",
+      "proveedor": "Obsidian",
+      "importe": -10.8,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
       "fecha": "26.08.2026",
       "concepto": "Railway.com",
       "categoria": "Suscripciones",
@@ -1381,6 +2789,28 @@
       "proveedor": "Ikea",
       "importe": -74.78,
       "cuenta": "CaixaBank Visa Oro",
+      "nota": ""
+    },
+    {
+      "fecha": "26.08.2026",
+      "concepto": "Apple.com/Bill (iTunes)",
+      "categoria": "Suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Apple",
+      "importe": -9.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "26.08.2026",
+      "concepto": "Apple.com/Bill (iTunes)",
+      "categoria": "Suscripciones",
+      "nivel2": "Streaming",
+      "nivel3": "",
+      "proveedor": "Apple",
+      "importe": -9.99,
+      "cuenta": "CaixaBank Visa Platinum",
       "nota": ""
     },
     {
@@ -1600,6 +3030,17 @@
       "nivel3": "Prime Video sin anuncios",
       "proveedor": "Amazon",
       "importe": -1.99,
+      "cuenta": "CaixaBank Visa Platinum",
+      "nota": ""
+    },
+    {
+      "fecha": "21.08.2026",
+      "concepto": "Amazon HV6MT0GY5",
+      "categoria": "Otros",
+      "nivel2": "Sin clasificar",
+      "nivel3": "",
+      "proveedor": "Amazon",
+      "importe": -47.05,
       "cuenta": "CaixaBank Visa Platinum",
       "nota": ""
     },
@@ -2339,6 +3780,17 @@
       "importe": 0.99,
       "cuenta": "MyInvestor",
       "nota": "Verificado contra extracto real MyInvestor 06.10.2026"
+    },
+    {
+      "fecha": "05.08.2026",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
     },
     {
       "fecha": "04.08.2026",
@@ -4134,6 +5586,17 @@
       "nota": "33,69€ de efectivo pasa a inversión -- ya reflejado en el valor de mercado del activo"
     },
     {
+      "fecha": "03.07.2026",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
       "fecha": "02.07.2026",
       "concepto": "Spliiit",
       "categoria": "Suscripciones",
@@ -4420,6 +5883,17 @@
       "nota": "Aportación de capital como socio, 10.000 EUR -- ya sumado en BALANCE como activo pendiente de devolución (parte de los 11.000EUR MyInvestor)"
     },
     {
+      "fecha": "19.06.2026",
+      "concepto": "Transferencia inmediata a favor de Alejandro Pérez Hidalgo",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Barrido de saldo acumulado de cuotas del préstamo a otra cuenta propia",
+      "proveedor": "",
+      "importe": -860.0,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Transferencia del saldo acumulado de cuotas a otra cuenta propia (no especifica destino en este extracto). Verificado contra extracto real Openbank."
+    },
+    {
       "fecha": "18.06.2026",
       "concepto": "Liquidación préstamo 6652008882",
       "categoria": "Financiación",
@@ -4475,6 +5949,17 @@
       "nota": "6.000 EUR enviados a MyInvestor -- transferencia entre cuentas propias"
     },
     {
+      "fecha": "04.06.2026",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
       "fecha": "13.05.2026",
       "concepto": "Transferencia a Mayela Acquisition 7 S.L.U.",
       "categoria": "Movimientos internos",
@@ -4484,6 +5969,17 @@
       "importe": 0.0,
       "cuenta": "CaixaBank Cta Corriente ES09...8164",
       "nota": "20.000 EUR -- Aportación total Reus, ya reflejado en BALANCE como coinversión activa (APH Portfolio - Reus). Comprobante de transferencia verificado, IBAN destino ES2630580546922720021414 (Cajamar)"
+    },
+    {
+      "fecha": "05.05.2026",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
     },
     {
       "fecha": "28.04.2026",
@@ -4497,6 +5993,28 @@
       "nota": "Movimiento interno. Ver BALANCE (Suricar)."
     },
     {
+      "fecha": "01.04.2026",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
+      "fecha": "30.03.2026",
+      "concepto": "Transferencia a favor de Pérez Hidalgo Alejandro",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Barrido de saldo acumulado de cuotas del préstamo a otra cuenta propia",
+      "proveedor": "",
+      "importe": -573.36,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Transferencia del saldo acumulado de cuotas a otra cuenta propia (no especifica destino en este extracto). Verificado contra extracto real Openbank."
+    },
+    {
       "fecha": "24.03.2026",
       "concepto": "Aportación socio Suricar AJ Rent SLU",
       "categoria": "Movimientos internos",
@@ -4508,6 +6026,17 @@
       "nota": "Movimiento interno. Ver BALANCE (Suricar)."
     },
     {
+      "fecha": "05.03.2026",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
       "fecha": "05.02.2026",
       "concepto": "Aportación capital social Suricar AJ Rent SLU",
       "categoria": "Movimientos internos",
@@ -4517,6 +6046,314 @@
       "importe": 0.0,
       "cuenta": "Trade Republic ES73...9111",
       "nota": "Movimiento interno. Ver BALANCE (Suricar)."
+    },
+    {
+      "fecha": "04.02.2026",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
+      "fecha": "02.01.2026",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
+      "fecha": "02.01.2026",
+      "concepto": "Transferencia a favor de Pérez Hidalgo Alejandro",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Barrido de saldo acumulado de cuotas del préstamo a otra cuenta propia",
+      "proveedor": "",
+      "importe": -286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Transferencia del saldo acumulado de cuotas a otra cuenta propia (no especifica destino en este extracto). Verificado contra extracto real Openbank."
+    },
+    {
+      "fecha": "29.12.2025",
+      "concepto": "Transferencia a favor de Pérez Hidalgo Alejandro",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Barrido de saldo acumulado de cuotas del préstamo a otra cuenta propia",
+      "proveedor": "",
+      "importe": -286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Transferencia del saldo acumulado de cuotas a otra cuenta propia (no especifica destino en este extracto). Verificado contra extracto real Openbank."
+    },
+    {
+      "fecha": "03.12.2025",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
+      "fecha": "10.11.2025",
+      "concepto": "Transferencia a favor de Pérez Hidalgo Alejandro",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Barrido de saldo acumulado de cuotas del préstamo a otra cuenta propia",
+      "proveedor": "",
+      "importe": -629.03,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Transferencia del saldo acumulado de cuotas a otra cuenta propia (no especifica destino en este extracto). Verificado contra extracto real Openbank."
+    },
+    {
+      "fecha": "05.11.2025",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
+      "fecha": "29.10.2025",
+      "concepto": "Regularización salida socio (transferencia a cta. conjunta Mayela)",
+      "categoria": "Coinversión Real Estate",
+      "nivel2": "Regularización Mayela",
+      "nivel3": "Transferencia a cuenta conjunta Mayela para compensar inversión hecha por 3 de 4 coinversores sin contar con el cuarto",
+      "proveedor": "",
+      "importe": -804.37,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Confirmado por el usuario 07.10.2026: compensación a la cuenta conjunta Mayela entre coinversores. Verificado contra extracto real Openbank."
+    },
+    {
+      "fecha": "07.10.2025",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
+      "fecha": "08.09.2025",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
+      "fecha": "06.08.2025",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
+      "fecha": "04.07.2025",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
+      "fecha": "20.06.2025",
+      "concepto": "Transferencia a favor de Pérez Hidalgo Alejandro",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Barrido de saldo acumulado de cuotas del préstamo a otra cuenta propia",
+      "proveedor": "",
+      "importe": -585.19,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Transferencia del saldo acumulado de cuotas a otra cuenta propia (no especifica destino en este extracto). Verificado contra extracto real Openbank."
+    },
+    {
+      "fecha": "06.06.2025",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
+      "fecha": "08.05.2025",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
+      "fecha": "10.04.2025",
+      "concepto": "Transferencia a favor de Pérez Hidalgo Alejandro",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Barrido de saldo acumulado de cuotas del préstamo a otra cuenta propia",
+      "proveedor": "",
+      "importe": -350.0,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Transferencia del saldo acumulado de cuotas a otra cuenta propia (no especifica destino en este extracto). Verificado contra extracto real Openbank."
+    },
+    {
+      "fecha": "07.04.2025",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
+      "fecha": "11.03.2025",
+      "concepto": "Transferencia a favor de Pérez Hidalgo Alejandro",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Barrido de saldo acumulado de cuotas del préstamo a otra cuenta propia",
+      "proveedor": "",
+      "importe": -500.0,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Transferencia del saldo acumulado de cuotas a otra cuenta propia (no especifica destino en este extracto). Verificado contra extracto real Openbank."
+    },
+    {
+      "fecha": "06.03.2025",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
+      "fecha": "06.02.2025",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
+      "fecha": "22.01.2025",
+      "concepto": "Transferencia a favor de Pérez Hidalgo Alejandro",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Barrido de saldo acumulado de cuotas del préstamo a otra cuenta propia",
+      "proveedor": "",
+      "importe": -320.0,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Transferencia del saldo acumulado de cuotas a otra cuenta propia (no especifica destino en este extracto). Verificado contra extracto real Openbank."
+    },
+    {
+      "fecha": "22.01.2025",
+      "concepto": "Transferencia a favor de Pérez Hidalgo Alejandro",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Barrido de saldo acumulado de cuotas del préstamo a otra cuenta propia",
+      "proveedor": "",
+      "importe": -10.0,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Transferencia del saldo acumulado de cuotas a otra cuenta propia (no especifica destino en este extracto). Verificado contra extracto real Openbank."
+    },
+    {
+      "fecha": "07.01.2025",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
+      "fecha": "09.12.2024",
+      "concepto": "Transferencia a favor de Pérez Hidalgo Alejandro",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Barrido de saldo acumulado de cuotas del préstamo a otra cuenta propia",
+      "proveedor": "",
+      "importe": -550.0,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Transferencia del saldo acumulado de cuotas a otra cuenta propia (no especifica destino en este extracto). Verificado contra extracto real Openbank."
+    },
+    {
+      "fecha": "04.12.2024",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
+      "fecha": "06.11.2024",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
+      "fecha": "07.10.2024",
+      "concepto": "ABONO QUOTA GABRIEL MESQUIDA MARQUES (de Lucia Fedelich Florit)",
+      "categoria": "Ingresos financieros",
+      "nivel2": "Préstamo privado otorgado",
+      "nivel3": "Cuota mensual Gabriel Mesquida Marques / Lucía Fedelich Florit (Ciutadella, Menorca)",
+      "proveedor": "Lucía Fedelich Florit",
+      "importe": 286.68,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Cuota mensual del préstamo hipotecario privado (contrato 20.03.2019, 12% interés, 120 cuotas ~286,68€). Verificado contra extracto real Openbank (saldo corrido sin errores, 2024-2026)."
+    },
+    {
+      "fecha": "07.10.2024",
+      "concepto": "Transferencia a favor de Pérez Hidalgo Alejandro",
+      "categoria": "Movimientos internos",
+      "nivel2": "Transferencia propia",
+      "nivel3": "Barrido de saldo acumulado de cuotas del préstamo a otra cuenta propia",
+      "proveedor": "",
+      "importe": -270.0,
+      "cuenta": "Openbank Cta Corriente ES60...0626",
+      "nota": "Transferencia del saldo acumulado de cuotas a otra cuenta propia (no especifica destino en este extracto). Verificado contra extracto real Openbank."
     }
   ],
   "real_estate": [
@@ -4627,8 +6464,8 @@
   ],
   "inversiones": {
     "kpis": {
-      "total": 416230.97,
-      "financiero": 230606.87,
+      "total": 415080.22,
+      "financiero": 229456.12,
       "coinversiones_desembolsado": 72600.0,
       "coinversiones_comprometido": 89700.0,
       "en_mora": 20000.0,
@@ -4638,36 +6475,36 @@
       "concentracion_mayela": 0.8166
     },
     "liquidez": {
-      "liquidez_inmediata": 12663.16,
+      "liquidez_inmediata": 13236.52,
       "compromisos_pendientes": 17100.0,
-      "libre_disposicion": -4436.84,
-      "activos_liquidos_invertibles": 226040.94,
-      "financiero_pignorado": 177069.77,
-      "financiero_libre_o_sin_confirmar": 48971.17,
+      "libre_disposicion": -3863.48,
+      "activos_liquidos_invertibles": 224890.19,
+      "financiero_pignorado": 177325.8,
+      "financiero_libre_o_sin_confirmar": 47564.39,
       "detalle_liquidas": [
         {
           "nombre": "Vanguard Emerging Markets",
-          "valor": 23683.1,
+          "valor": 23611.12,
           "pignorado": true
         },
         {
           "nombre": "Vanguard US 500",
-          "valor": 595.3,
+          "valor": 596.25,
           "pignorado": true
         },
         {
           "nombre": "Vanguard Global Stock",
-          "valor": 150639.47,
+          "valor": 150980.63,
           "pignorado": true
         },
         {
           "nombre": "iShares Physical Gold ETC",
-          "valor": 2151.9,
+          "valor": 2137.8,
           "pignorado": true
         },
         {
           "nombre": "iShares Bitcoin ETP",
-          "valor": 48971.17,
+          "valor": 47564.39,
           "pignorado": false
         }
       ],
@@ -4692,28 +6529,28 @@
     "cartera_financiera": [
       {
         "detalle": "MyInvestor - Vanguard Emerging Markets (pignorado)",
-        "valor": 23683.1,
-        "nota": "Valor de mercado a 07.10.2026 via Yahoo Finance (fuente publica en vivo, no captura de app). Nota: mercado secundario (Frankfurt), puede diferir del NAV oficial en ~0,5-1,5%. PIGNORADO como colateral de los 2 prestamos MyInvestor (no 6652008882 y 6654035991, total 65.072,59EUR) -- confirmado por el usuario 20.09.2026, vinculado a la misma cuenta de Valores (665011650) que respalda ambos prestamos. NOTA 06.10.2026: el extracto oficial MyInvestor de esa fecha mostró este fondo a 0,0000EUR y el total de Inversión del documento no cuadraba con la suma de posiciones visibles -- confirmado por el usuario como error del extracto, no pérdida de valor real. Se mantiene el criterio de valorar vía Yahoo Finance, sin cambios."
+        "valor": 23611.12,
+        "nota": "Valor de mercado a 08.10.2026 via Yahoo Finance (fuente publica en vivo, no captura de app). Nota: mercado secundario (Frankfurt), puede diferir del NAV oficial en ~0,5-1,5%. PIGNORADO como colateral de los 2 prestamos MyInvestor (no 6652008882 y 6654035991, total 65.072,59EUR) -- confirmado por el usuario 20.09.2026, vinculado a la misma cuenta de Valores (665011650) que respalda ambos prestamos. NOTA 06.10.2026: el extracto oficial MyInvestor de esa fecha mostró este fondo a 0,0000EUR y el total de Inversión del documento no cuadraba con la suma de posiciones visibles -- confirmado por el usuario como error del extracto, no pérdida de valor real. Se mantiene el criterio de valorar vía Yahoo Finance, sin cambios."
       },
       {
         "detalle": "MyInvestor - Vanguard US 500 (pignorado)",
-        "valor": 595.3,
-        "nota": "Valor de mercado a 07.10.2026 via Yahoo Finance (fuente publica en vivo, no captura de app). Nota: mercado secundario (Frankfurt), puede diferir del NAV oficial en ~0,5-1,5%. PIGNORADO como colateral de los 2 prestamos MyInvestor (no 6652008882 y 6654035991, total 65.072,59EUR) -- confirmado por el usuario 20.09.2026, vinculado a la misma cuenta de Valores (665011650) que respalda ambos prestamos. NOTA 06.10.2026: el extracto oficial MyInvestor de esa fecha mostró este fondo a 0,0000EUR y el total de Inversión del documento no cuadraba con la suma de posiciones visibles -- confirmado por el usuario como error del extracto, no pérdida de valor real. Se mantiene el criterio de valorar vía Yahoo Finance, sin cambios."
+        "valor": 596.25,
+        "nota": "Valor de mercado a 08.10.2026 via Yahoo Finance (fuente publica en vivo, no captura de app). Nota: mercado secundario (Frankfurt), puede diferir del NAV oficial en ~0,5-1,5%. PIGNORADO como colateral de los 2 prestamos MyInvestor (no 6652008882 y 6654035991, total 65.072,59EUR) -- confirmado por el usuario 20.09.2026, vinculado a la misma cuenta de Valores (665011650) que respalda ambos prestamos. NOTA 06.10.2026: el extracto oficial MyInvestor de esa fecha mostró este fondo a 0,0000EUR y el total de Inversión del documento no cuadraba con la suma de posiciones visibles -- confirmado por el usuario como error del extracto, no pérdida de valor real. Se mantiene el criterio de valorar vía Yahoo Finance, sin cambios."
       },
       {
         "detalle": "MyInvestor - Vanguard Global Stock (pignorado)",
-        "valor": 150639.47,
-        "nota": "Valor de mercado a 07.10.2026 via Yahoo Finance (fuente publica en vivo, no captura de app). Nota: mercado secundario (Frankfurt), puede diferir del NAV oficial en ~0,5-1,5%. PIGNORADO como colateral de los 2 prestamos MyInvestor (no 6652008882 y 6654035991, total 65.072,59EUR) -- confirmado por el usuario 20.09.2026, vinculado a la misma cuenta de Valores (665011650) que respalda ambos prestamos."
+        "valor": 150980.63,
+        "nota": "Valor de mercado a 08.10.2026 via Yahoo Finance (fuente publica en vivo, no captura de app). Nota: mercado secundario (Frankfurt), puede diferir del NAV oficial en ~0,5-1,5%. PIGNORADO como colateral de los 2 prestamos MyInvestor (no 6652008882 y 6654035991, total 65.072,59EUR) -- confirmado por el usuario 20.09.2026, vinculado a la misma cuenta de Valores (665011650) que respalda ambos prestamos."
       },
       {
         "detalle": "MyInvestor - iShares Physical Gold ETC (pignorado)",
-        "valor": 2151.9,
-        "nota": "Valor de mercado a 07.10.2026 vía Yahoo Finance (fuente pública en vivo, EGLN.L London EUR-hedged). ⚠️ PIGNORADO como colateral de los 2 préstamos MyInvestor -- confirmado por el usuario 20.09.2026."
+        "valor": 2137.8,
+        "nota": "Valor de mercado a 08.10.2026 vía Yahoo Finance (fuente pública en vivo, EGLN.L London EUR-hedged). ⚠️ PIGNORADO como colateral de los 2 préstamos MyInvestor -- confirmado por el usuario 20.09.2026."
       },
       {
         "detalle": "MyInvestor - iShares Bitcoin ETP",
-        "valor": 48971.17,
-        "nota": "Valor de mercado según app MyInvestor, 07.10.2026. Estado de pignoración SIN CONFIRMAR -- no se encontró contrato de constitución de los préstamos archivado que detalle qué activos exactos quedan en garantía; el extracto de MyInvestor solo confirma que ambos préstamos están vinculados a la cuenta de Valores general (665011650), la misma que aloja todos los activos. No asumir libre ni pignorado hasta verificar."
+        "valor": 47564.39,
+        "nota": "Valor de mercado según app MyInvestor, 08.10.2026. Estado de pignoración SIN CONFIRMAR -- no se encontró contrato de constitución de los préstamos archivado que detalle qué activos exactos quedan en garantía; el extracto de MyInvestor solo confirma que ambos préstamos están vinculados a la cuenta de Valores general (665011650), la misma que aloja todos los activos. No asumir libre ni pignorado hasta verificar."
       },
       {
         "detalle": "MyInvestor Indexado (plan de pensiones)",
@@ -4848,7 +6685,7 @@
       "display": "31,2%",
       "status": "ok",
       "nota": "Sano: menos de 40%",
-      "explicacion": "Qué parte de todo lo que tienes está financiado con deuda. Fórmula: Total Pasivos (134.383,50 €) ÷ Total Activos (431.144,13 €). Cuanto más bajo, menos dependes de préstamos para sostener tu patrimonio."
+      "explicacion": "Qué parte de todo lo que tienes está financiado con deuda. Fórmula: Total Pasivos (134.383,50 €) ÷ Total Activos (430.566,74 €). Cuanto más bajo, menos dependes de préstamos para sostener tu patrimonio."
     },
     {
       "label": "Esfuerzo de deuda (cuota/ingresos)",
@@ -4859,24 +6696,24 @@
     },
     {
       "label": "Tasa de ahorro mensual",
-      "display": "-219,2%",
+      "display": "-350,2%",
       "status": "bad",
       "nota": "Objetivo: 10-15% o más (promedio últimos 2 meses)",
-      "explicacion": "De cada 100€ que ingresas, cuántos te quedan sin gastar. Fórmula: (Ingresos promedio 2m 1.393,79 € − Gastos promedio 2m 4.448,94 €) ÷ Ingresos promedio 2m."
+      "explicacion": "De cada 100€ que ingresas, cuántos te quedan sin gastar. Fórmula: (Ingresos promedio 2m 1.393,79 € − Gastos promedio 2m 6.275,29 €) ÷ Ingresos promedio 2m."
     },
     {
       "label": "Colchón de liquidez",
-      "display": "-1,0 meses",
+      "display": "-0,6 meses",
       "status": "bad",
       "nota": "⚠️ Negativo: los compromisos pendientes (ej. resto de Torredembarra) superan la liquidez bancaria disponible",
-      "explicacion": "Cuántos meses de gasto normal podrías cubrir con el dinero en cuentas bancarias, después de restar lo que ya debes desembolsar. Fórmula: (Cuentas bancarias 12.663,16 € − Compromisos pendientes 17.100,00 €) ÷ Gasto medio mensual (4.448,94 €)."
+      "explicacion": "Cuántos meses de gasto normal podrías cubrir con el dinero en cuentas bancarias, después de restar lo que ya debes desembolsar. Fórmula: (Cuentas bancarias 13.236,52 € − Compromisos pendientes 17.100,00 €) ÷ Gasto medio mensual (6.275,29 €)."
     },
     {
       "label": "Apalancamiento (activos/patrimonio)",
       "display": "1,45x",
       "status": "ok",
       "nota": "Normal invirtiendo con deuda",
-      "explicacion": "Por cada 1€ de patrimonio neto, cuántos € de activos controlas gracias a la deuda. Fórmula: Total Activos (431.144,13 €) ÷ Patrimonio Neto (296.760,63 €). 1x significaría cero deuda; cuanto más alto, más amplificado está tu patrimonio con préstamos."
+      "explicacion": "Por cada 1€ de patrimonio neto, cuántos € de activos controlas gracias a la deuda. Fórmula: Total Activos (430.566,74 €) ÷ Patrimonio Neto (296.183,24 €). 1x significaría cero deuda; cuanto más alto, más amplificado está tu patrimonio con préstamos."
     }
   ]
 }

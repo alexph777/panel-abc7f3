@@ -588,10 +588,10 @@
     "patrimonio_neto": 318428.3,
     "total_activos": 452811.8,
     "total_pasivos": 134383.5,
-    "cashflow_mes": -24748.94,
+    "cashflow_mes": -14314.88,
     "ingresos_mes": 56.9,
-    "gastos_mes": 24805.84,
-    "gastos_promedio_2m": 8500.92,
+    "gastos_mes": 14371.78,
+    "gastos_promedio_2m": 11235.73,
     "ingresos_promedio_2m": 1393.79,
     "mes_label": "09/2026",
     "delta_neto_texto": "+32.638,45 € vs mes anterior",
@@ -7102,17 +7102,17 @@
     },
     {
       "label": "Tasa de ahorro mensual",
-      "display": "-509,9%",
+      "display": "-706,1%",
       "status": "bad",
       "nota": "Objetivo: 10-15% o más (promedio últimos 2 meses)",
-      "explicacion": "De cada 100€ que ingresas, cuántos te quedan sin gastar. Fórmula: (Ingresos promedio 2m 1.393,79 € − Gastos promedio 2m 8.500,92 €) ÷ Ingresos promedio 2m."
+      "explicacion": "De cada 100€ que ingresas, cuántos te quedan sin gastar. Fórmula: (Ingresos promedio 2m 1.393,79 € − Gastos promedio 2m 11.235,73 €) ÷ Ingresos promedio 2m."
     },
     {
       "label": "Colchón de liquidez",
-      "display": "3,3 meses",
-      "status": "ok",
+      "display": "2,5 meses",
+      "status": "warn",
       "nota": "Estándar: 3-6 meses (gasto medio últimos 2 meses), neto de compromisos pendientes",
-      "explicacion": "Cuántos meses de gasto normal podrías cubrir con el dinero en cuentas bancarias, después de restar lo que ya debes desembolsar. Fórmula: (Cuentas bancarias 44.844,72 € − Compromisos pendientes 17.100,00 €) ÷ Gasto medio mensual (8.500,92 €)."
+      "explicacion": "Cuántos meses de gasto normal podrías cubrir con el dinero en cuentas bancarias, después de restar lo que ya debes desembolsar. Fórmula: (Cuentas bancarias 44.844,72 € − Compromisos pendientes 17.100,00 €) ÷ Gasto medio mensual (11.235,73 €)."
     },
     {
       "label": "Apalancamiento (activos/patrimonio)",
@@ -7284,7 +7284,7 @@
   });
 
   // ---------- meses disponibles (a partir de los movimientos reales) ----------
-  const EXCLUIR_DEL_GASTO_REAL = ['Movimientos internos', 'M&H / Inversión'];
+  const EXCLUIR_DEL_GASTO_REAL = ['Movimientos internos', 'M&H / Inversión', 'Ingresos financieros', 'Ingresos laborales', 'Coinversión Real Estate'];
   function mesKeyDe(fecha) {
     // fecha viene como dd.mm.yyyy
     const partes = fecha.split('.');

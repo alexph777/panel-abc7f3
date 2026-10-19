@@ -2,8 +2,9 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Patrimonio Personal — Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Patrimonio Personal — Alejandro</title>
 <link rel="icon" href="https://alexph777.github.io/panel-abc7f3/favicon-v2.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="16x16" href="https://alexph777.github.io/panel-abc7f3/favicon-16x16-v2.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://alexph777.github.io/panel-abc7f3/favicon-32x32-v2.png">
@@ -14,578 +15,388 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Rediseño «wow» 19-oct-2026 (hermes-expert, opción 1A aprobada por Alejandro).
+     Contrato con regenerar_dashboard.py: SOLO se sustituye el bloque
+     <script id="dashboard-data">; todo lo demás se calcula aquí desde DATA.
+     Copia previa: /opt/data/backups/patrimonio_dashboard.antes_wow_20261019.html -->
 <style>
   :root{
-    --bg: oklch(96.5% 0.004 90);
-    --surface: oklch(99% 0.002 90);
-    --surface-2: oklch(97.3% 0.003 90);
-    --ink: oklch(22% 0.012 260);
-    --muted: oklch(48% 0.02 260);
-    --faint: oklch(62% 0.015 260);
-    --border: oklch(89% 0.01 260);
-    --border-2: oklch(93% 0.006 260);
+    --bg: oklch(96.8% 0.006 85);
+    --surface: oklch(99.3% 0.003 85);
+    --surface-2: oklch(95.6% 0.006 85);
+    --ink: oklch(21% 0.014 260);
+    --muted: oklch(44% 0.018 260);
+    --faint: oklch(50% 0.016 260);
+    --line: oklch(88% 0.01 85);
+    --line-2: oklch(92.5% 0.008 85);
     --accent: oklch(45% 0.09 165);
-    --accent-ink: oklch(28% 0.07 165);
+    --accent-ink: oklch(33% 0.08 165);
     --accent-soft: oklch(94% 0.035 165);
-    --risk: oklch(52% 0.15 55);
+    --warn: oklch(74% 0.14 75);
+    --risk-ink: oklch(38% 0.11 55);
     --risk-soft: oklch(95% 0.045 70);
-    --risk-ink: oklch(35% 0.11 55);
-    --danger: oklch(50% 0.17 25);
-    --shadow: 0 1px 2px oklch(20% 0.01 260 / 0.04), 0 1px 1px oklch(20% 0.01 260 / 0.03);
+    --danger: oklch(47% 0.16 25);
+    --danger-soft: oklch(95.5% 0.03 25);
+    --t-xs: 12px; --t-s: 14px; --t-m: 16px; --t-l: 20px; --t-xl: 28px; --t-xxl: 44px;
     color-scheme: light;
   }
   html[data-theme="dark"]{
-    --bg: oklch(19% 0.012 260);
-    --surface: oklch(23% 0.014 260);
+    --bg: oklch(18.5% 0.012 260);
+    --surface: oklch(22.5% 0.014 260);
     --surface-2: oklch(26% 0.015 260);
-    --ink: oklch(94% 0.006 260);
-    --muted: oklch(72% 0.015 260);
-    --faint: oklch(58% 0.015 260);
-    --border: oklch(32% 0.015 260);
-    --border-2: oklch(29% 0.014 260);
+    --ink: oklch(95% 0.006 260);
+    --muted: oklch(78% 0.014 260);
+    --faint: oklch(72% 0.014 260);
+    --line: oklch(33% 0.015 260);
+    --line-2: oklch(29% 0.014 260);
     --accent: oklch(72% 0.11 165);
-    --accent-ink: oklch(85% 0.08 165);
+    --accent-ink: oklch(84% 0.09 165);
     --accent-soft: oklch(30% 0.05 165);
-    --risk: oklch(72% 0.13 60);
-    --risk-soft: oklch(32% 0.06 65);
-    --risk-ink: oklch(85% 0.1 60);
-    --danger: oklch(68% 0.16 25);
-    --shadow: 0 1px 2px oklch(0% 0 0 / 0.2);
+    --warn: oklch(78% 0.13 75);
+    --risk-ink: oklch(86% 0.1 65);
+    --risk-soft: oklch(31% 0.06 65);
+    --danger: oklch(75% 0.14 25);
+    --danger-soft: oklch(29% 0.06 25);
+    color-scheme: dark;
   }
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font:400 var(--t-s)/1.5 'IBM Plex Sans', system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+  .num{ font-family:'IBM Plex Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .wrap{ max-width:1120px; margin:0 auto; padding:28px 28px 64px; }
+  button{ font:inherit; color:inherit; }
+  a{ color:var(--accent-ink); }
 
-  *{ box-sizing: border-box; }
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--ink);
-    font-family:'IBM Plex Sans', system-ui, sans-serif;
-    -webkit-font-smoothing:antialiased;
-    padding: 28px 28px 60px;
-  }
-  .num{ font-family:'IBM Plex Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+  /* ---------- cabecera ---------- */
+  .top{ display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:28px; }
+  .top .who{ font-size:var(--t-s); font-weight:600; }
+  .top .when{ font-size:var(--t-xs); color:var(--muted); }
+  .btn-ghost{ font-size:var(--t-xs); color:var(--muted); background:transparent; border:1px solid var(--line); border-radius:6px; padding:6px 10px; cursor:pointer; }
+  .btn-ghost:hover{ color:var(--ink); border-color:var(--muted); }
 
-  .wrap{ max-width:1240px; margin:0 auto; }
+  /* ---------- portada ---------- */
+  .hero{ display:grid; grid-template-columns: 1.15fr 1fr; gap:40px; align-items:start; margin-bottom:36px; }
+  .eyebrow{ font-size:var(--t-xs); font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin:0 0 10px; }
+  .hero-n{ font-size:var(--t-xxl); font-weight:600; line-height:1.05; letter-spacing:-.01em; color:var(--accent-ink); margin:0; }
+  .hero-line{ font-size:var(--t-m); color:var(--ink); margin:12px 0 0; max-width:34em; }
+  .hero-line b{ font-weight:600; }
+  .hero-delta{ font-size:var(--t-s); color:var(--muted); margin:6px 0 0; }
+  .hero-delta .pos{ color:var(--accent-ink); font-weight:600; }
+  .hero-delta .neg{ color:var(--danger); font-weight:600; }
 
-  header{
-    display:flex; align-items:flex-end; justify-content:space-between;
-    margin-bottom:22px; padding-bottom:16px; border-bottom:1px solid var(--border);
-    flex-wrap:wrap; gap:12px;
-  }
-  header h1{ font-size:16px; font-weight:600; margin:0 0 4px; letter-spacing:0.01em; }
-  header .sub{ font-size:12.5px; color:var(--muted); }
-  .theme-toggle{
-    font-size:12px; color:var(--muted); background:var(--surface); border:1px solid var(--border);
-    border-radius:6px; padding:6px 10px; cursor:pointer; font-family:inherit;
-  }
-  .theme-toggle:hover{ color:var(--ink); border-color:var(--faint); }
+  .stack{ display:flex; height:14px; border-radius:4px; overflow:hidden; margin:22px 0 10px; background:var(--surface-2); }
+  .stack span{ display:block; height:100%; }
+  .stack span + span{ box-shadow: inset 2px 0 0 var(--bg); }
+  .stack-key{ display:flex; flex-wrap:wrap; gap:4px 16px; font-size:var(--t-xs); color:var(--muted); }
+  .stack-key i{ display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:6px; vertical-align:baseline; }
 
-  .kpi-row{ display:grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap:14px; margin-bottom:18px; }
-  .kpi-row.kpi-row-3col{ grid-template-columns: 1.6fr 1fr 1fr; }
-  .kpi-row.kpi-row-2col{ grid-template-columns: 1.6fr 1fr; }
-  .kpi{
-    background:var(--surface); border:1px solid var(--border); border-radius:10px;
-    padding:18px 20px; box-shadow:var(--shadow);
-  }
-  .kpi .label{ font-size:11px; text-transform:uppercase; letter-spacing:0.06em; color:var(--faint); margin-bottom:8px; }
-  .kpi .value{ font-size:28px; font-weight:600; line-height:1.1; }
-  .kpi.primary .value{ font-size:34px; color:var(--accent-ink); }
-  .kpi .delta{ font-size:12px; color:var(--muted); margin-top:6px; }
-  .kpi .delta.pos{ color:var(--accent-ink); }
-  .kpi .delta.neg{ color:var(--danger); }
+  /* ---------- qué mirar ---------- */
+  .watch{ background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:20px 22px; }
+  .watch h2{ font-size:var(--t-m); font-weight:600; margin:0 0 4px; }
+  .watch .hint{ font-size:var(--t-xs); color:var(--muted); margin:0 0 14px; }
+  .alert{ display:grid; grid-template-columns: 10px 1fr auto; gap:12px; align-items:start; padding:12px 0; border-top:1px solid var(--line-2); }
+  .alert:first-of-type{ border-top:none; padding-top:4px; }
+  .alert .dot{ width:10px; height:10px; border-radius:50%; margin-top:6px; }
+  .dot.bad{ background:var(--danger); } .dot.warn{ background:var(--warn); } .dot.ok{ background:var(--accent); } .dot.risk{ background:var(--risk-ink); }
+  .alert .t{ font-weight:600; }
+  .alert .d{ color:var(--muted); font-size:var(--t-xs); margin-top:2px; }
+  .alert .v{ font-weight:600; text-align:right; }
+  .more{ margin-top:6px; }
+  .more > summary{ cursor:pointer; font-size:var(--t-xs); color:var(--accent-ink); font-weight:600; list-style:none; padding:8px 0 0; }
+  .more > summary::-webkit-details-marker{ display:none; }
 
-  .liq-row{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
-  .liq-item{ flex:1; min-width:140px; }
-  .liq-item.liq-total{ padding-left:18px; border-left:2px solid var(--border); }
-  .liq-op{ font-size:20px; color:var(--faint); font-weight:300; flex-shrink:0; }
-  .liq-label{ font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--faint); margin-bottom:6px; }
-  .liq-value{ font-size:22px; font-weight:600; line-height:1.1; }
-  .liq-note{ font-size:12px; color:var(--muted); margin-top:14px; }
-  .liq-sep{ border-top:1px solid var(--border-2); margin:18px 0; }
-  .liq-row-3{ gap:24px; }
-  .liq-row-3 .liq-value{ font-size:17px; }
-  .liq-row-4{ gap:20px; }
-  .liq-row-4 .liq-item{ min-width:150px; }
-  .liq-row-4 .liq-value{ font-size:17px; }
-  .liq-sub{ font-size:11px; color:var(--muted); margin-top:3px; }
-  .liq-detalle{ margin-top:8px; display:flex; flex-direction:column; gap:4px; }
-  .liq-detalle-row{ display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted); }
-  .liq-detalle-tag{ font-size:10px; flex-shrink:0; }
-  .liq-detalle-nombre{ flex:1; }
-  .liq-detalle-valor{ font-weight:600; color:var(--ink); font-size:11px; }
-  @media (max-width: 640px){
-    .liq-row{ flex-direction:column; align-items:stretch; gap:10px; }
-    .liq-item.liq-total{ padding-left:0; border-left:none; border-top:2px solid var(--border); padding-top:10px; }
-    .liq-op{ text-align:center; }
-    .liq-row-3{ flex-direction:column; gap:14px; }
-    .liq-row-4{ flex-direction:column; gap:14px; }
-  }
+  /* ---------- ⓘ ---------- */
+  .info{ display:inline-block; cursor:pointer; color:var(--muted); font-size:var(--t-s); line-height:1; padding:6px; margin:-6px -2px; background:none; border:0; vertical-align:baseline; }
+  .info:hover, .info[aria-expanded="true"]{ color:var(--accent-ink); }
+  .explain{ display:none; font-size:var(--t-xs); color:var(--muted); line-height:1.5; margin-top:8px; padding:10px 12px; background:var(--surface-2); border-radius:8px; font-weight:400; text-transform:none; letter-spacing:0; }
+  .explain.open{ display:block; }
 
-  .ratios-panel{
-    background:var(--surface); border:1px solid var(--border); border-radius:10px;
-    padding:18px 20px; box-shadow:var(--shadow); margin-bottom:18px;
-  }
-  .ratios-panel h2{
-    font-size:12.5px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em;
-    color:var(--muted); margin:0 0 14px;
-  }
-  .ratio-grid{ display:grid; grid-template-columns: repeat(5, 1fr); gap:0; }
-  .ratio-item{
-    display:flex; flex-direction:column; gap:6px; padding:0 16px;
-    border-left:1px solid var(--border-2);
-  }
-  .ratio-item:first-child{ border-left:none; padding-left:0; }
-  .ratio-item:last-child{ padding-right:0; }
-  .ratio-item .rlabel{
-    font-size:10px; color:var(--faint); line-height:1.3; min-height:26px;
-    text-transform:uppercase; letter-spacing:0.04em; font-weight:500;
-  }
-  .ratio-item .rvalue{ font-size:20px; font-weight:600; display:flex; align-items:center; gap:6px; }
-  .ratio-item .rdot{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-  .ratio-item .rdot.ok{ background:var(--accent); }
-  .ratio-item .rdot.warn{ background:oklch(75% 0.14 75); }
-  .ratio-item .rdot.bad{ background:var(--danger); }
-  .ratio-item .rnote{ font-size:10.5px; color:var(--muted); }
-  /* .rinfo / .rexplain: patrón reutilizable de icono ⓘ + explicación
-     expandible, usado en Salud Financiera, KPIs superiores, Liquidez,
-     Concentración Mayela y Posiciones liquidadas -- global, no solo
-     ratio-item, para que funcione en cualquier contenedor. */
-  .rinfo{
-    display:inline-block; cursor:pointer; color:var(--faint); font-size:13px;
-    font-weight:400; text-transform:none; letter-spacing:0; vertical-align:middle;
-    padding:6px; margin:-6px; line-height:1;
-  }
-  .rinfo:hover, .rinfo.active{ color:var(--accent-ink); }
-  .rexplain{
-    display:none; font-size:11px; line-height:1.45; color:var(--muted);
-    padding-top:6px; border-top:1px dashed var(--border-2); margin-top:6px;
-  }
-  .rexplain.open{ display:block; }
+  /* ---------- salud ---------- */
+  .health{ display:grid; grid-template-columns: repeat(5, 1fr); border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin-bottom:28px; }
+  .h-item{ padding:16px 16px 16px 0; }
+  .h-item + .h-item{ padding-left:16px; border-left:1px solid var(--line-2); }
+  .h-item .l{ font-size:var(--t-xs); color:var(--muted); min-height:36px; }
+  .h-item .v{ font-size:var(--t-l); font-weight:600; display:flex; align-items:center; gap:8px; margin-top:4px; }
+  .h-item .v .dot{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .h-item .n{ font-size:var(--t-xs); color:var(--muted); margin-top:4px; }
 
-  .main-grid{ display:grid; grid-template-columns: 1.35fr 1fr; align-items:start; gap:14px; margin-bottom:14px; }
-  .col{ display:flex; flex-direction:column; gap:14px; }
+  /* ---------- pestañas ---------- */
+  .tabs{ display:flex; gap:24px; border-bottom:1px solid var(--line); margin-bottom:24px; overflow-x:auto; }
+  .tab{ background:none; border:0; border-bottom:2px solid transparent; padding:10px 0; font-size:var(--t-s); font-weight:500; color:var(--muted); cursor:pointer; white-space:nowrap; }
+  .tab:hover{ color:var(--ink); }
+  .tab[aria-selected="true"]{ color:var(--ink); font-weight:600; border-bottom-color:var(--accent); }
+  .pane{ display:none; } .pane.on{ display:block; }
 
-  /* ---------- tabs ---------- */
-  .tabs-nav{
-    display:flex; gap:4px; margin-bottom:18px; border-bottom:1px solid var(--border);
+  /* ---------- bloques ---------- */
+  .grid2{ display:grid; grid-template-columns: 1.2fr 1fr; gap:20px; align-items:start; }
+  .col{ display:flex; flex-direction:column; gap:20px; min-width:0; }
+  .card{ background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:20px 22px; min-width:0; }
+  .card h3{ font-size:var(--t-m); font-weight:600; margin:0 0 4px; }
+  .card .sub{ font-size:var(--t-xs); color:var(--muted); margin:0 0 16px; }
+  .note{ font-size:var(--t-xs); color:var(--muted); margin:14px 0 0; }
+
+  /* composición */
+  .rows{ display:flex; flex-direction:column; }
+  .row{ display:grid; grid-template-columns: 12px 1fr auto auto; gap:10px; align-items:center; padding:9px 0; border-top:1px solid var(--line-2); cursor:default; background:none; border-left:0; border-right:0; border-bottom:0; width:100%; text-align:left; }
+  .row:first-child{ border-top:none; }
+  button.row{ cursor:pointer; }
+  button.row:hover .lbl{ color:var(--accent-ink); }
+  .row .sw{ width:10px; height:10px; border-radius:2px; }
+  .row .lbl{ min-width:0; }
+  .row .lbl .chev{ display:inline-block; width:14px; color:var(--muted); transition:transform .15s ease; }
+  .row[aria-expanded="true"] .chev{ transform:rotate(90deg); }
+  .row .pct{ color:var(--muted); font-size:var(--t-xs); width:46px; text-align:right; }
+  .row .val{ font-weight:500; text-align:right; min-width:104px; }
+  .sub-rows{ display:none; padding:2px 0 10px 22px; }
+  .sub-rows.open{ display:block; }
+  .srow{ display:grid; grid-template-columns: 1fr auto; gap:12px; padding:5px 0; font-size:var(--t-xs); color:var(--muted); }
+  .srow .x{ color:var(--muted); }
+  .srow .amt{ color:var(--ink); }
+  .pill{ display:inline-block; font-size:var(--t-xs); font-weight:600; padding:0 6px; border-radius:4px; margin-left:6px; line-height:1.6; white-space:nowrap; }
+  .pill.mora{ background:var(--risk-soft); color:var(--risk-ink); }
+  .pill.lock{ background:var(--danger-soft); color:var(--danger); }
+  .pill.ok{ background:var(--accent-soft); color:var(--accent-ink); }
+  .pill.pend{ background:var(--surface-2); color:var(--muted); }
+
+  /* evolución */
+  .chart{ width:100%; height:auto; display:block; overflow:visible; }
+  .chart text{ font-family:'IBM Plex Mono', ui-monospace, monospace; font-size:12px; fill:var(--muted); }
+  .chart .vtxt{ fill:var(--ink); font-weight:500; }
+  .evo-list{ margin-top:12px; }
+  .evo-list .srow{ font-size:var(--t-xs); }
+  .evo-list .pos{ color:var(--accent-ink); } .evo-list .neg{ color:var(--danger); }
+
+  /* tablas */
+  table{ width:100%; border-collapse:collapse; font-size:var(--t-s); }
+  th{ text-align:left; font-weight:500; font-size:var(--t-xs); color:var(--muted); padding:0 10px 8px 0; border-bottom:1px solid var(--line); }
+  td{ padding:10px 10px 10px 0; border-bottom:1px solid var(--line-2); vertical-align:top; }
+  th.r, td.r{ text-align:right; }
+  tr:last-child td{ border-bottom:none; }
+  tfoot td{ border-top:1px solid var(--line); border-bottom:none; font-weight:600; }
+  td .m{ display:block; font-size:var(--t-xs); color:var(--muted); }
+  td.pos{ color:var(--accent-ink); } td.neg{ color:var(--danger); }
+
+  /* riesgos */
+  .risk{ padding:12px 0; border-top:1px solid var(--line-2); }
+  .risk:first-of-type{ border-top:none; padding-top:0; }
+  .risk .head{ display:flex; justify-content:space-between; gap:12px; align-items:baseline; }
+  .risk .t{ font-weight:600; }
+  .risk .d{ font-size:var(--t-xs); color:var(--muted); margin-top:4px; }
+
+  /* inversiones */
+  .big{ display:grid; grid-template-columns: 1.2fr 1fr 1fr; gap:20px; margin-bottom:20px; }
+  .big .card .k{ font-size:var(--t-xs); color:var(--muted); }
+  .big .card .n{ font-size:var(--t-xl); font-weight:600; margin-top:6px; line-height:1.1; }
+  .big .card .s{ font-size:var(--t-xs); color:var(--muted); margin-top:6px; }
+  .eq{ display:grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap:14px; align-items:center; }
+  .eq .op{ font-size:var(--t-l); color:var(--muted); }
+  .eq .k{ font-size:var(--t-xs); color:var(--muted); }
+  .eq .n{ font-size:var(--t-l); font-weight:600; margin-top:2px; }
+  .split{ display:grid; grid-template-columns: repeat(4, 1fr); gap:20px; margin-top:20px; padding-top:18px; border-top:1px solid var(--line-2); }
+  .split .k{ font-size:var(--t-xs); color:var(--muted); }
+  .split .n{ font-size:var(--t-m); font-weight:600; margin-top:2px; }
+  .split .srow{ padding:3px 0; }
+
+  /* gastos */
+  .controls{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:16px; }
+  .controls select, .controls input{ font:inherit; font-size:var(--t-s); color:var(--ink); background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:8px 10px; }
+  .controls input{ flex:1; min-width:180px; }
+  .bar{ display:grid; grid-template-columns: minmax(110px, 170px) 1fr auto; gap:12px; align-items:center; padding:7px 0; width:100%; background:none; border:0; text-align:left; cursor:pointer; }
+  .bar .c{ min-width:0; }
+  .bar .c .chev{ display:inline-block; width:14px; color:var(--muted); transition:transform .15s ease; }
+  .bar[aria-expanded="true"] .chev{ transform:rotate(90deg); }
+  .bar .tr{ height:12px; background:var(--surface-2); border-radius:3px; overflow:hidden; }
+  .bar .tr span{ display:block; height:100%; background:var(--accent); border-radius:3px 0 0 3px; }
+  .bar .tr span.back{ background:var(--accent-ink); opacity:.5; }
+  .bar .a{ text-align:right; min-width:96px; }
+  .bar.l2{ grid-template-columns: minmax(96px, 154px) 1fr auto; font-size:var(--t-xs); padding:4px 0 4px 18px; cursor:default; }
+  .bar.l2.click{ cursor:pointer; }
+  .bar.l2 .tr{ height:8px; } .bar.l2 .tr span{ opacity:.6; }
+  .bar.l3{ grid-template-columns: minmax(80px, 138px) 1fr auto; font-size:var(--t-xs); padding:3px 0 3px 36px; cursor:default; color:var(--muted); }
+  .bar.l3 .tr{ height:6px; } .bar.l3 .tr span{ opacity:.4; }
+  .foot{ display:flex; justify-content:space-between; border-top:1px solid var(--line); margin-top:10px; padding-top:10px; font-weight:600; }
+  .month{ border-top:1px solid var(--line-2); }
+  .month:first-child{ border-top:none; }
+  .month > summary{ display:flex; justify-content:space-between; gap:12px; padding:12px 0; cursor:pointer; list-style:none; font-weight:600; }
+  .month > summary::-webkit-details-marker{ display:none; }
+  .month > summary .chev{ display:inline-block; width:14px; color:var(--muted); transition:transform .15s ease; }
+  .month[open] > summary .chev{ transform:rotate(90deg); }
+  .month > summary .s{ font-weight:400; color:var(--muted); font-size:var(--t-xs); }
+  .mov{ display:grid; grid-template-columns: 52px 1fr auto; gap:12px; padding:8px 0; border-top:1px solid var(--line-2); font-size:var(--t-xs); }
+  .mov .f{ color:var(--muted); }
+  .mov .c{ color:var(--ink); font-size:var(--t-s); }
+  .mov .m{ color:var(--muted); }
+  .mov .i{ text-align:right; font-size:var(--t-s); }
+  .mov .i.pos{ color:var(--accent-ink); }
+  .mov.int .c, .mov.int .i{ color:var(--muted); }
+
+  footer{ margin-top:40px; padding-top:16px; border-top:1px solid var(--line); font-size:var(--t-xs); color:var(--muted); text-align:center; }
+
+  @media (max-width: 900px){
+    .hero{ grid-template-columns:1fr; gap:24px; }
+    .grid2{ grid-template-columns:1fr; }
+    .health{ grid-template-columns: repeat(2, 1fr); }
+    .h-item, .h-item + .h-item{ padding:14px 12px 14px 0; border-left:none; border-top:1px solid var(--line-2); }
+    .h-item:nth-child(even){ padding-left:12px; border-left:1px solid var(--line-2); }
+    .h-item:nth-child(-n+2){ border-top:none; }
+    .big{ grid-template-columns:1fr; }
+    .split{ grid-template-columns: 1fr 1fr; }
   }
-  .tab-btn{
-    padding:9px 4px; margin-right:18px; font-size:12.5px; font-weight:500; color:var(--faint);
-    background:none; border:none; border-bottom:2px solid transparent; cursor:pointer;
-    font-family:inherit; letter-spacing:0.01em;
+  @media (max-width: 600px){
+    .wrap{ padding:18px 16px 48px; }
+    .top{ margin-bottom:20px; }
+    :root{ --t-xxl: 40px; }
+    .hero-n{ font-size:var(--t-xxl); }
+    .watch, .card{ padding:16px; border-radius:10px; }
+    .h-item .l{ min-height:0; }
+    .eq{ grid-template-columns:1fr; gap:6px; }
+    .eq .op{ display:none; }
+    .split{ grid-template-columns:1fr; gap:14px; }
+    .row{ grid-template-columns: 12px 1fr auto; }
+    .row .pct{ display:none; }
+    .row .val{ min-width:0; }
+    .bar{ grid-template-columns: 1fr auto; }
+    .bar .tr{ grid-column: 1 / -1; grid-row:2; }
+    .bar.l2, .bar.l3{ grid-template-columns: 1fr auto; }
+    table.cards thead{ display:none; }
+    table.cards, table.cards tbody, table.cards tfoot, table.cards tr, table.cards td{ display:block; width:100%; }
+    table.cards tr{ padding:10px 0; border-bottom:1px solid var(--line-2); }
+    table.cards tr:last-child{ border-bottom:none; }
+    table.cards td{ display:flex; justify-content:space-between; gap:12px; padding:3px 0; border:none; text-align:right; }
+    table.cards td::before{ content:attr(data-l); color:var(--muted); font-size:var(--t-xs); text-align:left; }
+    table.cards td.first{ display:block; text-align:left; font-weight:600; }
+    table.cards td.first::before{ content:none; }
+    table.cards td .m{ text-align:right; }
+    table.cards td.first .m{ text-align:left; font-weight:400; }
+    table.cards tfoot tr{ border-top:1px solid var(--line); }
   }
-  .tab-btn:hover{ color:var(--ink); }
-  .tab-btn.active{ color:var(--ink); font-weight:600; border-bottom-color:var(--accent); }
-  .tab-panel{ display:none; }
-  .tab-panel.active{ display:block; }
-
-  /* ---------- detalle de gastos ---------- */
-  .detalle-controls{ display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap; align-items:center; }
-  .detalle-controls select, .detalle-controls input{
-    font-family:inherit; font-size:12.5px; color:var(--ink); background:var(--surface);
-    border:1px solid var(--border); border-radius:6px; padding:7px 10px;
-  }
-  .detalle-controls input{ flex:1; min-width:160px; }
-  .detalle-count{ font-size:12px; color:var(--faint); margin-left:auto; }
-  .detalle-table-wrap{
-    max-height:640px; overflow-y:auto; border:1px solid var(--border); border-radius:8px;
-  }
-  table.detalle{ width:100%; border-collapse:collapse; font-size:12px; }
-  table.detalle thead th{
-    position:sticky; top:0; background:var(--surface-2); text-align:left; font-weight:500;
-    font-size:10.5px; text-transform:uppercase; letter-spacing:0.04em; color:var(--faint);
-    padding:8px 10px; border-bottom:1px solid var(--border); z-index:1;
-  }
-  table.detalle th.num, table.detalle td.num{ text-align:right; }
-  table.detalle td{ padding:8px 10px; border-bottom:1px solid var(--border-2); color:var(--ink); }
-  table.detalle tr:last-child td{ border-bottom:none; }
-  table.detalle td.muted{ color:var(--muted); font-size:11px; }
-  table.detalle td.neg{ color:var(--ink); }
-  table.detalle td.pos{ color:var(--accent-ink); }
-  table.detalle tr.interno{ opacity:0.5; font-style:italic; }
-
-  .panel{
-    background:var(--surface); border:1px solid var(--border); border-radius:10px;
-    padding:18px 20px; box-shadow:var(--shadow);
-  }
-  .panel h2{
-    font-size:12.5px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em;
-    color:var(--muted); margin:0 0 14px;
-  }
-  .panel h2 .count{ font-weight:400; text-transform:none; letter-spacing:0; color:var(--faint); }
-
-  .composicion{ display:flex; gap:24px; align-items:center; }
-  .donut-wrap{ position:relative; width:150px; height:150px; flex-shrink:0; }
-  .donut-wrap svg{ transform:rotate(-90deg); }
-  .donut-center{
-    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
-  }
-  .donut-center .n{ font-size:18px; font-weight:600; }
-  .donut-center .l{ font-size:10px; color:var(--faint); text-transform:uppercase; letter-spacing:0.04em; }
-  .legend{ flex:1; display:flex; flex-direction:column; gap:7px; }
-  .legend-row{ display:flex; align-items:center; gap:9px; font-size:12.5px; }
-  .legend-row .dot{ width:9px; height:9px; border-radius:2px; flex-shrink:0; }
-  .legend-row .lbl{ flex:1; color:var(--ink); }
-  .legend-row .pct{ color:var(--faint); width:38px; text-align:right; flex-shrink:0; }
-  .legend-row .val{ color:var(--muted); width:88px; text-align:right; flex-shrink:0; }
-  .legend-row.has-detalle{ cursor:pointer; }
-  .legend-row.has-detalle .lbl::before{ content:'▸'; display:inline-block; width:12px; color:var(--faint); transition:transform .15s ease; }
-  .legend-row.has-detalle.expanded .lbl::before{ transform:rotate(90deg); }
-  .activo-detalle-panel{ display:none; padding:4px 0 8px 21px; margin-bottom:2px; }
-  .activo-detalle-panel.open{ display:block; }
-  .activo-detalle-row{ display:grid; grid-template-columns: 1fr 70px 88px; align-items:start; gap:8px; margin-bottom:5px; font-size:11px; }
-  .activo-detalle-lbl{ color:var(--muted); overflow-wrap:break-word; line-height:1.35; }
-  .activo-detalle-track{ height:8px; background:var(--surface-2); border-radius:2px; overflow:hidden; margin-top:3px; }
-  .activo-detalle-fill{ display:block; height:100%; opacity:.55; border-radius:2px 0 0 2px; }
-  .activo-detalle-amt{ text-align:right; color:var(--muted); }
-  .activo-detalle-sub{ font-size:9.5px; color:var(--faint); margin-top:1px; }
-
-  table.re{ width:100%; border-collapse:collapse; font-size:12.5px; }
-  table.re th{
-    text-align:left; font-weight:500; font-size:10.5px; text-transform:uppercase; letter-spacing:0.04em;
-    color:var(--faint); padding:0 8px 8px 0; border-bottom:1px solid var(--border);
-  }
-  table.re th.num, table.re td.num{ text-align:right; }
-  table.re td{ padding:8px 8px 8px 0; border-bottom:1px solid var(--border-2); color:var(--ink); }
-  table.re tr:last-child td{ border-bottom:none; }
-  table.re td.muted{ color:var(--muted); font-size:11.5px; }
-  table.re td.pos{ color:var(--accent-ink); font-weight:600; }
-  table.re td.neg{ color:var(--risk-ink); font-weight:600; }
-  table.re tr.total-row td{ font-weight:600; border-top:2px solid var(--border); border-bottom:none; }
-  .tag{
-    display:inline-block; font-size:10px; padding:2px 6px; border-radius:4px; font-weight:500;
-    background:var(--accent-soft); color:var(--accent-ink);
-  }
-  .tag.mora{ background:var(--risk-soft); color:var(--risk-ink); }
-  .empty-note{ font-size:12px; color:var(--faint); padding:6px 0; }
-
-  .bar-row{ display:grid; grid-template-columns: 130px 1fr 78px; align-items:center; gap:10px; margin-bottom:9px; font-size:12.5px; cursor:pointer; }
-  .bar-row .cat{ color:var(--ink); }
-  .bar-row .cat::before{ content:'▸'; display:inline-block; width:12px; color:var(--muted); transition:transform .15s ease; }
-  .bar-row.expanded .cat::before{ transform:rotate(90deg); }
-  .bar-track{ height:16px; background:var(--surface-2); border-radius:4px; overflow:hidden; }
-  .bar-fill{ display:block; height:100%; background:var(--accent); border-radius:4px 0 0 4px; }
-  .bar-fill.reembolso{ background:var(--accent-ink); opacity:0.55; }
-  .amt.reembolso{ color:var(--accent-ink); }
-  .tag-reembolso{
-    display:inline-block; font-size:10px; font-weight:500; margin-left:6px;
-    padding:1px 6px; border-radius:4px; background:var(--accent-soft); color:var(--accent-ink);
-    vertical-align:middle; white-space:nowrap;
-  }
-  .tag-pignorado{
-    display:inline-block; font-size:10px; font-weight:600; margin-left:6px;
-    padding:1px 6px; border-radius:4px; background:color-mix(in oklch, var(--danger) 18%, transparent);
-    color:var(--danger); vertical-align:middle; white-space:nowrap; cursor:help;
-  }
-  .bar-row .amt{ text-align:right; color:var(--muted); }
-  .subcat-panel{ display:none; padding:2px 0 10px 22px; margin-bottom:2px; }
-  .subcat-panel.open{ display:block; }
-  .subcat-row{ display:grid; grid-template-columns: 108px 1fr 70px; align-items:center; gap:10px; margin-bottom:5px; font-size:11.5px; }
-  .subcat-row .subcat{ color:var(--muted); }
-  .subcat-row.has-n3{ cursor:pointer; }
-  .subcat-row.has-n3 .subcat::before{ content:'▸'; display:inline-block; width:11px; color:var(--faint); transition:transform .15s ease; }
-  .subcat-row.has-n3.expanded .subcat::before{ transform:rotate(90deg); }
-  .subcat-track{ height:10px; background:var(--surface-2); border-radius:3px; overflow:hidden; }
-  .subcat-fill{ display:block; height:100%; background:var(--accent); opacity:.55; border-radius:3px 0 0 3px; }
-  .subcat-fill.reembolso{ background:var(--accent-ink); opacity:0.4; }
-  .subamt.reembolso{ color:var(--accent-ink); }
-  .subcat-row .subamt{ text-align:right; color:var(--muted); }
-  .nivel3-panel{ display:none; padding:1px 0 8px 20px; margin-bottom:2px; }
-  .nivel3-panel.open{ display:block; }
-  .nivel3-row{ display:grid; grid-template-columns: 96px 1fr 62px; align-items:center; gap:8px; margin-bottom:4px; font-size:10.5px; }
-  .nivel3-row .n3lbl{ color:var(--faint); }
-  .nivel3-track{ height:7px; background:var(--surface-2); border-radius:2px; overflow:hidden; }
-  .nivel3-fill{ display:block; height:100%; background:var(--accent); opacity:.35; border-radius:2px 0 0 2px; }
-  .nivel3-row .n3amt{ text-align:right; color:var(--faint); }
-  .bar-foot{ display:flex; justify-content:space-between; margin-top:10px; padding-top:10px; border-top:1px solid var(--border); font-size:12.5px; }
-  .bar-foot .lbl{ color:var(--muted); }
-  .bar-foot .val{ font-weight:600; color:var(--ink); }
-
-  table.deb{ width:100%; border-collapse:collapse; font-size:12.5px; }
-  table.deb th{
-    text-align:left; font-weight:500; font-size:10.5px; text-transform:uppercase; letter-spacing:0.04em;
-    color:var(--faint); padding:0 6px 8px 0; border-bottom:1px solid var(--border);
-  }
-  table.deb th.num, table.deb td.num{ text-align:right; }
-  table.deb td{ padding:9px 6px 9px 0; border-bottom:1px solid var(--border-2); }
-  table.deb tr:last-child td{ border-bottom:none; }
-  table.deb td.muted{ color:var(--muted); font-size:11.5px; }
-  table.deb tfoot td{ border-top:1px solid var(--border); border-bottom:none; font-weight:600; padding-top:10px; }
-
-  .flags{ display:flex; flex-direction:column; gap:0; }
-  .flag{
-    display:grid; grid-template-columns: 90px 1fr 100px; gap:14px; align-items:start;
-    padding:12px 0; border-bottom:1px solid var(--border-2); font-size:12.5px;
-  }
-  .flag:last-child{ border-bottom:none; }
-  .flag .badge{
-    font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.03em;
-    padding:3px 7px; border-radius:4px; text-align:center; height:fit-content;
-  }
-  .flag .badge.mora{ background:var(--risk-soft); color:var(--risk-ink); }
-  .flag .badge.pend{ background:var(--surface-2); color:var(--muted); border:1px solid var(--border); }
-  .flag .desc .t{ color:var(--ink); margin-bottom:2px; }
-  .flag .desc .d{ color:var(--muted); font-size:11.5px; line-height:1.4; }
-  .flag .amt{ text-align:right; font-weight:600; color:var(--ink); }
-
-  .evol-chart{ margin-bottom:10px; }
-  .evol-table{ width:100%; border-collapse:collapse; font-size:12px; }
-  .evol-table td{ padding:5px 0; border-bottom:1px solid var(--border-2); }
-  .evol-table tr:last-child td{ border-bottom:none; }
-  .evol-table td.num{ text-align:right; }
-  .evol-table td.delta-pos{ color:var(--accent-ink); }
-  .evol-table td.delta-neg{ color:var(--danger); }
-  .evol-note{ font-size:12px; color:var(--muted); margin-top:10px; }
-
-  footer{ text-align:center; font-size:11px; color:var(--faint); margin-top:24px; padding-top:16px; border-top:1px solid var(--border); }
-
-  @media (max-width: 880px){
-    body{ padding: 20px 16px 48px; }
-    .kpi-row{ grid-template-columns: 1fr 1fr; gap:10px; }
-    .kpi{ padding:14px 16px; }
-    .kpi.primary{ grid-column: 1 / -1; }
-    .kpi.primary .value{ font-size:28px; }
-    .kpi .value{ font-size:22px; }
-    .ratio-grid{ grid-template-columns: repeat(3, 1fr); gap:14px 16px; }
-    .main-grid{ grid-template-columns: 1fr; gap:12px; }
-    .composicion{ flex-direction:column; align-items:stretch; }
-    .donut-wrap{ align-self:center; }
-    .bar-row{ grid-template-columns: 100px 1fr 66px; }
-    .subcat-row{ grid-template-columns: 88px 1fr 60px; }
-    .nivel3-row{ grid-template-columns: 78px 1fr 54px; }
-    .detalle-table-wrap{ max-height:520px; }
-  }
-
-  @media (max-width: 640px){
-    body{ padding: 16px 12px 40px; font-size:14px; }
-    header{ align-items:flex-start; }
-    header h1{ font-size:14.5px; }
-    header .sub{ font-size:11.5px; }
-    .kpi-row{ grid-template-columns: 1fr 1fr; gap:8px; }
-    .kpi{ padding:12px 14px; border-radius:8px; }
-    .kpi .label{ font-size:10px; }
-    .kpi.primary .value{ font-size:24px; }
-    .kpi .value{ font-size:19px; }
-    .kpi .delta{ font-size:11px; }
-    .panel{ padding:14px 15px; border-radius:8px; }
-    .panel h2{ font-size:11.5px; margin-bottom:11px; }
-
-    .donut-wrap{ width:130px; height:130px; }
-    .legend-row{ font-size:12px; flex-wrap:wrap; }
-    .legend-row .lbl{ flex-basis:100%; order:1; margin-top:1px; }
-    .legend-row .pct{ width:auto; }
-    .legend-row .val{ width:auto; margin-left:auto; }
-
-    .bar-row{ grid-template-columns: 82px 1fr 62px; gap:7px; font-size:11.5px; }
-    .bar-track{ height:14px; }
-    .subcat-row{ grid-template-columns: 70px 1fr 56px; gap:6px; font-size:10.5px; }
-    .subcat-track{ height:8px; }
-    .nivel3-row{ grid-template-columns: 62px 1fr 48px; gap:5px; font-size:9.5px; }
-    .nivel3-track{ height:6px; }
-    .bar-foot{ font-size:12px; }
-
-    .flag{
-      grid-template-columns: 1fr auto; grid-template-rows: auto auto;
-      row-gap:6px; column-gap:10px; padding:11px 0;
-    }
-    .flag .badge{ grid-column:1; grid-row:1; justify-self:start; }
-    .flag .amt{ grid-column:2; grid-row:1; align-self:start; }
-    .flag .desc{ grid-column:1 / -1; grid-row:2; }
-
-    .ratio-grid{ grid-template-columns: repeat(2, 1fr); gap:14px; }
-    .ratio-item .rvalue{ font-size:17px; }
-
-    table.re, table.deb{ font-size:12.5px; }
-    table.re thead, table.deb thead{ display:none; }
-    table.re tbody, table.deb tbody,
-    table.re tfoot, table.deb tfoot{ display:block; width:100%; }
-    table.re tr, table.deb tr{
-      display:block; width:100%; padding:10px 0; border-bottom:1px solid var(--border-2);
-    }
-    table.re tr:last-child, table.deb tr:last-child{ border-bottom:none; }
-    table.re td, table.deb td{
-      display:flex; justify-content:space-between; align-items:baseline; gap:12px;
-      padding:3px 0; border-bottom:none; text-align:right;
-    }
-    table.re td > *:not(.tag), table.deb td > div.muted{ text-align:right; }
-    table.re td::before, table.deb td::before{
-      content: attr(data-label); color:var(--faint); font-size:10.5px; text-transform:uppercase;
-      letter-spacing:0.04em; text-align:left; flex-shrink:0;
-    }
-    table.deb td[data-label="Entidad"]{ flex-direction:column; align-items:flex-start; gap:2px; }
-    table.deb td[data-label="Entidad"]::before{ margin-bottom:1px; }
-    table.deb td[data-label="Entidad"] .muted{ font-size:11px; }
-    table.re td.muted, table.deb td.muted{ font-size:11.5px; }
-    table.deb tfoot td{ padding-top:10px; }
-
-    .evol-note{ font-size:11.5px; }
-
-    .tabs-nav{ overflow-x:auto; white-space:nowrap; -webkit-overflow-scrolling:touch; }
-    .tab-btn{ margin-right:14px; padding:8px 2px; }
-    .detalle-controls{ gap:8px; }
-    .detalle-controls input{ min-width:120px; }
-    .detalle-count{ width:100%; margin-left:0; order:3; }
-    table.detalle thead{ display:none; }
-    table.detalle tbody{ display:block; }
-    table.detalle tr{
-      display:block; width:100%; padding:8px 10px; border-bottom:1px solid var(--border-2);
-    }
-    table.detalle tr:last-child{ border-bottom:none; }
-    table.detalle td{
-      display:flex; justify-content:space-between; align-items:baseline; gap:10px;
-      padding:2px 0; border-bottom:none; text-align:right; font-size:12px;
-    }
-    table.detalle td::before{
-      content: attr(data-label); color:var(--faint); font-size:10px; text-transform:uppercase;
-      letter-spacing:0.04em; text-align:left; flex-shrink:0;
-    }
-    table.detalle td[data-label="Concepto"]{ flex-direction:column; align-items:flex-start; gap:2px; text-align:left; }
-    table.detalle td[data-label="Concepto"]::before{ margin-bottom:1px; }
-  }
-
-  @media (max-width: 380px){
-    .kpi-row{ grid-template-columns: 1fr; }
-    .kpi.primary{ grid-column: auto; }
-  }
+  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <header>
+  <div class="top">
     <div>
-      <h1>Patrimonio Personal — Alejandro</h1>
-      <div class="sub" id="headerSub">Datos: Google Sheet "Patrimonio Personal - Alejandro"</div>
+      <div class="who">Patrimonio personal · Alejandro</div>
+      <div class="when" id="when"></div>
     </div>
-    <button class="theme-toggle" id="themeToggle">Modo oscuro</button>
-  </header>
-
-  <div class="kpi-row" id="kpiRow"></div>
-
-  <div class="ratios-panel">
-    <h2>Salud Financiera</h2>
-    <div class="ratio-grid" id="ratiosGrid"></div>
+    <button class="btn-ghost" id="themeToggle" type="button">Modo oscuro</button>
   </div>
 
-  <div class="tabs-nav">
-    <button class="tab-btn active" data-tab="resumen">Resumen</button>
-    <button class="tab-btn" data-tab="inversiones">Inversiones</button>
-    <button class="tab-btn" data-tab="detalle">Detalle de Gastos</button>
-  </div>
+  <section class="hero" aria-label="Resumen">
+    <div>
+      <p class="eyebrow">Patrimonio neto hoy <button class="info" type="button" data-for="x-pn" aria-expanded="false" aria-label="Cómo se calcula">ⓘ</button></p>
+      <p class="hero-n num" id="heroN">—</p>
+      <p class="hero-line" id="heroLine"></p>
+      <p class="hero-delta" id="heroDelta"></p>
+      <div class="explain" id="x-pn"></div>
+      <div class="stack" id="stack" role="img" aria-label="Composición de lo que tienes"></div>
+      <div class="stack-key" id="stackKey"></div>
+    </div>
+    <div class="watch">
+      <h2>Qué mirar este mes</h2>
+      <p class="hint">Sale solo de los datos: ratios en alerta, riesgos abiertos y avisos del libro M&amp;H.</p>
+      <div id="watch"></div>
+    </div>
+  </section>
 
-  <div class="tab-panel active" id="tab-resumen">
-  <div class="main-grid">
-    <div class="col">
-      <div class="panel">
-        <h2>Composición de Activos</h2>
-        <div class="composicion">
-          <div class="donut-wrap">
-            <svg width="150" height="150" viewBox="0 0 150 150" id="donutSvg"></svg>
-            <div class="donut-center">
-              <div class="n num" id="donutTotal">—</div>
-              <div class="l">Total</div>
-            </div>
-          </div>
-          <div class="legend" id="legend"></div>
+  <section class="health" id="health" aria-label="Salud financiera"></section>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-pane="resumen" type="button">Resumen</button>
+    <button class="tab" role="tab" aria-selected="false" data-pane="inversiones" type="button">Inversiones</button>
+    <button class="tab" role="tab" aria-selected="false" data-pane="gastos" type="button">Gastos</button>
+  </nav>
+
+  <!-- RESUMEN -->
+  <section class="pane on" id="pane-resumen">
+    <div class="grid2">
+      <div class="col">
+        <div class="card">
+          <h3>Lo que tienes <button class="info" type="button" data-for="x-fis" aria-expanded="false" aria-label="Nota fiscal">ⓘ</button></h3>
+          <p class="sub" id="activosSub"></p>
+          <div class="explain" id="x-fis">Solo afecta a «Inversiones / bolsa» y «Criptomonedas»: se muestran a valor de mercado bruto, sin restar el IRPF que pagarías al vender (plusvalías, tramos de aproximadamente 19-28 %). No se calcula esa cifra porque no está registrado el coste de compra de cada posición. El resto no tributa como plusvalía: M&amp;H es un préstamo de socio a devolver, las cuentas ya son liquidez y el plan de pensiones tributa como rendimiento del trabajo. Por eso, el patrimonio «después de impuestos si vendieras todo hoy» sería algo menor, solo por la parte de bolsa y cripto.</div>
+          <div class="rows" id="activos"></div>
         </div>
-        <div class="liq-note">⚠️ Solo aplica a "Inversiones / bolsa" y "Criptomonedas" (fondos Vanguard, Bitcoin, Oro): valor de mercado bruto, sin descontar el IRPF que se devengaría al liquidar (plusvalías de capital, tramos ~19-28% en España). No se calcula una cifra de pasivo fiscal contingente por no tener capturado el coste de adquisición histórico. Las demás categorías no tributan como plusvalía: Participación M&amp;H es un préstamo de socio a devolver (sin plusvalía), Cuentas bancarias ya es liquidez disponible, y Plan de pensiones tributa como rendimiento del trabajo (escala general, no 19-28%). El patrimonio neto real "tras impuestos si se liquidara todo hoy" es, por tanto, algo menor que el Patrimonio Neto mostrado arriba, pero solo respecto a la parte de bolsa/cripto.</div>
+        <div class="card">
+          <h3>Lo que debes</h3>
+          <p class="sub" id="pasivosSub"></p>
+          <table class="cards" id="pasivos"></table>
+          <p class="note" id="pasivosNota"></p>
+        </div>
       </div>
-
-      <div class="panel">
-        <h2 id="reHeading">Cartera Real Estate (APH) — posiciones activas</h2>
-        <table class="re">
-          <thead>
-            <tr><th>Posición</th><th>Gestor</th><th class="num">Valor</th><th>Estado</th></tr>
-          </thead>
-          <tbody id="reBody"></tbody>
-        </table>
-      </div>
-
-      <div class="panel">
-        <h2>Riesgos y pendientes</h2>
-        <div class="flags" id="flags"></div>
+      <div class="col">
+        <div class="card">
+          <h3>Cómo ha evolucionado <button class="info" type="button" data-for="x-evo" aria-expanded="false" aria-label="Qué se muestra">ⓘ</button></h3>
+          <p class="sub">Registros del Sheet (hoja EVOLUCION_MENSUAL) y la cifra de hoy.</p>
+          <div class="explain" id="x-evo">Cada punto es una foto del patrimonio neto que se guardó en el Sheet. Si el mismo día hay varias (porque se corrigieron datos), se dibuja la última. El punto «hoy» es la cifra en vivo de arriba, que cambia cada día con los precios de mercado. Los motivos de cada corrección siguen en el Sheet.</div>
+          <svg class="chart" id="chart" viewBox="0 0 560 200" role="img" aria-label="Evolución del patrimonio neto"></svg>
+          <div class="evo-list" id="evoList"></div>
+        </div>
+        <div class="card">
+          <h3>Riesgos y pendientes</h3>
+          <p class="sub" id="riesgosSub"></p>
+          <div id="riesgos"></div>
+        </div>
       </div>
     </div>
+  </section>
 
-    <div class="col">
-      <div class="panel">
-        <h2 id="gastosHeading">Gasto por categoría</h2>
-        <div class="detalle-controls" style="margin-bottom:12px;">
-          <select id="filtroMesResumen"></select>
-        </div>
+  <!-- INVERSIONES -->
+  <section class="pane" id="pane-inversiones">
+    <div class="big" id="invBig"></div>
+    <div class="card" style="margin-bottom:20px">
+      <h3>Liquidez <button class="info" type="button" data-for="x-liq" aria-expanded="false" aria-label="Cómo se calcula">ⓘ</button></h3>
+      <p class="sub">Lo que tienes en el banco, menos lo que ya te has comprometido a poner.</p>
+      <div class="explain" id="x-liq">Liquidez inmediata = cuentas bancarias. Compromisos pendientes = capital ya asumido en operaciones activas (p. ej. Torredembarra) que todavía no ha salido de tu cuenta, pero que tendrás que aportar. Libre disposición = liquidez inmediata − compromisos pendientes: lo que te quedaría si tuvieras que cubrir hoy todo lo comprometido.</div>
+      <div class="eq" id="liqEq"></div>
+      <p class="note" id="liqNota"></p>
+      <div class="split" id="liqSplit"></div>
+    </div>
+    <div class="card" style="margin-bottom:20px">
+      <h3>Coinversiones inmobiliarias vivas <button class="info" type="button" data-for="x-coi" aria-expanded="false" aria-label="De dónde salen las cifras">ⓘ</button></h3>
+      <p class="sub" id="coiSub"></p>
+      <div class="explain" id="x-coi">«Capital vivo» es lo que sigue invertido después de restar el capital ya devuelto, y sale de la hoja BALANCE (la misma cifra que en Resumen). «Comprometido», año y gestor salen de HISTORIAL_INVERSIONES_RE. Las coinversiones se valoran a coste, no a mercado: criterio prudente, sin depender de tasaciones que no se pueden comprobar.</div>
+      <table class="cards" id="coi"></table>
+    </div>
+    <div class="card" style="margin-bottom:20px">
+      <h3>Participación en M&amp;H Capital Partners</h3>
+      <div id="mh"></div>
+    </div>
+    <div class="card">
+      <h3>Posiciones ya liquidadas <button class="info" type="button" data-for="x-rea" aria-expanded="false" aria-label="Cómo se calcula">ⓘ</button></h3>
+      <p class="sub" id="reaSub"></p>
+      <div class="explain" id="x-rea">Rentabilidad = (distribuido − desembolsado) ÷ desembolsado, de cada posición. Es la rentabilidad total del periodo, no la anual: un 24,8 % en 4 años no equivale a un 24,8 % en 1 año, por eso se muestran los años al lado. Cifras brutas, antes de IRPF.</div>
+      <table class="cards" id="rea"></table>
+    </div>
+  </section>
+
+  <!-- GASTOS -->
+  <section class="pane" id="pane-gastos">
+    <div class="grid2">
+      <div class="card">
+        <h3>En qué se va el dinero</h3>
+        <p class="sub" id="barsSub"></p>
+        <div class="controls"><select id="mesBars" aria-label="Mes"></select></div>
         <div id="bars"></div>
-        <div class="bar-foot">
-          <span class="lbl">Total gasto real</span>
-          <span class="val num" id="gastosTotal">—</span>
+        <div class="foot"><span>Gasto real</span><span class="num" id="barsTotal">—</span></div>
+        <p class="note">No cuenta movimientos internos, aportaciones a M&amp;H, coinversiones ni ingresos. Pulsa una categoría para ver el detalle.</p>
+      </div>
+      <div class="card">
+        <h3>Movimientos <button class="info" type="button" data-for="x-mov" aria-expanded="false" aria-label="Por qué no coincide el total">ⓘ</button></h3>
+        <p class="sub" id="movSub"></p>
+        <div class="explain" id="x-mov">El total de cada mes suma TODOS los movimientos que se ven, incluidos «M&amp;H / Inversión» e ingresos, que en «En qué se va el dinero» no cuentan como gasto. Por eso los totales no coinciden: aquí está el movimiento bancario completo; allí, solo el gasto de consumo.</div>
+        <div class="controls">
+          <select id="fCat" aria-label="Categoría"><option value="">Todas las categorías</option></select>
+          <input type="search" id="fTxt" placeholder="Buscar concepto o proveedor" aria-label="Buscar">
         </div>
-      </div>
-
-      <div class="panel">
-        <h2>Pasivos — detalle</h2>
-        <table class="deb">
-          <thead>
-            <tr><th>Entidad</th><th class="num">Saldo</th><th class="num">Cuota/mes</th><th class="num">Interés</th></tr>
-          </thead>
-          <tbody id="debBody"></tbody>
-          <tfoot id="debFoot"></tfoot>
-        </table>
-        <div class="liq-note" id="debNota"></div>
-      </div>
-
-      <div class="panel">
-        <h2>Evolución mensual</h2>
-        <div class="evol-chart"><svg id="evolSvg" width="100%" height="70" preserveAspectRatio="none"></svg></div>
-        <table class="evol-table" id="evolTable"></table>
-        <div class="evol-note" id="evolNote"></div>
+        <div id="months"></div>
       </div>
     </div>
-  </div>
-  </div>
+  </section>
 
-  <div class="tab-panel" id="tab-inversiones">
-    <div class="panel" id="liqPanel" style="margin-bottom:20px;"></div>
-    <div class="kpi-row kpi-row-2col" id="invKpiRow" style="margin-bottom:20px;"></div>
-    <div class="panel">
-      <h2>Participación M&amp;H Capital Partners</h2>
-      <div class="flags" id="invMhBody"></div>
-    </div>
-    <div class="panel" style="margin-top:12px;">
-      <h2 id="invRealizadasHeading">Posiciones liquidadas (ganancia ya materializada)</h2>
-      <table class="re">
-        <thead><tr><th>Inversión</th><th>Gestor</th><th>Participación</th><th class="num">Año</th><th class="num">Desembolsado</th><th class="num">Distribuido</th><th class="num">Ganancia/Pérdida</th><th class="num">% Rentabilidad</th><th class="num">Años mantenida</th></tr></thead>
-        <tbody id="invRealizadasBody"></tbody>
-        <tfoot id="invRealizadasFoot"></tfoot>
-      </table>
-    </div>
-  </div>
-
-  <div class="tab-panel" id="tab-detalle">
-    <div class="panel">
-      <h2>Detalle de movimientos <span class="count" id="detalleHeading"></span></h2>
-      <div class="detalle-controls">
-        <select id="filtroMesDetalle"></select>
-        <select id="filtroCategoria">
-          <option value="">Todas las categorías</option>
-        </select>
-        <input type="text" id="filtroTexto" placeholder="Buscar por concepto o proveedor...">
-        <span class="detalle-count" id="detalleCount"></span>
-        <span class="rinfo" id="detalleInfoIcon" title="Ver explicación">ⓘ</span>
-      </div>
-      <div class="rexplain" id="detalleInfoPanel">El total de esta tabla suma TODOS los movimientos visibles (incluye "M&amp;H / Inversión", que en "Gasto por categoría" de la pestaña Resumen se excluye del gasto real por tratarse de aportaciones de capital, no consumo). Por eso este total puede no coincidir exacto con el "Total gasto real" de esa otra vista -- aquí se ve el movimiento bancario completo, allí solo lo que es gasto de consumo.</div>
-      <div class="detalle-table-wrap">
-        <table class="detalle">
-          <thead>
-            <tr>
-              <th>Fecha</th><th>Concepto</th><th>Categoría</th><th>Proveedor</th>
-              <th class="num">Importe</th><th>Cuenta</th>
-            </tr>
-          </thead>
-          <tbody id="detalleBody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <footer id="footerNote">Fuente: Google Sheet "Patrimonio Personal - Alejandro"</footer>
+  <footer id="foot"></footer>
 </div>
 
 <script type="application/json" id="dashboard-data">
@@ -6459,11 +6270,11 @@
   ],
   "inversiones": {
     "kpis": {
-      "total": 411454.7,
+      "total": 384654.7,
       "financiero": 225830.6,
-      "coinversiones_desembolsado": 72600.0,
+      "coinversiones_desembolsado": 53800.0,
       "coinversiones_comprometido": 89700.0,
-      "en_mora": 20000.0,
+      "en_mora": 12000.0,
       "mh": 85000.0,
       "prestamos_privados": 8024.1,
       "ganancia_realizada": 50900.0,
@@ -6504,11 +6315,11 @@
         }
       ],
       "plan_pensiones": 4565.93,
-      "capital_iliquido_comprometido": 165624.1,
+      "capital_iliquido_comprometido": 146824.1,
       "detalle_iliquido": [
         {
           "nombre": "Coinversiones Mayela (Torredembarra+Escala 2+Reus)",
-          "valor": 72600.0
+          "valor": 53800.0
         },
         {
           "nombre": "Participación M&H Capital Partners",
@@ -6519,7 +6330,7 @@
           "valor": 8024.1
         }
       ],
-      "en_mora": 20000.0
+      "en_mora": 12000.0
     },
     "cartera_financiera": [
       {
@@ -6561,7 +6372,9 @@
         "comprometido": 53000.0,
         "desembolsado": 35900.0,
         "distribuido": 0,
-        "anios_en_cartera": 2
+        "anios_en_cartera": 2,
+        "capital_vivo": 17100.0,
+        "capital_vivo_fuente": "BALANCE"
       },
       {
         "inversion": "Escala 2",
@@ -6570,7 +6383,9 @@
         "comprometido": 16700.0,
         "desembolsado": 16700.0,
         "distribuido": 0,
-        "anios_en_cartera": 1
+        "anios_en_cartera": 1,
+        "capital_vivo": 16700.0,
+        "capital_vivo_fuente": "BALANCE"
       },
       {
         "inversion": "Reus",
@@ -6579,7 +6394,9 @@
         "comprometido": 20000.0,
         "desembolsado": 20000.0,
         "distribuido": 0,
-        "anios_en_cartera": 0
+        "anios_en_cartera": 0,
+        "capital_vivo": 20000.0,
+        "capital_vivo_fuente": "BALANCE"
       }
     ],
     "coinversiones_riesgo": [
@@ -6590,7 +6407,9 @@
         "comprometido": 10000.0,
         "desembolsado": 10000.0,
         "distribuido": 0,
-        "anios_en_cartera": 1
+        "anios_en_cartera": 1,
+        "capital_vivo": 6000.0,
+        "capital_vivo_fuente": "BALANCE"
       },
       {
         "inversion": "Maldonado 33",
@@ -6599,7 +6418,9 @@
         "comprometido": 10000.0,
         "desembolsado": 10000.0,
         "distribuido": 0,
-        "anios_en_cartera": 1
+        "anios_en_cartera": 1,
+        "capital_vivo": 6000.0,
+        "capital_vivo_fuente": "BALANCE"
       }
     ],
     "coinversiones_realizadas": [
@@ -6715,654 +6536,272 @@
 </script>
 
 <script>
+(() => {
   const DATA = JSON.parse(document.getElementById('dashboard-data').textContent);
-  const fmt = n => n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: true }) + ' €';
-  const fmtShort = n => (n/1000).toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + 'k€';
+  const $ = id => document.getElementById(id);
+  const fmt = n => (n ?? 0).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: 'always' }) + ' €';
+  const fmt0 = n => Math.round(n ?? 0).toLocaleString('es-ES', { maximumFractionDigits: 0, useGrouping: 'always' }) + ' €';
+  const sign = n => (n >= 0 ? '+' : '−');
+  const pct1 = x => (x * 100).toFixed(1).replace('.', ',') + ' %';
+  const K = DATA.kpi, INV = DATA.inversiones || {};
 
-  document.getElementById('headerSub').textContent = `Datos: Google Sheet "Patrimonio Personal - Alejandro" · Actualizado ${DATA.generated_at}`;
-  document.getElementById('footerNote').textContent = `Fuente: Google Sheet "Patrimonio Personal - Alejandro" · Generado automáticamente el ${DATA.generated_at}`;
-
-  // Icono ⓘ reutilizable: genera el span clicable + el panel de explicación
-  // que se despliega debajo. Mismo patrón validado en los ratios de Salud
-  // Financiera -- información siempre disponible inline (nunca oculta tras
-  // hover, que no funciona en móvil), varias explicaciones se pueden tener
-  // abiertas a la vez. `id` debe ser único en toda la página.
-  let infoIconCounter = 0;
-  function infoIcon(texto) {
-    const id = `info-${infoIconCounter++}`;
-    return {
-      icon: `<span class="rinfo" data-infoid="${id}" title="Ver explicación">ⓘ</span>`,
-      panel: `<div class="rexplain" id="${id}">${texto}</div>`,
-    };
+  // ⓘ: un clic abre/cierra su explicación (nunca hover: no funciona en móvil)
+  let infoN = 0;
+  function info(texto){
+    const id = 'xi-' + (infoN++);
+    return { icon: `<button class="info" type="button" data-for="${id}" aria-expanded="false" aria-label="Ver explicación">ⓘ</button>`,
+             panel: `<div class="explain" id="${id}">${texto}</div>` };
   }
-  function bindInfoIcons(container) {
-    container.querySelectorAll('.rinfo[data-infoid]').forEach(icon => {
-      icon.addEventListener('click', () => {
-        const panel = document.getElementById(icon.dataset.infoid);
-        if (panel) panel.classList.toggle('open');
-        icon.classList.toggle('active');
-      });
-    });
+  document.addEventListener('click', ev => {
+    const b = ev.target.closest('.info[data-for]');
+    if (!b) return;
+    ev.stopPropagation();
+    const p = $(b.dataset.for); if (!p) return;
+    const open = !p.classList.contains('open');
+    p.classList.toggle('open', open); b.setAttribute('aria-expanded', open);
+  }, true);
+
+  // ---------- fecha ----------
+  $('when').textContent = `Actualizado el ${DATA.generated_at} · Google Sheet «Patrimonio Personal - Alejandro»`;
+  $('foot').textContent = `Fuente: Google Sheet «Patrimonio Personal - Alejandro» · generado automáticamente el ${DATA.generated_at}`;
+
+  // ---------- evolución: limpiar etiquetas y quedarnos con la última foto de cada día ----------
+  const fechaDe = s => (String(s).match(/\d{2}\.\d{2}\.\d{4}/) || [String(s)])[0];
+  const evoRaw = (DATA.evolucion || []).filter(e => typeof e.patrimonio_neto === 'number');
+  const evo = [];
+  evoRaw.forEach(e => { const f = fechaDe(e.mes); if (evo.length && evo[evo.length-1].f === f) evo[evo.length-1] = { f, v: e.patrimonio_neto }; else evo.push({ f, v: e.patrimonio_neto }); });
+
+  // ---------- portada ----------
+  $('heroN').textContent = fmt0(K.patrimonio_neto);
+  $('heroLine').innerHTML = `Tienes <b class="num">${fmt0(K.total_activos)}</b> y debes <b class="num">${fmt0(K.total_pasivos)}</b>.`;
+  if (evo.length) {
+    const last = evo[evo.length-1], d = K.patrimonio_neto - last.v;
+    $('heroDelta').innerHTML = `<span class="num ${d >= 0 ? 'pos' : 'neg'}">${sign(d)}${fmt0(Math.abs(d))}</span> desde el último registro (${last.f}, ${fmt0(last.v)}).`;
   }
+  $('x-pn').innerHTML = `Patrimonio neto = lo que tienes (${fmt(K.total_activos)}) − lo que debes (${fmt(K.total_pasivos)}) = <b>${fmt(K.patrimonio_neto)}</b>. Es lo que te quedaría si vendieras todo y pagaras todas las deudas hoy, antes de los impuestos sobre plusvalías (ver ⓘ en «Lo que tienes»).`;
 
-  // ---------- KPI row ----------
-  const kpiRow = document.getElementById('kpiRow');
-  const cashflowClass = DATA.kpi.cashflow_mes >= 0 ? 'pos' : 'neg';
-  const cashflowSign = DATA.kpi.cashflow_mes >= 0 ? '+' : '';
-  const infoPatrimonio = infoIcon(`Patrimonio Neto = Total Activos (${fmt(DATA.kpi.total_activos)}) − Total Pasivos (${fmt(DATA.kpi.total_pasivos)}). Es lo que realmente te quedaría si vendieras todo y pagaras toda la deuda hoy (antes de impuestos sobre plusvalías, ver nota fiscal en la pestaña Inversiones).`);
-  const infoActivos = infoIcon(`Suma de todo lo que posees: cuentas bancarias, inversiones (fondos, oro, cripto), coinversiones inmobiliarias (a coste), participación M&amp;H, préstamos privados otorgados y plan de pensiones. Ver desglose completo en "Composición de Activos" más abajo.`);
-  const infoPasivos = infoIcon(`Suma de todos los préstamos vigentes: personal CaixaBank, Bankinter, y los 2 pignorados de MyInvestor. Ver detalle línea por línea en "Pasivos — detalle" más abajo, incluyendo cuáles son pignorados (riesgo de ejecución automática) y cuáles con recurso general.`);
-  const infoCashflow = infoIcon(`Cashflow = Ingresos del mes − Gastos del mes (último mes completo, no el mes en curso, que casi siempre está incompleto y subestimaría el gasto real). Un valor negativo no es necesariamente alarmante si es puntual (ej. gastos médicos, seguro anual) -- compara con la "Tasa de ahorro mensual" de Salud Financiera, que usa el promedio de 2 meses para suavizar ese ruido.`);
-  kpiRow.innerHTML = `
-    <div class="kpi primary">
-      <div class="label">Patrimonio Neto ${infoPatrimonio.icon}</div>
-      <div class="value num">${fmt(DATA.kpi.patrimonio_neto)}</div>
-      <div class="delta">${DATA.kpi.delta_neto_texto}</div>
-      ${infoPatrimonio.panel}
-    </div>
-    <div class="kpi">
-      <div class="label">Total Activos ${infoActivos.icon}</div>
-      <div class="value num">${fmt(DATA.kpi.total_activos)}</div>
-      ${infoActivos.panel}
-    </div>
-    <div class="kpi">
-      <div class="label">Total Pasivos ${infoPasivos.icon}</div>
-      <div class="value num">${fmt(DATA.kpi.total_pasivos)}</div>
-      <div class="delta">Cuota mensual total: ${fmt(DATA.kpi.cuota_mensual_total)}</div>
-      ${infoPasivos.panel}
-    </div>
-    <div class="kpi">
-      <div class="label">Cashflow (${DATA.kpi.mes_label}) ${infoCashflow.icon}</div>
-      <div class="value num ${cashflowClass}" style="color:${DATA.kpi.cashflow_mes >= 0 ? 'var(--accent-ink)' : 'var(--danger)'}">${cashflowSign}${fmt(DATA.kpi.cashflow_mes)}</div>
-      <div class="delta">Ingresos ${fmt(DATA.kpi.ingresos_mes)} · Gastos ${fmt(DATA.kpi.gastos_mes)} · último mes completo</div>
-      ${infoCashflow.panel}
-    </div>`;
-  bindInfoIcons(kpiRow);
+  const activos = DATA.activos || [];
+  const totA = activos.reduce((s,a) => s + a.value, 0) || 1;
+  $('stack').innerHTML = activos.map(a => `<span style="width:${(a.value/totA*100).toFixed(2)}%;background:${a.color}" title="${a.label}: ${fmt(a.value)}"></span>`).join('');
+  const corto = l => l.replace('Participación ', '').replace(' Capital Partners', '').replace(' AJ Rent SLU', '').replace('Inversiones / bolsa', 'Bolsa').replace('Coinversiones Real Estate', 'Inmobiliario').replace('Préstamos privados otorgados', 'Préstamo privado').replace('Cuentas bancarias', 'Bancos').replace('Criptomonedas', 'Cripto').replace('Plan de pensiones', 'Pensiones');
+  $('stackKey').innerHTML = activos.map(a => `<span><i style="background:${a.color}"></i>${corto(a.label)} ${Math.round(a.value/totA*100)} %</span>`).join('');
 
-  // ---------- ratios de salud financiera ----------
-  const ratiosGrid = document.getElementById('ratiosGrid');
-  DATA.ratios.forEach((r, i) => {
-    const item = document.createElement('div');
-    item.className = 'ratio-item';
-    item.innerHTML = `<div class="rlabel">${r.label} <span class="rinfo" data-ridx="${i}" title="Ver explicación">ⓘ</span></div>
-      <div class="rvalue num"><span class="rdot ${r.status}"></span>${r.display}</div>
-      <div class="rnote">${r.nota}</div>
-      <div class="rexplain" id="rexplain-${i}">${r.explicacion || ''}</div>`;
-    ratiosGrid.appendChild(item);
-  });
-  // Click en el icono ⓘ expande/colapsa la explicación de ESE ratio en
-  // concreto (no colapsa las demás -- a diferencia del acordeón de gastos,
-  // aquí tiene sentido comparar varias explicaciones abiertas a la vez).
-  ratiosGrid.querySelectorAll('.rinfo').forEach(icon => {
-    icon.addEventListener('click', () => {
-      const idx = icon.dataset.ridx;
-      document.getElementById(`rexplain-${idx}`).classList.toggle('open');
-      icon.classList.toggle('active');
-    });
-  });
+  // ---------- qué mirar ----------
+  const avisos = [];
+  const rank = { bad: 0, risk: 1, warn: 2, pend: 3 };
+  (DATA.ratios || []).forEach(r => { if (r.status === 'bad' || r.status === 'warn') avisos.push({ s: r.status, t: r.label, d: r.nota, v: r.display, x: r.explicacion }); });
+  (DATA.riesgos || []).forEach(r => avisos.push({ s: r.badge === 'mora' ? 'risk' : 'pend', t: r.titulo, d: r.badge_text, v: fmt0(r.importe), x: r.desc }));
+  if (INV.mh_estado_actualizacion && INV.mh_estado_actualizacion !== 'AL DÍA' && INV.mh_estado_actualizacion !== 'SIN DATO' && /DESACTUAL/i.test(INV.mh_estado_actualizacion))
+    avisos.push({ s: 'pend', t: 'Libro de M&H posiblemente desactualizado', d: 'Puede haber aportaciones o retiros de socio recientes sin reflejar.', v: fmt0(INV.kpis && INV.kpis.mh), x: INV.mh_nota || '' });
+  avisos.sort((a,b) => rank[a.s] - rank[b.s]);
+  const dotCls = s => s === 'bad' ? 'bad' : s === 'warn' ? 'warn' : s === 'risk' ? 'risk' : 'ok';
+  const alertHTML = a => { const i = info(a.x); return `<div class="alert"><span class="dot ${dotCls(a.s)}" aria-hidden="true"></span><div><div class="t">${a.t} ${a.x ? i.icon : ''}</div><div class="d">${a.d}</div>${a.x ? i.panel : ''}</div><div class="v num">${a.v}</div></div>`; };
+  const top = avisos.slice(0, 3), rest = avisos.slice(3);
+  $('watch').innerHTML = (avisos.length ? top.map(alertHTML).join('') : '<p class="hint">Nada en alerta: todos los ratios están en verde y no hay riesgos abiertos.</p>')
+    + (rest.length ? `<details class="more"><summary>Ver ${rest.length} más</summary>${rest.map(alertHTML).join('')}</details>` : '');
 
-  // ---------- donut + legend ----------
-  const totalActivos = DATA.activos.reduce((s,a)=>s+a.value, 0);
-  document.getElementById('donutTotal').textContent = fmtShort(totalActivos);
-  const svg = document.getElementById('donutSvg');
-  const R = 60, CX = 75, CY = 75, STROKE = 20;
-  const circumference = 2 * Math.PI * R;
-  let cumulative = 0;
-  DATA.activos.forEach(a => {
-    const frac = a.value / totalActivos;
-    const dash = frac * circumference;
-    const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    circle.setAttribute('cx', CX); circle.setAttribute('cy', CY); circle.setAttribute('r', R);
-    circle.setAttribute('fill', 'none');
-    circle.setAttribute('stroke', a.color);
-    circle.setAttribute('stroke-width', STROKE);
-    circle.setAttribute('stroke-dasharray', `${dash} ${circumference - dash}`);
-    circle.setAttribute('stroke-dashoffset', -cumulative);
-    svg.appendChild(circle);
-    cumulative += dash;
-  });
-  const legend = document.getElementById('legend');
-  DATA.activos.forEach((a, i) => {
-    const pct = (a.value / totalActivos * 100).toFixed(1);
-    const tieneDetalle = a.detalle && a.detalle.length > 0;
-    const row = document.createElement('div');
-    row.className = tieneDetalle ? 'legend-row has-detalle' : 'legend-row';
-    row.dataset.idx = i;
-    row.innerHTML = `<span class="dot" style="background:${a.color}"></span>
-      <span class="lbl">${a.label}</span>
-      <span class="pct num">${pct}%</span>
-      <span class="val num">${fmt(a.value)}</span>`;
-    legend.appendChild(row);
-    if (tieneDetalle) {
-      const panel = document.createElement('div');
-      panel.className = 'activo-detalle-panel';
-      panel.id = `activo-detalle-${i}`;
-      const maxDet = Math.max(...a.detalle.map(d => d.value), 1);
-      panel.innerHTML = a.detalle.map(d => {
-        const pctD = (d.value / maxDet * 100).toFixed(0);
-        const badgeMora = d.estado === 'En mora'
-          ? ' <span class="tag-pignorado" title="Sin cobro desde otoño 2025 -- ver detalle en \'Riesgos y Pendientes\' más abajo.">⚠️ en mora</span>'
-          : '';
-        // Sub-línea Comprometido/Distribuido/Años -- solo para posiciones de
-        // Coinversiones Real Estate (traen estos campos, ver
-        // regenerar_dashboard.py). Se omite "Comprometido" si coincide con
-        // el valor ya desembolsado (repetiría el mismo número dos veces).
-        const subInfo = (d.comprometido !== undefined)
-          ? `<div class="activo-detalle-sub">${
-              d.comprometido !== d.value ? `Comprometido ${fmt(d.comprometido)} · ` : ''
-            }${d.distribuido > 0 ? `Distribuido ${fmt(d.distribuido)} · ` : ''}${
-              d.anios_en_cartera != null ? `${d.anios_en_cartera} ${d.anios_en_cartera === 1 ? 'año' : 'años'}` : ''
-            }</div>`
-          : '';
-        return `<div class="activo-detalle-row">
-          <span class="activo-detalle-lbl">${d.label}${badgeMora}${subInfo}</span>
-          <span class="activo-detalle-track"><span class="activo-detalle-fill" style="width:${pctD}%; background:${a.color}"></span></span>
-          <span class="activo-detalle-amt num">${fmt(d.value)}</span>
-        </div>`;
-      }).join('');
-      legend.appendChild(panel);
-      row.addEventListener('click', () => {
-        const yaAbierto = panel.classList.contains('open');
-        legend.querySelectorAll('.activo-detalle-panel.open').forEach(p => p.classList.remove('open'));
-        legend.querySelectorAll('.legend-row.expanded').forEach(r => r.classList.remove('expanded'));
-        if (yaAbierto) return;
-        panel.classList.add('open');
-        row.classList.add('expanded');
-      });
-    }
-  });
+  // ---------- salud financiera ----------
+  $('health').innerHTML = (DATA.ratios || []).map(r => { const i = info(r.explicacion || ''); return `<div class="h-item"><div class="l">${r.label} ${i.icon}</div><div class="v num"><span class="dot ${r.status}" aria-hidden="true"></span>${r.display}</div><div class="n">${r.nota}</div>${i.panel}</div>`; }).join('');
+  // cashflow como sexto dato, explicado (no cuadra con la tasa de ahorro a propósito)
+  const cf = K.cashflow_mes, iCf = info(`Ingresos del mes (${fmt(K.ingresos_mes)}) − gastos del mes (${fmt(K.gastos_mes)}), del último mes completo (${K.mes_label}). Incluye la categoría «Ingresos financieros» (intereses y cobros de liquidaciones de inversiones). La «Tasa de ahorro» la excluye y usa la media de 2 meses, para no tomar un cobro puntual como ingreso de todos los meses. Por eso uno puede salir en verde y la otra en rojo a la vez.`);
+  $('health').insertAdjacentHTML('afterbegin', `<div class="h-item"><div class="l">Cashflow de ${K.mes_label} ${iCf.icon}</div><div class="v num" style="color:${cf >= 0 ? 'var(--accent-ink)' : 'var(--danger)'}">${sign(cf)}${fmt0(Math.abs(cf))}</div><div class="n">Incluye cobros de inversiones</div>${iCf.panel}</div>`);
+  $('health').style.gridTemplateColumns = window.matchMedia('(max-width: 900px)').matches ? '' : 'repeat(6, 1fr)';
 
-  // ---------- meses disponibles (a partir de los movimientos reales) ----------
-  const EXCLUIR_DEL_GASTO_REAL = ['Movimientos internos', 'M&H / Inversión', 'Ingresos financieros', 'Ingresos laborales', 'Coinversión Real Estate'];
-  function mesKeyDe(fecha) {
-    // fecha viene como dd.mm.yyyy
-    const partes = fecha.split('.');
-    if (partes.length !== 3) return null;
-    return `${partes[2]}-${partes[1]}`; // yyyy-mm, ordenable como texto
-  }
-  const NOMBRES_MES = ['', 'Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-  function nombreMes(key) {
-    const [y, m] = key.split('-');
-    return `${NOMBRES_MES[parseInt(m,10)]} ${y}`;
-  }
-  const movimientosAll = DATA.movimientos || [];
-  const mesesDisponibles = [...new Set(movimientosAll.map(m => mesKeyDe(m.fecha)).filter(Boolean))].sort().reverse();
-
-  function calcularGastosPorMes(mesKey) {
-    const enMes = mesKey === 'todos'
-      ? movimientosAll
-      : movimientosAll.filter(m => mesKeyDe(m.fecha) === mesKey);
-    // Bug real corregido (20.09.2026, detectado por el usuario: "en el
-    // dashboard no se sabe si es positivo o negativo... por eso en agosto
-    // se ha gastado 8000" cuando el gasto real neto era 6.893,83€). Antes
-    // se sumaba Math.abs(importe) de CADA movimiento, así que una devolución
-    // (ej. Renfe +126,50€, reembolso Amazon +133,63€) se sumaba como gasto
-    // adicional en vez de restar del gasto real -- una devolución de 126,50€
-    // inflaba el total en +253€ (se contaba dos veces: como si fuera gasto Y
-    // como si no compensara nada). Ahora se suma el NETO con signo invertido
-    // (los gastos ya son negativos en GASTOS, así que -importe los vuelve
-    // positivos y una devolución positiva resta correctamente del total).
-    const porCategoria = {};
-    enMes.forEach(m => {
-      if (EXCLUIR_DEL_GASTO_REAL.includes(m.categoria)) return;
-      porCategoria[m.categoria] = (porCategoria[m.categoria] || 0) - m.importe;
-    });
-    // Todas las categorías con movimiento se muestran, incluidas las que
-    // terminan en neto negativo (más devuelto que gastado, ej. Transporte en
-    // agosto: -105,44€ por la devolución de Renfe) -- ocultarlas silenciosamente
-    // parecía "faltan categorías" al usuario (dinero real, pero invisible en
-    // pantalla). Se marcan con reembolso:true para que el render las pinte
-    // en un estilo distinto (verde/positivo) en vez de como barra de gasto.
-    const gastos = Object.entries(porCategoria)
-      .map(([label, value]) => ({ label, value: round2(Math.abs(value)), reembolso: value < 0 }))
-      .sort((a,b) => b.value - a.value);
-    const total = round2(Object.values(porCategoria).reduce((s,v) => s+v, 0));
-    return { gastos, total };
-  }
-  function round2(n) { return Math.round(n * 100) / 100; }
-
-  function calcularSubcategorias(mesKey, categoria) {
-    const enMes = mesKey === 'todos'
-      ? movimientosAll
-      : movimientosAll.filter(m => mesKeyDe(m.fecha) === mesKey);
-    const porNivel2 = {};
-    const tieneNivel3 = {};
-    enMes.forEach(m => {
-      if (m.categoria !== categoria) return;
-      const label = m.nivel2 && m.nivel2.trim() ? m.nivel2 : '(sin subcategoría)';
-      // Mismo fix de neto-con-signo que calcularGastosPorMes (ver comentario
-      // ahí) -- una devolución dentro de esta categoría debe restar, no sumar.
-      porNivel2[label] = (porNivel2[label] || 0) - m.importe;
-      if (m.nivel3 && m.nivel3.trim()) tieneNivel3[label] = true;
-    });
-    return Object.entries(porNivel2)
-      .map(([label, value]) => ({ label, value: round2(Math.abs(value)), reembolso: value < 0, tieneNivel3: !!tieneNivel3[label] }))
-      .sort((a,b) => b.value - a.value);
-  }
-
-  function calcularNivel3(mesKey, categoria, nivel2) {
-    const enMes = mesKey === 'todos'
-      ? movimientosAll
-      : movimientosAll.filter(m => mesKeyDe(m.fecha) === mesKey);
-    const porNivel3 = {};
-    enMes.forEach(m => {
-      if (m.categoria !== categoria) return;
-      const n2 = m.nivel2 && m.nivel2.trim() ? m.nivel2 : '(sin subcategoría)';
-      if (n2 !== nivel2) return;
-      // Filas sin Nivel3 relleno se agrupan en "(sin detalle)" en vez de
-      // omitirse -- omitirlas haría que la suma del desglose no coincidiera
-      // con el total de la subcategoría, pareciendo que falta dinero (caso
-      // real: "Atención médica" con 635€ en una fila sin Nivel3 -- sin este
-      // bucket, el desglose solo suma 795,16€ de 1.430,16€ reales).
-      const n3 = m.nivel3 && m.nivel3.trim() ? m.nivel3 : '(sin detalle)';
-      // Mismo fix de neto-con-signo (ver calcularGastosPorMes).
-      porNivel3[n3] = (porNivel3[n3] || 0) - m.importe;
-    });
-    return Object.entries(porNivel3)
-      .map(([label, value]) => ({ label, value: round2(Math.abs(value)), reembolso: value < 0 }))
-      .sort((a,b) => b.value - a.value);
-  }
-
-  function renderBars(mesKey) {
-    const { gastos, total } = calcularGastosPorMes(mesKey);
-    const etiquetaPeriodo = mesKey === 'todos' ? 'todos los meses cargados' : `${nombreMes(mesKey)} · excl. movimientos internos`;
-    document.getElementById('gastosHeading').innerHTML = `Gasto por categoría <span class="count">${etiquetaPeriodo}</span>`;
-    document.getElementById('gastosTotal').textContent = fmt(total);
-    const bars = document.getElementById('bars');
-    if (gastos.length === 0) {
-      bars.innerHTML = `<div class="empty-note">Sin gastos registrados en este periodo.</div>`;
-      return;
-    }
-    const maxGasto = Math.max(...gastos.map(g=>g.value), 1);
-    bars.innerHTML = gastos.map((g, i) => {
-      const pct = (g.value / maxGasto * 100).toFixed(0);
-      const signo = g.reembolso ? '−' : '';
-      const claseImporte = g.reembolso ? 'amt num reembolso' : 'amt num';
-      const claseFill = g.reembolso ? 'bar-fill reembolso' : 'bar-fill';
-      const notaReembolso = g.reembolso ? ' <span class="tag-reembolso" title="Este mes se devolvió/reembolsó más de lo gastado en esta categoría">↩ neto devuelto</span>' : '';
-      return `<div class="bar-row" data-idx="${i}" data-cat="${g.label.replace(/"/g,'&quot;')}">
-        <span class="cat">${g.label}${notaReembolso}</span>
-        <span class="bar-track"><span class="${claseFill}" style="width:${pct}%"></span></span>
-        <span class="${claseImporte}">${signo}${fmt(g.value)}</span>
-      </div>
-      <div class="subcat-panel" id="subcat-${i}"></div>`;
+  // ---------- lo que tienes ----------
+  $('activosSub').textContent = `${fmt(totA)} en ${activos.length} grupos. Pulsa uno para ver qué hay dentro.`;
+  $('activos').innerHTML = activos.map((a, i) => {
+    const det = a.detalle || [];
+    const has = det.length > 0;
+    const head = `<span class="sw" style="background:${a.color}" aria-hidden="true"></span><span class="lbl">${has ? '<span class="chev">›</span>' : ''}${a.label}</span><span class="pct num">${(a.value/totA*100).toFixed(1).replace('.', ',')} %</span><span class="val num">${fmt(a.value)}</span>`;
+    if (!has) return `<div class="row">${head}</div>`;
+    const sub = det.map(d => {
+      const tags = (d.estado === 'En mora' ? '<span class="pill mora">en mora</span>' : '') + (/pignorad/i.test(d.label) ? '' : '');
+      const extra = (d.comprometido !== undefined)
+        ? `<div class="x">${d.comprometido !== d.value ? `Comprometido ${fmt(d.comprometido)} · ` : ''}${d.distribuido > 0 ? `Distribuido ${fmt(d.distribuido)} · ` : ''}${d.anios_en_cartera != null ? `${d.anios_en_cartera} ${d.anios_en_cartera === 1 ? 'año' : 'años'}` : ''}</div>` : '';
+      const lbl = d.label.replace(/\s*\(pignorado\)/i, '');
+      const lock = /\(pignorado\)/i.test(d.label) ? '<span class="pill lock">pignorado</span>' : '';
+      return `<div class="srow"><div>${lbl}${lock}${tags}${extra}</div><span class="amt num">${fmt(d.value)}</span></div>`;
     }).join('');
-
-    // Click en una fila de categoría expande/colapsa su desglose por
-    // subcategoría (Nivel2) -- se calcula bajo demanda, no de antemano,
-    // para no recorrer movimientosAll una vez por categoría en cada render.
-    bars.querySelectorAll('.bar-row').forEach(row => {
-      row.addEventListener('click', () => {
-        const idx = row.dataset.idx;
-        const categoria = row.dataset.cat;
-        const panel = document.getElementById(`subcat-${idx}`);
-        const yaAbierto = panel.classList.contains('open');
-        // Colapsar cualquier otro panel abierto (solo uno expandido a la vez,
-        // evita una lista larguísima si el usuario abre varias categorías).
-        bars.querySelectorAll('.subcat-panel.open').forEach(p => p.classList.remove('open'));
-        bars.querySelectorAll('.bar-row.expanded').forEach(r => r.classList.remove('expanded'));
-        if (yaAbierto) return;
-        const subs = calcularSubcategorias(mesKey, categoria);
-        if (subs.length === 0) {
-          panel.innerHTML = `<div class="empty-note">Sin desglose por subcategoría disponible.</div>`;
-        } else {
-          const maxSub = Math.max(...subs.map(s=>s.value), 1);
-          panel.innerHTML = subs.map((s, j) => {
-            const pct = (s.value / maxSub * 100).toFixed(0);
-            const claseN3 = s.tieneNivel3 ? ' has-n3' : '';
-            const signoS = s.reembolso ? '−' : '';
-            const claseFillS = s.reembolso ? 'subcat-fill reembolso' : 'subcat-fill';
-            const claseAmtS = s.reembolso ? 'subamt num reembolso' : 'subamt num';
-            const notaS = s.reembolso ? ' <span class="tag-reembolso">↩</span>' : '';
-            return `<div class="subcat-row${claseN3}" data-n2idx="${j}" data-n2="${s.label.replace(/"/g,'&quot;')}">
-              <span class="subcat">${s.label}${notaS}</span>
-              <span class="subcat-track"><span class="${claseFillS}" style="width:${pct}%"></span></span>
-              <span class="${claseAmtS}">${signoS}${fmt(s.value)}</span>
-            </div>
-            ${s.tieneNivel3 ? `<div class="nivel3-panel" id="subcat-${idx}-n3-${j}"></div>` : ''}`;
-          }).join('');
-          // Click en una fila de subcategoría (solo las que tienen Nivel3
-          // real este periodo) expande/colapsa su desglose de Nivel3 --
-          // mismo patrón lazy-on-click y "un panel abierto a la vez" que el
-          // nivel de arriba, anidado un nivel más.
-          panel.querySelectorAll('.subcat-row.has-n3').forEach(subRow => {
-            subRow.addEventListener('click', (ev) => {
-              ev.stopPropagation(); // no burbujear al bar-row padre
-              const n2idx = subRow.dataset.n2idx;
-              const nivel2 = subRow.dataset.n2;
-              const n3panel = document.getElementById(`subcat-${idx}-n3-${n2idx}`);
-              const n3YaAbierto = n3panel.classList.contains('open');
-              panel.querySelectorAll('.nivel3-panel.open').forEach(p => p.classList.remove('open'));
-              panel.querySelectorAll('.subcat-row.expanded').forEach(r => r.classList.remove('expanded'));
-              if (n3YaAbierto) return;
-              const n3s = calcularNivel3(mesKey, categoria, nivel2);
-              const maxN3 = Math.max(...n3s.map(x=>x.value), 1);
-              n3panel.innerHTML = n3s.map(x => {
-                const pct3 = (x.value / maxN3 * 100).toFixed(0);
-                return `<div class="nivel3-row">
-                  <span class="n3lbl">${x.label}</span>
-                  <span class="nivel3-track"><span class="nivel3-fill" style="width:${pct3}%"></span></span>
-                  <span class="n3amt num">${fmt(x.value)}</span>
-                </div>`;
-              }).join('');
-              n3panel.classList.add('open');
-              subRow.classList.add('expanded');
-            });
-          });
-        }
-        panel.classList.add('open');
-        row.classList.add('expanded');
-      });
-    });
-  }
-
-  const filtroMesResumen = document.getElementById('filtroMesResumen');
-  const mesActualKey = mesesDisponibles[0]; // mes más reciente con datos
-  mesesDisponibles.forEach(key => {
-    const opt = document.createElement('option');
-    opt.value = key; opt.textContent = nombreMes(key);
-    filtroMesResumen.appendChild(opt);
+    return `<button class="row" type="button" aria-expanded="false" data-sub="as-${i}">${head}</button><div class="sub-rows" id="as-${i}">${sub}</div>`;
+  }).join('');
+  $('activos').addEventListener('click', ev => {
+    const b = ev.target.closest('button.row'); if (!b) return;
+    const p = $(b.dataset.sub), open = !p.classList.contains('open');
+    p.classList.toggle('open', open); b.setAttribute('aria-expanded', open);
   });
-  const optTodos = document.createElement('option');
-  optTodos.value = 'todos'; optTodos.textContent = 'Todos los meses';
-  filtroMesResumen.appendChild(optTodos);
-  filtroMesResumen.value = mesActualKey;
-  filtroMesResumen.addEventListener('change', () => renderBars(filtroMesResumen.value));
-  renderBars(mesActualKey);
 
-  // ---------- real estate table ----------
-  const reTotal = DATA.real_estate.reduce((s,r)=>s+r.valor, 0);
-  document.getElementById('reHeading').innerHTML = `Cartera Real Estate (APH) — posiciones activas <span class="count">${DATA.real_estate.length} · ${fmt(reTotal)}</span>`;
-  const reBody = document.getElementById('reBody');
-  if (DATA.real_estate.length === 0) {
-    reBody.innerHTML = `<tr><td colspan="4" class="empty-note">Sin posiciones activas registradas.</td></tr>`;
-  } else {
-    DATA.real_estate.forEach(r => {
-      const tagClass = r.estado.toLowerCase().includes('mora') ? 'tag mora' : 'tag';
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td data-label="Posición">${r.posicion}</td>
-        <td data-label="Gestor" class="muted">${r.gestor}</td>
-        <td data-label="Valor" class="num num">${fmt(r.valor)}</td>
-        <td data-label="Estado"><span class="${tagClass}">${r.estado}</span></td>`;
-      reBody.appendChild(tr);
+  // ---------- lo que debes ----------
+  const pas = DATA.pasivos || [];
+  $('pasivosSub').textContent = `${fmt(K.total_pasivos)} en ${pas.length} préstamos · cuota total ${fmt(K.cuota_mensual_total)} al mes`;
+  $('pasivos').innerHTML = `<thead><tr><th>Préstamo</th><th class="r">Saldo</th><th class="r">Cuota/mes</th><th class="r">Interés</th></tr></thead><tbody>` +
+    pas.map(p => `<tr><td class="first">${p.entidad}${p.pignorado ? '<span class="pill lock" title="Garantía: cartera de valores MyInvestor. Si el mercado cae, pueden ejecutarla sin juicio previo.">pignorado</span>' : ''}<span class="m">${p.nota || ''}</span></td><td class="r num" data-l="Saldo">${fmt(p.saldo)}</td><td class="r num" data-l="Cuota/mes">${p.cuota_mensual ? fmt(p.cuota_mensual) : '—'}</td><td class="r num" data-l="Interés">${p.interes}</td></tr>`).join('') +
+    `</tbody><tfoot><tr><td class="first">Total</td><td class="r num" data-l="Saldo">${fmt(K.total_pasivos)}</td><td class="r num" data-l="Cuota/mes">${fmt(K.cuota_mensual_total)}</td><td></td></tr></tfoot>`;
+  if (DATA.deuda_pignorada != null)
+    $('pasivosNota').innerHTML = `<b class="num">${fmt(DATA.deuda_pignorada)}</b> están pignorados: tienen como garantía la cartera de valores y pueden ejecutarse automáticamente si el mercado cae. Los otros <b class="num">${fmt(DATA.deuda_personal_con_recurso)}</b> son deuda personal normal.`;
+
+  // ---------- evolución: gráfico ----------
+  (function chart(){
+    const pts = evo.map(e => ({ f: e.f.slice(0,5), v: e.v }));
+    pts.push({ f: 'hoy', v: K.patrimonio_neto, hoy: true });
+    const svg = $('chart');
+    if (pts.length < 2) { svg.style.display = 'none'; return; }
+    const W = 560, H = 210, L = 8, R = 8, T = 28, B = 44;
+    const vs = pts.map(p => p.v), mn = Math.min(...vs), mx = Math.max(...vs), rg = (mx - mn) || 1;
+    const X = i => L + i * (W - L - R) / (pts.length - 1);
+    const Y = v => T + (1 - (v - mn) / rg) * (H - T - B);
+    const css = getComputedStyle(document.documentElement);
+    const ac = css.getPropertyValue('--accent').trim(), ln = css.getPropertyValue('--line').trim();
+    let s = `<line x1="${L}" x2="${W-R}" y1="${H-B}" y2="${H-B}" stroke="${ln}"/>`;
+    const solid = pts.slice(0, -1).map((p,i) => `${X(i)},${Y(p.v)}`).join(' ');
+    s += `<polyline points="${solid}" fill="none" stroke="${ac}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+    const n = pts.length - 1;
+    s += `<line x1="${X(n-1)}" y1="${Y(pts[n-1].v)}" x2="${X(n)}" y2="${Y(pts[n].v)}" stroke="${ac}" stroke-width="2.5" stroke-dasharray="4 5" stroke-linecap="round"/>`;
+    pts.forEach((p,i) => {
+      const x = X(i), y = Y(p.v), anchor = i === 0 ? 'start' : i === n ? 'end' : 'middle';
+      s += `<circle cx="${x}" cy="${y}" r="${p.hoy ? 5 : 4}" fill="${p.hoy ? 'var(--surface)' : ac}" stroke="${ac}" stroke-width="2"/>`;
+      const low = i > 0 && i < n && p.v < pts[i-1].v && p.v <= pts[i+1].v;
+      s += `<text class="vtxt" x="${x}" y="${low ? y + 20 : y - 10}" text-anchor="${anchor}">${(p.v/1000).toFixed(1).replace('.', ',')}k</text>`;
+      s += `<text x="${x}" y="${H - 8}" text-anchor="${anchor}">${p.f}</text>`;
     });
-  }
+    svg.innerHTML = s;
+  })();
+  $('evoList').innerHTML = evo.map((e,i) => {
+    const d = i ? e.v - evo[i-1].v : null;
+    return `<div class="srow"><span>${e.f}</span><span><span class="num">${fmt(e.v)}</span>${d === null ? '' : ` <span class="num ${d >= 0 ? 'pos' : 'neg'}">${sign(d)}${fmt(Math.abs(d))}</span>`}</span></div>`;
+  }).join('') + `<div class="srow"><span><b>Hoy</b> (en vivo)</span><span class="num"><b>${fmt(K.patrimonio_neto)}</b></span></div>`;
 
   // ---------- riesgos ----------
-  const flags = document.getElementById('flags');
-  if (DATA.riesgos.length === 0) {
-    flags.innerHTML = `<div class="empty-note">Sin riesgos ni pendientes registrados.</div>`;
-  } else {
-    DATA.riesgos.forEach(r => {
-      const div = document.createElement('div');
-      div.className = 'flag';
-      div.innerHTML = `<span class="badge ${r.badge}">${r.badge_text}</span>
-        <div class="desc"><div class="t">${r.titulo}</div><div class="d">${r.desc}</div></div>
-        <div class="amt num">${fmt(r.importe)}</div>`;
-      flags.appendChild(div);
-    });
-  }
-
-  // ---------- pasivos ----------
-  const debBody = document.getElementById('debBody');
-  DATA.pasivos.forEach(p => {
-    const tr = document.createElement('tr');
-    const cuotaTxt = p.cuota_mensual ? fmt(p.cuota_mensual) : '—';
-    // Deuda pignorada (colateral: cartera de valores) vs con recurso general
-    // -- riesgo distinto: la pignorada puede ejecutarse automáticamente
-    // (margin call) si cae el valor de la cartera, sin proceso judicial.
-    const badgePignorado = p.pignorado
-      ? ' <span class="tag-pignorado" title="Colateral: cartera de valores MyInvestor. Riesgo de ejecución automática (margin call) si el mercado cae, sin proceso judicial previo.">⚠️ pignorado</span>'
-      : '';
-    tr.innerHTML = `<td data-label="Entidad">${p.entidad}${badgePignorado}<div class="muted">${p.nota}</div></td>
-      <td data-label="Saldo" class="num num">${fmt(p.saldo)}</td>
-      <td data-label="Cuota/mes" class="num ${p.cuota_mensual ? 'num' : 'muted'}">${cuotaTxt}</td>
-      <td data-label="Interés" class="num ${p.interes === '—' ? 'muted' : 'num'}">${p.interes}</td>`;
-    debBody.appendChild(tr);
-  });
-  document.getElementById('debFoot').innerHTML = `<tr><td data-label="Total">Total Pasivos</td><td data-label="Saldo" class="num num">${fmt(DATA.kpi.total_pasivos)}</td><td data-label="Cuota/mes" class="num num">${fmt(DATA.kpi.cuota_mensual_total)}</td><td data-label=""></td></tr>`;
-  const debNotaEl = document.getElementById('debNota');
-  if (debNotaEl) {
-    debNotaEl.innerHTML = `⚠️ De los ${fmt(DATA.kpi.total_pasivos)} de deuda total, <strong>${fmt(DATA.deuda_pignorada)}</strong> están pignorados con colateral en cartera de valores (riesgo de ejecución automática/margin call si el mercado cae) y <strong>${fmt(DATA.deuda_personal_con_recurso)}</strong> son deuda personal con recurso general (impago sigue el cauce normal, sin ejecución automática).`;
-  }
-
-  // ---------- evolucion (sparkline + table) ----------
-  const evol = DATA.evolucion;
-  const evolSvg = document.getElementById('evolSvg');
-  const evolTable = document.getElementById('evolTable');
-  const evolNote = document.getElementById('evolNote');
-
-  if (evol.length < 2) {
-    evolSvg.style.display = 'none';
-    evolNote.textContent = 'Primer registro del histórico. A partir del próximo mes se mostrará la línea de tendencia del patrimonio neto.';
-  } else {
-    const values = evol.map(e => e.patrimonio_neto);
-    const min = Math.min(...values), max = Math.max(...values);
-    const range = (max - min) || 1;
-    const W = 400, H = 60, PAD = 6;
-    const pts = values.map((v,i) => {
-      const x = PAD + (i/(values.length-1)) * (W - PAD*2);
-      const y = H - PAD - ((v - min)/range) * (H - PAD*2);
-      return `${x},${y}`;
-    });
-    evolSvg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#2f7d5a';
-    evolSvg.innerHTML = `<polyline points="${pts.join(' ')}" fill="none" stroke="${accentColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>` +
-      pts.map(p => `<circle cx="${p.split(',')[0]}" cy="${p.split(',')[1]}" r="3" fill="${accentColor}"/>`).join('');
-    evolNote.textContent = '';
-  }
-
-  let rows = '';
-  evol.forEach((e, i) => {
-    let deltaTxt = '—', deltaClass = '';
-    if (i > 0) {
-      const delta = e.patrimonio_neto - evol[i-1].patrimonio_neto;
-      deltaClass = delta >= 0 ? 'delta-pos' : 'delta-neg';
-      deltaTxt = (delta >= 0 ? '+' : '') + fmt(delta);
-    }
-    rows += `<tr><td>${e.mes}</td><td class="num">${fmt(e.patrimonio_neto)}</td><td class="num ${deltaClass}">${deltaTxt}</td></tr>`;
-  });
-  evolTable.innerHTML = rows;
+  const ries = DATA.riesgos || [];
+  $('riesgosSub').textContent = ries.length ? `${ries.length} abiertos · ${fmt(ries.reduce((s,r) => s + (r.importe || 0), 0))} en juego` : 'Sin riesgos registrados.';
+  $('riesgos').innerHTML = ries.map(r => `<div class="risk"><div class="head"><div class="t">${r.titulo} <span class="pill ${r.badge === 'mora' ? 'mora' : 'pend'}">${r.badge_text}</span></div><div class="num">${fmt(r.importe)}</div></div><div class="d">${r.desc}</div></div>`).join('');
 
   // ---------- inversiones ----------
-  const inv = DATA.inversiones;
-  if (inv) {
-    // ---------- escalera de liquidez ----------
-    const liq = inv.liquidez;
-    const liqPositivo = liq.libre_disposicion >= 0;
-    const infoLiq = infoIcon(`Liquidez inmediata = Cuentas bancarias. Compromisos pendientes = capital ya asumido en operaciones activas (ej. Torredembarra) pero aún no desembolsado -- es dinero que vas a tener que aportar sí o sí, aunque todavía no haya salido de tu cuenta. Libre disposición neta = Liquidez inmediata − Compromisos pendientes: es lo que te quedaría disponible si tuvieras que cubrir todo lo comprometido hoy mismo.`);
-    document.getElementById('liqPanel').innerHTML = `
-      <h2>Liquidez y disponibilidad ${infoLiq.icon}</h2>
-      ${infoLiq.panel}
-      <div class="liq-row">
-        <div class="liq-item">
-          <div class="liq-label">Liquidez inmediata</div>
-          <div class="liq-value num">${fmt(liq.liquidez_inmediata)}</div>
-        </div>
-        <div class="liq-op">−</div>
-        <div class="liq-item">
-          <div class="liq-label">Compromisos pendientes</div>
-          <div class="liq-value num" style="color:var(--danger)">${fmt(liq.compromisos_pendientes)}</div>
-        </div>
-        <div class="liq-op">=</div>
-        <div class="liq-item liq-total">
-          <div class="liq-label">Libre disposición neta</div>
-          <div class="liq-value num" style="color:${liqPositivo ? 'var(--accent-ink)' : 'var(--danger)'}">${fmt(liq.libre_disposicion)}</div>
-        </div>
-      </div>
-      <div class="liq-note">${liqPositivo ? 'Cubre los capital calls ya comprometidos (ej. Torredembarra) con margen.' : '⚠️ Si se pidiera hoy el resto de lo comprometido (ej. Torredembarra), la liquidez bancaria no llegaría a cubrirlo.'}</div>
-      <div class="liq-sep"></div>
-      <div class="liq-row liq-row-4">
-        <div class="liq-item">
-          <div class="liq-label">Inversiones líquidas</div>
-          <div class="liq-value num">${fmt(liq.activos_liquidos_invertibles)}</div>
-          <div class="liq-detalle">
-            ${liq.detalle_liquidas.map(d => `<div class="liq-detalle-row"><span class="liq-detalle-tag">${d.pignorado ? '🔒' : '⚪'}</span><span class="liq-detalle-nombre">${d.nombre}</span><span class="liq-detalle-valor num">${fmt(d.valor)}</span></div>`).join('')}
-          </div>
-        </div>
-        <div class="liq-item">
-          <div class="liq-label">Plan de pensiones</div>
-          <div class="liq-value num">${fmt(liq.plan_pensiones)}</div>
-          <div class="liq-sub">Iliquidez estructural — rescate restringido por ley, no vendible en días</div>
-        </div>
-        <div class="liq-item">
-          <div class="liq-label">Capital ilíquido ya desembolsado</div>
-          <div class="liq-value num">${fmt(liq.capital_iliquido_comprometido)}</div>
-          <div class="liq-detalle">
-            ${liq.detalle_iliquido.map(d => `<div class="liq-detalle-row"><span class="liq-detalle-nombre">${d.nombre}</span><span class="liq-detalle-valor num">${fmt(d.valor)}</span></div>`).join('')}
-          </div>
-        </div>
-        <div class="liq-item">
-          <div class="liq-label">En mora / en riesgo</div>
-          <div class="liq-value num" style="color:var(--risk-ink)">${fmt(liq.en_mora)}</div>
-          <div class="liq-sub">UrbanFlip — sin certeza de cobro</div>
-        </div>
-      </div>`;
+  if (INV.kpis) {
+    const k = INV.kpis, L = INV.liquidez;
+    const iTot = info(`Cartera financiera (${fmt(k.financiero)}) + coinversiones Mayela, capital vivo (${fmt(k.coinversiones_desembolsado)}) + en mora (${fmt(k.en_mora)}) + M&amp;H (${fmt(k.mh)}) + préstamos privados (${fmt(k.prestamos_privados)}). Las coinversiones van a coste y con el capital ya devuelto descontado (mismas cifras que BALANCE y Resumen).`);
+    const iCon = info(`Parte del capital COMPROMETIDO (no del desembolsado) en coinversiones inmobiliarias que gestiona Mayela, sobre todo lo comprometido (Mayela + UrbanFlip). Cuanto más alto, más te afectaría un problema de ese gestor: es riesgo de concentración, no de rentabilidad.`);
+    $('invBig').innerHTML =
+      `<div class="card"><div class="k">Total cartera de inversiones ${iTot.icon}</div><div class="n num">${fmt(k.total)}</div><div class="s">Bolsa + inmobiliario (a coste) + M&amp;H + préstamo privado</div>${iTot.panel}</div>` +
+      `<div class="card"><div class="k">Ganancia ya cobrada <span class="pill pend">bruta, antes de IRPF</span></div><div class="n num" style="color:var(--accent-ink)">${fmt(k.ganancia_realizada)}</div><div class="s">De las posiciones liquidadas (abajo)</div></div>` +
+      `<div class="card"><div class="k">Concentración en Mayela ${iCon.icon}</div><div class="n num">${pct1(k.concentracion_mayela)}</div><div class="s">Del capital comprometido en inmobiliario</div>${iCon.panel}</div>`;
 
-    const invKpiRow = document.getElementById('invKpiRow');
-    const infoTotalCartera = infoIcon(`Total cartera de inversiones = Cartera financiera (${fmt(inv.kpis.financiero)}) + Coinversiones Mayela desembolsado (${fmt(inv.kpis.coinversiones_desembolsado)}) + En mora (${fmt(inv.kpis.en_mora)}) + Participación M&amp;H (${fmt(inv.kpis.mh)}) + Préstamos privados. Las coinversiones inmobiliarias se valoran a coste (no a mercado), por decisión deliberada -- criterio conservador, sin depender de tasaciones no verificables.`);
-    const infoConcentracion = infoIcon(`% del capital COMPROMETIDO (no del desembolsado) en operaciones gestionadas por Mayela, sobre el total comprometido en coinversiones inmobiliarias (Mayela + UrbanFlip). Un porcentaje alto significa que si Mayela como gestor tuviera un problema, afectaría a la mayoría de tu cartera inmobiliaria -- riesgo de concentración, no de rentabilidad.`);
-    invKpiRow.innerHTML = `
-      <div class="kpi primary">
-        <div class="label">Total cartera de inversiones ${infoTotalCartera.icon}</div>
-        <div class="value num">${fmt(inv.kpis.total)}</div>
-        <div class="delta">Financiero + inmobiliario (a coste) + M&amp;H + préstamos privados</div>
-        ${infoTotalCartera.panel}
-      </div>
-      <div class="kpi">
-        <div class="label">Ganancia realizada acumulada <span class="tag-reembolso" title="Distribuido - Desembolsado, sin descontar IRPF. Existe una estimación antigua de ~50,2k€ neta, pero no está recalculada tras corregir Salt -- no se usa como cifra fiable.">bruto, antes de IRPF</span></div>
-        <div class="value num" style="color:var(--accent-ink)">${fmt(inv.kpis.ganancia_realizada)}</div>
-        <div class="delta">Concentración Mayela: ${(inv.kpis.concentracion_mayela*100).toFixed(1).replace('.', ',')}% del comprometido ${infoConcentracion.icon}</div>
-        ${infoConcentracion.panel}
-      </div>`;
-    bindInfoIcons(document.getElementById('liqPanel'));
-    bindInfoIcons(invKpiRow);
+    const libre = L.libre_disposicion;
+    $('liqEq').innerHTML =
+      `<div><div class="k">En el banco</div><div class="n num">${fmt(L.liquidez_inmediata)}</div></div><div class="op" aria-hidden="true">−</div>` +
+      `<div><div class="k">Ya comprometido</div><div class="n num" style="color:var(--danger)">${fmt(L.compromisos_pendientes)}</div></div><div class="op" aria-hidden="true">=</div>` +
+      `<div><div class="k">Libre de verdad</div><div class="n num" style="color:${libre >= 0 ? 'var(--accent-ink)' : 'var(--danger)'}">${fmt(libre)}</div></div>`;
+    $('liqNota').textContent = libre >= 0 ? 'Cubre lo ya comprometido (p. ej. Torredembarra) con margen.' : 'Si te pidieran hoy todo lo comprometido, el dinero del banco no llegaría.';
+    $('liqSplit').innerHTML =
+      `<div><div class="k">Inversiones que se pueden vender</div><div class="n num">${fmt(L.activos_liquidos_invertibles)}</div>${(L.detalle_liquidas||[]).map(d => `<div class="srow"><span>${d.nombre}${d.pignorado ? '<span class="pill lock">pignorado</span>' : ''}</span><span class="amt num">${fmt(d.valor)}</span></div>`).join('')}</div>` +
+      `<div><div class="k">Plan de pensiones</div><div class="n num">${fmt(L.plan_pensiones)}</div><div class="srow"><span>Rescate limitado por ley: no se vende en días.</span></div></div>` +
+      `<div><div class="k">Invertido y sin liquidez</div><div class="n num">${fmt(L.capital_iliquido_comprometido)}</div>${(L.detalle_iliquido||[]).map(d => `<div class="srow"><span>${d.nombre}</span><span class="amt num">${fmt(d.valor)}</span></div>`).join('')}</div>` +
+      `<div><div class="k">En mora</div><div class="n num" style="color:var(--risk-ink)">${fmt(L.en_mora)}</div><div class="srow"><span>UrbanFlip: sin seguridad de cobro.</span></div></div>`;
 
-    const invRealizadasBody = document.getElementById('invRealizadasBody');
-    const realizadas = inv.coinversiones_realizadas || [];
-    if (realizadas.length === 0) {
-      invRealizadasBody.innerHTML = `<tr><td colspan="9" class="empty-note">Sin posiciones liquidadas registradas.</td></tr>`;
-    } else {
-      invRealizadasBody.innerHTML = realizadas.map(c => {
-        const rentTxt = c.rentabilidad != null ? (c.rentabilidad*100).toFixed(1).replace('.',',') + '%' : 'N/D';
-        const ganClase = c.ganancia >= 0 ? 'pos' : 'neg';
-        return `<tr><td data-label="Inversión">${c.inversion}</td><td data-label="Gestor" class="muted">${c.gestor}</td><td data-label="Participación" class="muted">${c.participacion}</td><td data-label="Año" class="num muted">${c.anio ?? '—'}</td><td data-label="Desembolsado" class="num">${fmt(c.desembolsado)}</td><td data-label="Distribuido" class="num">${fmt(c.distribuido)}</td><td data-label="Ganancia/Pérdida" class="num ${ganClase}">${fmt(c.ganancia)}</td><td data-label="% Rentabilidad" class="num ${ganClase}">${rentTxt}</td><td data-label="Años mantenida" class="num muted">${c.anios_mantenida ?? '—'}</td></tr>`;
-      }).join('');
-    }
-    const totalDesemb = realizadas.reduce((s,c)=>s+c.desembolsado,0);
-    const totalDistrib = realizadas.reduce((s,c)=>s+c.distribuido,0);
-    const totalGanancia = realizadas.reduce((s,c)=>s+c.ganancia,0);
-    const totalRent = totalDesemb ? (totalGanancia/totalDesemb*100).toFixed(1).replace('.',',') + '%' : 'N/D';
-    document.getElementById('invRealizadasFoot').innerHTML =
-      `<tr class="total-row"><td>TOTAL (${realizadas.length})</td><td></td><td></td><td></td><td class="num">${fmt(totalDesemb)}</td><td class="num">${fmt(totalDistrib)}</td><td class="num pos">${fmt(totalGanancia)}</td><td class="num pos">${totalRent}</td><td></td></tr>`;
-    const infoRealizadas = infoIcon(`% Rentabilidad = (Distribuido − Desembolsado) ÷ Desembolsado, por posición. Es rentabilidad simple total del periodo, NO anualizada -- una posición mantenida 4 años al 24,8% no rindió lo mismo por año que una mantenida 1 año al mismo 24,8%. "Años mantenida" está al lado para poder comparar mentalmente. Cifras brutas, antes de IRPF.`);
-    document.getElementById('invRealizadasHeading').innerHTML =
-      `Posiciones liquidadas (ganancia ya materializada) ${infoRealizadas.icon} <span class="count">${realizadas.length} · ${fmt(totalGanancia)} ganancia total</span>${infoRealizadas.panel}`;
-    bindInfoIcons(document.getElementById('invRealizadasHeading').parentElement);
+    const coi = [...(INV.coinversiones_activas||[]).map(c => ({...c, mora:false})), ...(INV.coinversiones_riesgo||[]).map(c => ({...c, mora:true}))];
+    const vivo = c => c.capital_vivo ?? c.desembolsado;
+    $('coiSub').textContent = `${coi.length} posiciones · ${fmt(coi.reduce((s,c) => s + vivo(c), 0))} de capital vivo`;
+    $('coi').innerHTML = `<thead><tr><th>Posición</th><th class="r">Capital vivo</th><th class="r">Comprometido</th><th class="r">Años</th><th>Estado</th></tr></thead><tbody>` +
+      coi.map(c => `<tr><td class="first">${c.inversion}<span class="m">${c.gestor} · ${c.participacion}</span></td><td class="r num" data-l="Capital vivo">${fmt(vivo(c))}</td><td class="r num" data-l="Comprometido">${fmt(c.comprometido)}</td><td class="r num" data-l="Años">${c.anios_en_cartera ?? '—'}</td><td data-l="Estado"><span class="pill ${c.mora ? 'mora' : 'ok'}">${c.mora ? 'En mora' : 'Activa'}</span></td></tr>`).join('') + '</tbody>';
 
-    document.getElementById('invMhBody').innerHTML = `
-      <div class="flag">
-        <span class="badge pend">Socio 50%</span>
-        <div class="desc"><div class="t">${inv.mh_detalle}</div><div class="d">${inv.mh_nota}</div></div>
-        <div class="amt">${fmt(inv.kpis.mh)}</div>
-      </div>
-      <div class="liq-note">${inv.mh_estado_actualizacion === 'POSIBLE DESACTUALIZADO' ? '⚠️ Estado del libro M&amp;H: <strong>posible desactualizado</strong> -- puede haber aportaciones/retiros de socio más recientes no reflejados aquí todavía.' : `Estado del libro M&amp;H: ${inv.mh_estado_actualizacion}`}</div>`;
+    const des = INV.mh_estado_actualizacion && /DESACTUAL/i.test(INV.mh_estado_actualizacion);
+    $('mh').innerHTML = `<div class="risk"><div class="head"><div class="t">${INV.mh_detalle || ''} <span class="pill pend">socio 50 %</span></div><div class="num">${fmt(k.mh)}</div></div><div class="d">${INV.mh_nota || ''}</div></div>` +
+      `<p class="note">${des ? 'Estado del libro M&amp;H: <b>posiblemente desactualizado</b>. Puede haber aportaciones o retiros de socio recientes sin reflejar.' : `Estado del libro M&amp;H: ${INV.mh_estado_actualizacion || '—'}`}</p>`;
+
+    const rea = INV.coinversiones_realizadas || [];
+    const tD = rea.reduce((s,c) => s + c.desembolsado, 0), tR = rea.reduce((s,c) => s + c.distribuido, 0), tG = rea.reduce((s,c) => s + c.ganancia, 0);
+    $('reaSub').textContent = `${rea.length} posiciones · ${fmt(tG)} de ganancia bruta`;
+    $('rea').innerHTML = `<thead><tr><th>Inversión</th><th class="r">Puesto</th><th class="r">Recibido</th><th class="r">Ganancia</th><th class="r">Rentab.</th><th class="r">Años</th></tr></thead><tbody>` +
+      rea.map(c => `<tr><td class="first">${c.inversion}<span class="m">${c.gestor} · ${c.participacion} · ${c.anio ?? '—'}</span></td><td class="r num" data-l="Puesto">${fmt(c.desembolsado)}</td><td class="r num" data-l="Recibido">${fmt(c.distribuido)}</td><td class="r num ${c.ganancia >= 0 ? 'pos' : 'neg'}" data-l="Ganancia">${fmt(c.ganancia)}</td><td class="r num ${c.ganancia >= 0 ? 'pos' : 'neg'}" data-l="Rentab.">${c.rentabilidad != null ? pct1(c.rentabilidad) : '—'}</td><td class="r num" data-l="Años">${c.anios_mantenida ?? '—'}</td></tr>`).join('') +
+      `</tbody><tfoot><tr><td class="first">Total</td><td class="r num" data-l="Puesto">${fmt(tD)}</td><td class="r num" data-l="Recibido">${fmt(tR)}</td><td class="r num pos" data-l="Ganancia">${fmt(tG)}</td><td class="r num pos" data-l="Rentab.">${tD ? pct1(tG/tD) : '—'}</td><td></td></tr></tfoot>`;
   }
 
-  // ---------- tabs ----------
-  const tabBtns = document.querySelectorAll('.tab-btn');
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      tabBtns.forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-    });
-  });
-
-  // ---------- detalle de gastos ----------
-  const movimientos = movimientosAll;
-  document.getElementById('detalleHeading').textContent = `${movimientos.length} movimientos`;
-
-  const categoriasUnicas = [...new Set(movimientos.map(m => m.categoria))].sort();
-  const filtroCategoria = document.getElementById('filtroCategoria');
-  categoriasUnicas.forEach(cat => {
-    const opt = document.createElement('option');
-    opt.value = cat; opt.textContent = cat;
-    filtroCategoria.appendChild(opt);
-  });
-
-  const filtroMesDetalle = document.getElementById('filtroMesDetalle');
-  const optTodosDetalle = document.createElement('option');
-  optTodosDetalle.value = ''; optTodosDetalle.textContent = 'Todos los meses';
-  filtroMesDetalle.appendChild(optTodosDetalle);
-  mesesDisponibles.forEach(key => {
-    const opt = document.createElement('option');
-    opt.value = key; opt.textContent = nombreMes(key);
-    filtroMesDetalle.appendChild(opt);
-  });
-  // por defecto, ver todos los meses en el detalle (a diferencia del resumen,
-  // que arranca en el mes más reciente) -- el detalle es para bucear libremente
-
-  const detalleBody = document.getElementById('detalleBody');
-  const detalleCount = document.getElementById('detalleCount');
-
-  function renderDetalle() {
-    const mesFiltro = filtroMesDetalle.value;
-    const catFiltro = filtroCategoria.value;
-    const textoFiltro = document.getElementById('filtroTexto').value.trim().toLowerCase();
-
-    const filtrados = movimientos.filter(m => {
-      if (mesFiltro && mesKeyDe(m.fecha) !== mesFiltro) return false;
-      if (catFiltro && m.categoria !== catFiltro) return false;
-      if (textoFiltro) {
-        const haystack = `${m.concepto} ${m.proveedor} ${m.nivel2} ${m.nivel3}`.toLowerCase();
-        if (!haystack.includes(textoFiltro)) return false;
+  // ---------- gastos (misma lógica de neto con signo que la versión anterior) ----------
+  const EXCL = ['Movimientos internos', 'M&H / Inversión', 'Ingresos financieros', 'Ingresos laborales', 'Coinversión Real Estate'];
+  const MES = ['', 'enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const mesKey = f => { const p = String(f).split('.'); return p.length === 3 ? `${p[2]}-${p[1]}` : null; };
+  const mesNom = k => { const [y,m] = k.split('-'); const n = MES[parseInt(m,10)]; return n.charAt(0).toUpperCase() + n.slice(1) + ' ' + y; };
+  const MOV = DATA.movimientos || [];
+  const meses = [...new Set(MOV.map(m => mesKey(m.fecha)).filter(Boolean))].sort().reverse();
+  const r2 = n => Math.round(n * 100) / 100;
+  const enMes = k => k === 'todos' ? MOV : MOV.filter(m => mesKey(m.fecha) === k);
+  function agrupa(lista, clave){ const o = {}; lista.forEach(m => { const c = clave(m); o[c] = (o[c] || 0) - m.importe; }); return Object.entries(o).map(([label, v]) => ({ label, value: r2(Math.abs(v)), back: v < 0 })).sort((a,b) => b.value - a.value); }
+  const barHTML = (g, max, cls, extra) => `<div class="bar ${cls}" ${extra || ''}><span class="c">${cls === '' || cls.includes('click') ? '<span class="chev">›</span>' : ''}${g.label}${g.back ? ' <span class="pill ok">devuelto</span>' : ''}</span><span class="tr"><span class="${g.back ? 'back' : ''}" style="width:${(g.value/max*100).toFixed(0)}%"></span></span><span class="a num">${g.back ? '−' : ''}${fmt(g.value)}</span></div>`;
+  function renderBars(k){
+    const lista = enMes(k).filter(m => !EXCL.includes(m.categoria));
+    const gs = agrupa(lista, m => m.categoria);
+    const total = r2(lista.reduce((s,m) => s - m.importe, 0));
+    $('barsSub').textContent = k === 'todos' ? 'Todos los meses cargados' : mesNom(k);
+    $('barsTotal').textContent = fmt(total);
+    if (!gs.length) { $('bars').innerHTML = '<p class="note">Sin gastos en este periodo.</p>'; return; }
+    const max = Math.max(...gs.map(g => g.value), 1);
+    $('bars').innerHTML = gs.map((g,i) => `<button type="button" class="bar" aria-expanded="false" data-cat="${encodeURIComponent(g.label)}" data-i="${i}"><span class="c"><span class="chev">›</span>${g.label}${g.back ? ' <span class="pill ok">devuelto</span>' : ''}</span><span class="tr"><span class="${g.back ? 'back' : ''}" style="width:${(g.value/max*100).toFixed(0)}%"></span></span><span class="a num">${g.back ? '−' : ''}${fmt(g.value)}</span></button><div class="sub-rows" id="b2-${i}"></div>`).join('');
+  }
+  $('bars').addEventListener('click', ev => {
+    const k = $('mesBars').value;
+    const b3 = ev.target.closest('.bar.l2.click');
+    if (b3) {
+      const p = b3.nextElementSibling, open = !p.classList.contains('open');
+      if (open) {
+        const cat = decodeURIComponent(b3.dataset.cat), n2 = decodeURIComponent(b3.dataset.n2);
+        const gs = agrupa(enMes(k).filter(m => m.categoria === cat && ((m.nivel2 && m.nivel2.trim()) || '(sin subcategoría)') === n2), m => (m.nivel3 && m.nivel3.trim()) || '(sin detalle)');
+        const max = Math.max(...gs.map(g => g.value), 1);
+        p.innerHTML = gs.map(g => barHTML(g, max, 'l3')).join('');
       }
-      return true;
-    });
-
-    if (filtrados.length === 0) {
-      detalleBody.innerHTML = `<tr><td colspan="6" class="empty-note">Sin movimientos que coincidan con el filtro.</td></tr>`;
-    } else {
-      detalleBody.innerHTML = filtrados.map(m => {
-        const esInterno = m.categoria === 'Movimientos internos';
-        const importeClass = m.importe > 0 ? 'pos' : 'neg';
-        const importeTxt = (m.importe >= 0 ? '+' : '') + fmt(m.importe);
-        return `<tr class="${esInterno ? 'interno' : ''}">
-          <td data-label="Fecha">${m.fecha}</td>
-          <td data-label="Concepto">${m.concepto}${m.nota ? `<div class="muted">${m.nota}</div>` : ''}</td>
-          <td data-label="Categoría">${m.categoria}${m.nivel2 ? ` · ${m.nivel2}` : ''}</td>
-          <td data-label="Proveedor" class="muted">${m.proveedor || '—'}</td>
-          <td data-label="Importe" class="num ${importeClass}">${importeTxt}</td>
-          <td data-label="Cuenta" class="muted">${m.cuenta || '—'}</td>
-        </tr>`;
-      }).join('');
+      p.classList.toggle('open', open); b3.setAttribute('aria-expanded', open); return;
     }
+    const b = ev.target.closest('button.bar:not(.l2)'); if (!b) return;
+    const p = $('b2-' + b.dataset.i), open = !p.classList.contains('open');
+    $('bars').querySelectorAll(':scope > .sub-rows.open').forEach(x => x.classList.remove('open'));
+    $('bars').querySelectorAll(':scope > button.bar').forEach(x => x.setAttribute('aria-expanded', 'false'));
+    if (!open) return;
+    const cat = decodeURIComponent(b.dataset.cat);
+    const lista = enMes(k).filter(m => m.categoria === cat);
+    const con3 = new Set(lista.filter(m => m.nivel3 && m.nivel3.trim()).map(m => (m.nivel2 && m.nivel2.trim()) || '(sin subcategoría)'));
+    const gs = agrupa(lista, m => (m.nivel2 && m.nivel2.trim()) || '(sin subcategoría)');
+    const max = Math.max(...gs.map(g => g.value), 1);
+    p.innerHTML = gs.map(g => con3.has(g.label)
+      ? `<button type="button" class="bar l2 click" aria-expanded="false" data-cat="${encodeURIComponent(cat)}" data-n2="${encodeURIComponent(g.label)}"><span class="c"><span class="chev">›</span>${g.label}${g.back ? ' <span class="pill ok">devuelto</span>' : ''}</span><span class="tr"><span class="${g.back ? 'back' : ''}" style="width:${(g.value/max*100).toFixed(0)}%"></span></span><span class="a num">${g.back ? '−' : ''}${fmt(g.value)}</span></button><div class="sub-rows"></div>`
+      : barHTML(g, max, 'l2')).join('');
+    p.classList.add('open'); b.setAttribute('aria-expanded', 'true');
+  });
+  const selB = $('mesBars');
+  meses.forEach(k => selB.insertAdjacentHTML('beforeend', `<option value="${k}">${mesNom(k)}</option>`));
+  selB.insertAdjacentHTML('beforeend', '<option value="todos">Todos los meses</option>');
+  if (meses.length) selB.value = meses[0];
+  selB.addEventListener('change', () => renderBars(selB.value));
+  renderBars(selB.value || 'todos');
 
-    const total = filtrados.reduce((s, m) => s + m.importe, 0);
-    detalleCount.textContent = `${filtrados.length} movimientos · ${fmt(total)}`;
+  // movimientos agrupados por mes (el más reciente abierto)
+  [...new Set(MOV.map(m => m.categoria))].sort().forEach(c => $('fCat').insertAdjacentHTML('beforeend', `<option value="${c.replace(/"/g,'&quot;')}">${c}</option>`));
+  function renderMov(){
+    const cat = $('fCat').value, txt = $('fTxt').value.trim().toLowerCase();
+    const f = MOV.filter(m => (!cat || m.categoria === cat) && (!txt || `${m.concepto} ${m.proveedor} ${m.nivel2} ${m.nivel3}`.toLowerCase().includes(txt)));
+    $('movSub').textContent = `${f.length} de ${MOV.length} movimientos, agrupados por mes`;
+    const filtrando = !!(cat || txt);
+    const html = meses.map((k, idx) => {
+      const ms = f.filter(m => mesKey(m.fecha) === k); if (!ms.length) return '';
+      const tot = ms.reduce((s,m) => s + m.importe, 0);
+      return `<details class="month" ${idx === 0 || filtrando ? 'open' : ''}><summary><span><span class="chev">›</span>${mesNom(k)} <span class="s">· ${ms.length} movimientos</span></span><span class="num">${tot >= 0 ? '+' : '−'}${fmt(Math.abs(tot))}</span></summary>` +
+        ms.map(m => `<div class="mov ${m.categoria === 'Movimientos internos' ? 'int' : ''}"><span class="f num">${m.fecha.slice(0,5)}</span><div><div class="c">${m.concepto}</div><div class="m">${m.categoria}${m.nivel2 ? ' · ' + m.nivel2 : ''}${m.proveedor ? ' · ' + m.proveedor : ''}${m.cuenta ? ' · ' + m.cuenta : ''}</div>${m.nota ? `<div class="m">${m.nota}</div>` : ''}</div><span class="i num ${m.importe > 0 ? 'pos' : ''}">${m.importe >= 0 ? '+' : '−'}${fmt(Math.abs(m.importe))}</span></div>`).join('') + '</details>';
+    }).join('');
+    $('months').innerHTML = html || '<p class="note">Ningún movimiento coincide con el filtro.</p>';
   }
+  $('fCat').addEventListener('change', renderMov);
+  $('fTxt').addEventListener('input', renderMov);
+  renderMov();
 
-  filtroMesDetalle.addEventListener('change', renderDetalle);
-  filtroCategoria.addEventListener('change', renderDetalle);
-  document.getElementById('filtroTexto').addEventListener('input', renderDetalle);
-  renderDetalle();
-  document.getElementById('detalleInfoIcon').addEventListener('click', function() {
-    document.getElementById('detalleInfoPanel').classList.toggle('open');
-    this.classList.toggle('active');
-  });
+  // ---------- pestañas ----------
+  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-selected', x === t));
+    document.querySelectorAll('.pane').forEach(p => p.classList.toggle('on', p.id === 'pane-' + t.dataset.pane));
+  }));
 
-  // ---------- theme toggle ----------
-  const toggle = document.getElementById('themeToggle');
-  const root = document.documentElement;
-  const saved = localStorage.getItem('patrimonio-theme');
-  if (saved === 'dark') { root.setAttribute('data-theme','dark'); toggle.textContent = 'Modo claro'; }
-  toggle.addEventListener('click', () => {
-    const isDark = root.getAttribute('data-theme') === 'dark';
-    if (isDark) { root.removeAttribute('data-theme'); toggle.textContent = 'Modo oscuro'; localStorage.setItem('patrimonio-theme','light'); }
-    else { root.setAttribute('data-theme','dark'); toggle.textContent = 'Modo claro'; localStorage.setItem('patrimonio-theme','dark'); }
-  });
+  // ---------- tema ----------
+  const tg = $('themeToggle'), root = document.documentElement;
+  const setTheme = d => { if (d) root.setAttribute('data-theme', 'dark'); else root.removeAttribute('data-theme'); tg.textContent = d ? 'Modo claro' : 'Modo oscuro'; };
+  setTheme(localStorage.getItem('patrimonio-theme') === 'dark');
+  tg.addEventListener('click', () => { const d = root.getAttribute('data-theme') !== 'dark'; setTheme(d); localStorage.setItem('patrimonio-theme', d ? 'dark' : 'light'); location.reload(); });
+})();
 </script>
 </body>
 </html>

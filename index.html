@@ -401,10 +401,10 @@
 
 <script type="application/json" id="dashboard-data">
 {
-  "generated_at": "20.10.2026",
+  "generated_at": "21.10.2026",
   "kpi": {
-    "patrimonio_neto": 296316.88,
-    "total_activos": 430700.38,
+    "patrimonio_neto": 386306.09,
+    "total_activos": 520689.59,
     "total_pasivos": 134383.5,
     "cashflow_mes": 24810.15,
     "ingresos_mes": 39181.93,
@@ -416,6 +416,23 @@
     "cuota_mensual_total": 1290.75
   },
   "activos": [
+    {
+      "label": "Participación M&H Capital Partners",
+      "value": 174989.21,
+      "color": "oklch(70% 0.14 75)",
+      "detalle": [
+        {
+          "label": "Prestamo de socio pendiente de devolver (no capital social)",
+          "value": 164800.0,
+          "estado": null
+        },
+        {
+          "label": "Gastos adelantados pendientes de reintegro (neto)",
+          "value": 10189.21,
+          "estado": null
+        }
+      ]
+    },
     {
       "label": "Inversiones / bolsa",
       "value": 173436.34,
@@ -439,18 +456,6 @@
         {
           "label": "MyInvestor - Vanguard US 500 (pignorado)",
           "value": 584.36,
-          "estado": null
-        }
-      ]
-    },
-    {
-      "label": "Participación M&H Capital Partners",
-      "value": 85000.0,
-      "color": "oklch(70% 0.14 75)",
-      "detalle": [
-        {
-          "label": "Prestamo de socio pendiente de devolver (no capital social)",
-          "value": 85000.0,
           "estado": null
         }
       ]
@@ -6270,12 +6275,12 @@
   ],
   "inversiones": {
     "kpis": {
-      "total": 383605.66,
+      "total": 473594.87,
       "financiero": 224781.56,
       "coinversiones_desembolsado": 53800.0,
       "coinversiones_comprometido": 89700.0,
       "en_mora": 12000.0,
-      "mh": 85000.0,
+      "mh": 174989.21,
       "prestamos_privados": 8024.1,
       "ganancia_realizada": 50900.0,
       "concentracion_mayela": 0.8166
@@ -6315,7 +6320,7 @@
         }
       ],
       "plan_pensiones": 4565.93,
-      "capital_iliquido_comprometido": 146824.1,
+      "capital_iliquido_comprometido": 236813.31,
       "detalle_iliquido": [
         {
           "nombre": "Coinversiones Mayela (Torredembarra+Escala 2+Reus)",
@@ -6323,7 +6328,7 @@
         },
         {
           "nombre": "Participación M&H Capital Partners",
-          "valor": 85000.0
+          "valor": 174989.21
         },
         {
           "nombre": "Préstamo privado otorgado (Gabriel/Lucia)",
@@ -6498,10 +6503,10 @@
   "ratios": [
     {
       "label": "Deuda / Activos",
-      "display": "31,2%",
+      "display": "25,8%",
       "status": "ok",
       "nota": "Sano: menos de 40%",
-      "explicacion": "Qué parte de todo lo que tienes está financiado con deuda. Fórmula: Total Pasivos (134.383,50 €) ÷ Total Activos (430.700,38 €). Cuanto más bajo, menos dependes de préstamos para sostener tu patrimonio."
+      "explicacion": "Qué parte de todo lo que tienes está financiado con deuda. Fórmula: Total Pasivos (134.383,50 €) ÷ Total Activos (520.689,59 €). Cuanto más bajo, menos dependes de préstamos para sostener tu patrimonio."
     },
     {
       "label": "Esfuerzo de deuda (cuota/ingresos)",
@@ -6526,10 +6531,10 @@
     },
     {
       "label": "Apalancamiento (activos/patrimonio)",
-      "display": "1,45x",
+      "display": "1,35x",
       "status": "ok",
       "nota": "Normal invirtiendo con deuda",
-      "explicacion": "Por cada 1€ de patrimonio neto, cuántos € de activos controlas gracias a la deuda. Fórmula: Total Activos (430.700,38 €) ÷ Patrimonio Neto (296.316,88 €). 1x significaría cero deuda; cuanto más alto, más amplificado está tu patrimonio con préstamos."
+      "explicacion": "Por cada 1€ de patrimonio neto, cuántos € de activos controlas gracias a la deuda. Fórmula: Total Activos (520.689,59 €) ÷ Patrimonio Neto (386.306,09 €). 1x significaría cero deuda; cuanto más alto, más amplificado está tu patrimonio con préstamos."
     }
   ]
 }
